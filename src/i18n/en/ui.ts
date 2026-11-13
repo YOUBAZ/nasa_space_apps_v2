@@ -72,6 +72,9 @@ export const ui: Record<string, string> = {
   'room.closedHint': 'Online games live in the host\'s browser. When the host leaves, the room closes.',
   'home.tabsOnly': 'No game server is configured, so rooms only connect tabs of this same browser.',
 
+  'sound.on': 'Turn sound on',
+  'sound.off': 'Mute sound',
+  'camp.unlocked': 'New gear unlocked',
   // generic
   'common.exit': 'Exit to menu',
   'common.close': 'Close',

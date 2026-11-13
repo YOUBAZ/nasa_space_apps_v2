@@ -25,7 +25,9 @@ describe('debrief screen', () => {
     fireEvent.click(screen.getByRole('button', { name: /close the debrief/i }))
     expect(transport.getState()!.phase).toBe('campaign')
     expect(screen.getByRole('heading', { name: /^campaign$/i })).toBeInTheDocument()
-    expect(screen.getByText('High-gain dish (1 m)')).toBeInTheDocument()
+    // shown twice: the "new gear unlocked" card and the gear list
+    expect(within(screen.getByRole('status')).getByText('High-gain dish (1 m)')).toBeInTheDocument()
+    expect(screen.getAllByText('High-gain dish (1 m)')).toHaveLength(2)
   })
   it('only the Planner can start the next mission', () => {
     const s = ok(debriefOf(wildfire, 'wildfire', tight), { type: 'finishDebrief' }, P.radio)

@@ -83,6 +83,7 @@ export function Campaign() {
   const c = state.campaign
   const last = c.history[c.history.length - 1]
   const locked = UNLOCKS[state.difficulty].filter((id) => !c.unlocked.includes(id))
+  const newGear = last?.awards.find((a) => a.id === 'new_gear')?.unlock
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-4 px-3 py-4">
       <header>
@@ -90,6 +91,15 @@ export function Campaign() {
         <h1 className="text-3xl font-black">{t('stage.campaign')}</h1>
       </header>
       <Stats state={state} />
+      {newGear && (
+        <div className="unlock-pop panel flex items-center gap-3 border-2 border-active-green p-4" role="status">
+          <Icon name="lock" size={28} className="text-active-green" />
+          <div>
+            <p className="label text-active-green">{t('camp.unlocked')}</p>
+            <p className="font-display text-xl font-bold">{unlockName(newGear)}</p>
+          </div>
+        </div>
+      )}
       <div className="grid gap-4 md:grid-cols-2">
         <PatchWall state={state} />
         <section className="panel p-4">

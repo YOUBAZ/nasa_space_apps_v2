@@ -1,5 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import { Icon, type IconName } from '../icons'
+import { sfx } from '../sound'
 
 type Variant = 'primary' | 'action' | 'ghost' | 'go' | 'danger'
 const VARIANT: Record<Variant, string> = {
@@ -18,12 +19,13 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: ReactNode
 }
 
-export function Button({ variant = 'action', size = 'md', icon, children, className = '', ...rest }: ButtonProps) {
+export function Button({ variant = 'action', size = 'md', icon, children, className = '', onClick, ...rest }: ButtonProps) {
   const pad = size === 'sm' ? 'px-2.5 py-1 text-xs' : size === 'lg' ? 'px-6 py-3 text-base' : 'px-4 py-2 text-sm'
   return (
     <button type="button"
       className={`inline-flex items-center justify-center gap-2 rounded font-display font-bold uppercase tracking-wide transition
         disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:brightness-100 ${pad} ${VARIANT[variant]} ${className}`}
+      onClick={(e) => { sfx('click'); onClick?.(e) }}
       {...rest}>
       {icon && <Icon name={icon} size={size === 'sm' ? 14 : 18} />}
       {children}

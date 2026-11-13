@@ -67,6 +67,9 @@ export const ui: Record<string, string> = {
   'room.closedHint': 'اللعب عبر الإنترنت يعمل داخل متصفح المضيف. عندما يغادر المضيف تُغلق الغرفة.',
   'home.tabsOnly': 'لا يوجد خادم ألعاب مُعَدّ، لذلك تربط الغرف بين تبويبات هذا المتصفح نفسه فقط.',
 
+  'sound.on': 'شغّل الصوت',
+  'sound.off': 'اكتم الصوت',
+  'camp.unlocked': 'معدات جديدة مفتوحة',
   'common.exit': 'العودة إلى القائمة',
   'common.close': 'إغلاق',
   'common.cancel': 'إلغاء',

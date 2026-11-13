@@ -81,3 +81,7 @@ html[lang='ar'] {
   --font-body: 'IBM Plex Sans Arabic', 'Public Sans', Tahoma, sans-serif;
 }
 html[lang='ar'] * { letter-spacing: 0 !important; }
+
+.unlock-pop { animation: unlock-pop 700ms cubic-bezier(.2, 1.6, .4, 1) both; }
+@keyframes unlock-pop { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .unlock-pop { animation: none; } }
