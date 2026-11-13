@@ -1,5 +1,6 @@
 import { t } from '../i18n/i18n'
 import { useGame } from '../net/useGame'
+import type { Role } from '../engine/types'
 import { Button } from './components/Button'
 import { ChatDock } from './components/ChatDock'
 import { Campaign, CampaignOver } from './screens/Campaign'
@@ -9,7 +10,9 @@ import { Lobby } from './screens/Lobby'
 import { MissionBoard } from './screens/MissionBoard'
 import { Operations } from './screens/Operations'
 
-function Screen({ onExit }: { onExit: () => void }) {
+interface Focus { focusRole?: Role; focusKey?: string }
+
+function Screen({ onExit, focusRole, focusKey }: { onExit: () => void } & Focus) {
   const { state } = useGame()
   switch (state.phase) {
     case 'lobby': return <Lobby onExit={onExit} />
@@ -18,16 +21,16 @@ function Screen({ onExit }: { onExit: () => void }) {
     case 'debrief': return <Debrief />
     case 'campaign': return <Campaign />
     case 'campaign_over': return <CampaignOver onExit={onExit} />
-    default: return <MissionBoard onExit={onExit} />
+    default: return <MissionBoard onExit={onExit} focusRole={focusRole} focusKey={focusKey} />
   }
 }
 
 /** Picks the screen for the current phase of the game, plus the things that float over every screen. */
-export function GameScreens({ onExit, chat = false }: { onExit: () => void; chat?: boolean }) {
+export function GameScreens({ onExit, chat = false, focusRole, focusKey }: { onExit: () => void; chat?: boolean } & Focus) {
   const { closed } = useGame()
   return (
     <>
-      <Screen onExit={onExit} />
+      <Screen onExit={onExit} focusRole={focusRole} focusKey={focusKey} />
       <ChatDock always={chat} />
       {closed && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4" role="alertdialog" aria-label={t('room.closed')}>

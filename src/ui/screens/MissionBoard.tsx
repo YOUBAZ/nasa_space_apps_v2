@@ -45,7 +45,7 @@ export function ErrorToast() {
   )
 }
 
-export function MissionBoard({ onExit }: { onExit(): void }) {
+export function MissionBoard({ onExit, focusRole, focusKey }: { onExit(): void; focusRole?: Role; focusKey?: string }) {
   const { state, can, act } = useGame()
   const handbook = useHandbook()
   const todo = duties(state)
@@ -53,9 +53,13 @@ export function MissionBoard({ onExit }: { onExit(): void }) {
   const [active, setActive] = useState<Role>(mineWithDuty ?? ROLES.find((r) => can(r)) ?? 'planner')
   // Follow the action: when the phase changes, show a role that now has something to do here.
   useEffect(() => {
-    if (mineWithDuty) setActive(mineWithDuty)
+    if (mineWithDuty && !focusKey) setActive(mineWithDuty)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.phase])
+  // The tutorial steers the board to the role it is teaching.
+  useEffect(() => {
+    if (focusRole) setActive(focusRole)
+  }, [focusRole, focusKey])
   const m = state.mission
   const Panel = PANELS[active]
   const solo = state.mode === 'solo'

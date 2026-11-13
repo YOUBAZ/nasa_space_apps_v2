@@ -63,10 +63,10 @@ export function Launch() {
         </div>
         {done && fail && <p className="absolute inset-x-0 top-1/3 text-center font-display text-4xl font-black uppercase text-nasa-red">{t('launch.lostBig')}</p>}
       </div>
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+      <div className="mt-3 flex flex-wrap items-center justify-end gap-3">
         {!done
           ? <Button variant="ghost" size="sm" onClick={() => { setCount(0); setDone(true) }}>{t('launch.skip')}</Button>
-          : <span />}
+          : null}
         {done && (can('radio')
           ? <Button variant="primary" size="lg" icon="radio" onClick={() => act({ type: 'advanceOps' }, 'radio')}>{fail ? t('launch.toDebrief') : t('launch.toOps')}</Button>
           : <p className="mono text-sm text-carbon-30">{t('launch.waitRadio')}</p>)}
