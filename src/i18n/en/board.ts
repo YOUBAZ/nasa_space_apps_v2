@@ -335,4 +335,5 @@ export const board: Record<string, string> = {
   'err.allocation_too_small': "That is less than the spacecraft's standard equipment already costs.",
   'err.use_appeal': 'That was rejected. Appeal it, or ask for something different.',
   'log.funds.topup': 'added ${amount}M to the mission from campaign funds',
+  'hb.imagery': 'Planet and star images: NASA.',
 }

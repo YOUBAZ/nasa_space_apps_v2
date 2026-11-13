@@ -318,4 +318,5 @@ export const board: Record<string, string> = {
   'err.allocation_too_small': 'هذا أقل من تكلفة المعدات القياسية الموجودة في المركبة أصلًا.',
   'err.use_appeal': 'رُفض هذا الطلب. استأنف أو اطلب شيئًا مختلفًا.',
   'log.funds.topup': 'أضاف ${amount}M إلى المهمة من أموال الحملة',
+  'hb.imagery': 'صور الكواكب والنجوم: ناسا.',
 }

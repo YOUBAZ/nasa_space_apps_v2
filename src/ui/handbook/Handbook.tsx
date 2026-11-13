@@ -22,7 +22,7 @@ function Entry({ id }: { id: string }) {
       <a href={entryUrl(id)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm text-nasa-blue-tint underline">
         <Icon name="arrow" size={14} />{t('common.learnMore')}
       </a>
-      <p className="text-xs text-carbon-40">{t('hb.simplified')}</p>
+      <p className="text-xs text-carbon-40">{t('hb.simplified')} {t('hb.imagery')}</p>
     </article>
   )
 }

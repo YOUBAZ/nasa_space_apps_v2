@@ -81,3 +81,11 @@ Final: minor (deferred): tutorial teammates speak in coach bubbles, not the chat
 Final: minor (deferred): Planner's budget sliders are local until confirmed, so others don't see the plan forming.
 Final: minor (deferred): no notice when "fly again" drops parts that no longer fit the budget.
 Final: minor (deferred): 7 eslint fast-refresh warnings.
+
+## After the plan: team change requests (2026-11-14)
+Ruling: planets use real NASA imagery downloaded into public/textures (NASA SVS Blue Marble and LRO Moon kit, Cassini PIA07782, NASA 3D Resources Mars and Tycho star map) — the user asked for high-resolution planets and NASA images are free to use with credit — cost if wrong: +3.5 MB of assets; credit wording may need the team's check.
+Ruling: "fly again" skips the planning stage entirely when the old budget is still affordable — the user asked that it not change the previous data — cost if wrong: the Planner cannot shrink the budget on a re-flight except by not spending it.
+Ruling: with no radio link the first command goes unanswered and the conversation ends (previously three healthy replies came first) — truer to "nobody was listening" — cost if wrong: shorter operations scene on that failure.
+Ruling: Requests and Activity moved to the left column so the 3D column never scrolls; tutorial coach moved to bottom centre.
+Verified in browser: Expert Jupiter mission through every new screen (screenshots), launch frames for a good and a failed flight, tutorial end to end, two-tab online mission, Arabic solo, phone-width audit. 369 tests pass.
+Not verified: the new 3D on a real GPU or a phone (checked with software rendering only); frame rate on low-end devices.

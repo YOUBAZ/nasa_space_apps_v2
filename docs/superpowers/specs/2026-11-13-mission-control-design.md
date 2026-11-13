@@ -337,3 +337,13 @@ An independent review of the finished build led to these rule changes. Where the
 - **Scoring.** The Designer is no longer marked down for asking for funds; the score looks at how far spending went beyond the first allocation. The Radio Operator is no longer marked down for stations the data needed.
 - **Small fixes.** Re-selecting the part already chosen does nothing (it used to cancel the team's votes). Saved games carry a version, and a crash offers "clear saved game and restart".
 - **Tutorial.** The lesson accepts only the two lesson instruments and the Standard schedule, so no step can become impossible.
+
+## 17. Changes requested by the team (2026-11-14)
+
+- **Higher-detail 3D.** The earlier "simple shapes only" rule is dropped. Earth, Mars, Jupiter, the Moon and the star background use real NASA images (credits in `public/textures/CREDITS.md`). The spacecraft, rockets, launch pad and asteroid are modelled in code with smooth geometry, solar-cell and gold-foil surfaces, and a distinct shape for every instrument. Orbits are drawn as glowing rings with the team's own spacecraft flying them.
+- **One flight page.** Launch and operations share a single page: the 3D view on one side and the Radio Operator's console on the other. The console keeps one transcript, from the countdown calls to each command and the spacecraft's reply. With no radio link, the first command already goes unanswered.
+- **Bigger, expandable 3D boxes.** Every 3D box has an expand button (fills the screen, zoom enabled, Escape to close) and can be dragged taller. None of them scrolls inside. On the mission board the 3D preview and gauges sit alone in the right column; Requests and Activity moved under the role tabs on the left.
+- **Looking back at the debrief.** From the campaign screen and the final report, any player can go back to the last debrief and forward again. It is a private view and changes nothing in the game.
+- **"Fly again with fixes" changes nothing.** The mission restarts in the design stage with the same objective, budget split (including money the Planner added), schedule and every part and instrument. The team applies only its fix. If the campaign can no longer afford the same budget, the Planner re-plans starting from the old numbers.
+- **Pass and play.** Player 1 can be renamed in the player list.
+- **Tutorial.** The coach sits at the bottom centre so it never covers Requests; the re-plan step is gone because fly again keeps the budget.

@@ -11,3 +11,6 @@ English and Arabic (right-to-left). The Arabic text in `src/i18n/ar/` was machin
 
 ## Online play
 Copy `.env.example` to `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (a free Supabase project; no tables needed). Without them, rooms only connect tabs of the same browser.
+
+## Imagery
+The planets, the Moon and the star background are real NASA images (see `public/textures/CREDITS.md`). The spacecraft, rockets and asteroid are modelled in code. NASA does not endorse this project.

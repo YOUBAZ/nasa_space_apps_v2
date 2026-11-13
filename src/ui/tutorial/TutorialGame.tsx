@@ -42,8 +42,8 @@ function Coach({ session, onExit }: { session: TutorialSession; onExit(): void }
     <>
       {step && <Spotlight name={step.spotlight} stepId={step.id} />}
       <aside data-testid="coach" aria-live="polite"
-        className="fixed bottom-3 start-3 z-40 flex w-[26rem] max-w-[calc(100vw-1.5rem)] items-end gap-2 lg:w-[232px] lg:flex-col lg:items-stretch">
-        <div className="shrink-0 drop-shadow-[0_4px_12px_#000] lg:self-center"><Elon pose={tut.done ? 'celebrate' : shown.pose} size={104} /></div>
+        className="fixed bottom-3 left-1/2 z-40 flex w-[30rem] max-w-[calc(100vw-1.5rem)] -translate-x-1/2 items-end gap-2">
+        <div className="shrink-0 drop-shadow-[0_4px_12px_#000]"><Elon pose={tut.done ? 'celebrate' : shown.pose} size={104} /></div>
         <div className="flex min-w-0 flex-1 flex-col gap-2">
           {line && !tut.done && (
             <div className="self-start rounded-lg rounded-es-none border border-carbon-60 bg-carbon-80 px-3 py-2 text-sm shadow-lg">
@@ -53,7 +53,7 @@ function Coach({ session, onExit }: { session: TutorialSession; onExit(): void }
               <span>{t(line.key)}</span>
             </div>
           )}
-          <div className="rounded-lg rounded-es-none border-2 border-intl-orange bg-carbon-90 p-3 shadow-2xl lg:rounded-es-lg">
+          <div className="rounded-lg rounded-es-none border-2 border-intl-orange bg-carbon-90 p-3 shadow-2xl">
             <p className="label mb-1 flex items-center justify-between gap-2">
               <span className="text-intl-orange">{t('tut.coach')}</span>
               <span>{t('tut.step', { n: Math.min(tut.index + 1, TUTORIAL.length), total: TUTORIAL.length })}</span>
@@ -82,7 +82,7 @@ export function TutorialGame({ onExit }: { onExit(): void }) {
   return (
     <GameProvider transport={session.transport}>
       <HandbookProvider>
-        <div className="pb-48 lg:pb-0">
+        <div className="pb-64">
           <GameScreens onExit={onExit} focusRole={step?.tab} focusKey={step?.id} />
         </div>
         <Coach session={session} onExit={onExit} />
