@@ -289,8 +289,8 @@ def evaluate(d, obj, diff):
     cost = sum(p["cost"] for p in parts) + sum(i["cost"] for i in insts) + v["cost"] + sum(STATION_COST[s] for s in d["stations"])
     sev = {f[0] for f in faults}
     outcome = "failure" if "critical" in sev else "partial" if "major" in sev else "success"
-    return dict(outcome=outcome, faults=faults, mass=round(mass), cap=cap, draw=draw, gen=round(gen), cost=cost,
-                data=gen_data, downlink=round(downlink,2), cov=round(cov,2), life=round(life,1), sci=round(sci,2))
+    return dict(outcome=outcome, faults=faults, mass=mass, cap=cap, draw=draw, gen=gen, cost=cost,
+                data=gen_data, downlink=downlink, cov=cov, life=life, sci=sci)
 
 # ---------------- SEARCH ----------------
 def opts(diff, slot):
@@ -369,6 +369,32 @@ def distinct(found):
         key = (d["orbit"], d["vehicle"], d["power"], d["antenna"])
         if key not in seen: seen[key] = 1; out.append((cost, d, r))
     return out
+
+def dump(path):
+    out = []
+    for diff in ["fan","nerd","expert"]:
+        for obj in OBJ_BY_DIFF[diff]:
+            f = distinct(search(obj, diff))[:2]
+            for i,(cost,d,r) in enumerate(f):
+                out.append(dict(name=f"{diff}/{obj}/viable{i}", diff=diff, objective=obj, design=d, expect=pack(r)))
+            if f:
+                base = f[0][1]
+                variants = {
+                    "electron": dict(base, vehicle="electron"),
+                    "small_battery": dict(base, battery=sorted(opts(diff,"battery"), key=lambda x: COMP["battery"][x]["wh"])[0]),
+                    "medium_antenna": dict(base, antenna="medium"),
+                }
+                for k,v in variants.items():
+                    out.append(dict(name=f"{diff}/{obj}/{k}", diff=diff, objective=obj, design=v, expect=pack(evaluate(v,obj,diff))))
+    json.dump(out, open(path,"w"), indent=1)
+    print(f"wrote {len(out)} fixtures to {path}")
+
+def pack(r):
+    return dict(outcome=r["outcome"], faults=sorted(f[1] for f in r["faults"]), mass=r["mass"], cost=r["cost"],
+                science=r["sci"], downlink=r["downlink"], coverage=r["cov"], life=r["life"], powerDraw=r["draw"], powerGen=r["gen"])
+
+if __name__ == "__main__" and len(sys.argv) > 2 and sys.argv[1] == "--dump":
+    dump(sys.argv[2]); sys.exit(0)
 
 if __name__ == "__main__":
     summary = {}

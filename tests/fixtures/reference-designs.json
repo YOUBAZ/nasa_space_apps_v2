@@ -1,0 +1,3644 @@
+[
+ {
+  "name": "fan/wildfire/viable0",
+  "diff": "fan",
+  "objective": "wildfire",
+  "design": {
+   "structure": "medium",
+   "battery": "medium",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "none",
+   "storage": "medium",
+   "power": "deploy_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "thermal_ir"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 682,
+   "cost": 179,
+   "science": 0.5172413793103449,
+   "downlink": 60.0,
+   "coverage": 0.25,
+   "life": 8,
+   "powerDraw": 250,
+   "powerGen": 2500.0
+  }
+ },
+ {
+  "name": "fan/wildfire/viable1",
+  "diff": "fan",
+  "objective": "wildfire",
+  "design": {
+   "structure": "medium",
+   "battery": "medium",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "none",
+   "storage": "medium",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "thermal_ir"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 766,
+   "cost": 210,
+   "science": 0.5172413793103449,
+   "downlink": 900.0,
+   "coverage": 0.25,
+   "life": 8,
+   "powerDraw": 345,
+   "powerGen": 2500.0
+  }
+ },
+ {
+  "name": "fan/wildfire/electron",
+  "diff": "fan",
+  "objective": "wildfire",
+  "design": {
+   "structure": "medium",
+   "battery": "medium",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "none",
+   "storage": "medium",
+   "power": "deploy_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "thermal_ir"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna"
+   ],
+   "vehicle": "electron"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "over_capacity"
+   ],
+   "mass": 682,
+   "cost": 157,
+   "science": 0.5172413793103449,
+   "downlink": 60.0,
+   "coverage": 0.25,
+   "life": 8,
+   "powerDraw": 250,
+   "powerGen": 2500.0
+  }
+ },
+ {
+  "name": "fan/wildfire/small_battery",
+  "diff": "fan",
+  "objective": "wildfire",
+  "design": {
+   "structure": "medium",
+   "battery": "medium",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "none",
+   "storage": "medium",
+   "power": "deploy_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "thermal_ir"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 682,
+   "cost": 179,
+   "science": 0.5172413793103449,
+   "downlink": 60.0,
+   "coverage": 0.25,
+   "life": 8,
+   "powerDraw": 250,
+   "powerGen": 2500.0
+  }
+ },
+ {
+  "name": "fan/wildfire/medium_antenna",
+  "diff": "fan",
+  "objective": "wildfire",
+  "design": {
+   "structure": "medium",
+   "battery": "medium",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "none",
+   "storage": "medium",
+   "power": "deploy_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "thermal_ir"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 682,
+   "cost": 179,
+   "science": 0.5172413793103449,
+   "downlink": 60.0,
+   "coverage": 0.25,
+   "life": 8,
+   "powerDraw": 250,
+   "powerGen": 2500.0
+  }
+ },
+ {
+  "name": "fan/telescope/viable0",
+  "diff": "fan",
+  "objective": "telescope",
+  "design": {
+   "structure": "large",
+   "battery": "medium",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "medium",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "l2",
+   "instruments": [
+    "ir_telescope"
+   ],
+   "protection": "sunshield",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "atlas_v"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 3021,
+   "cost": 904,
+   "science": 0.5165217391304348,
+   "downlink": 47.519999999999996,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 605,
+   "powerGen": 2500.0
+  }
+ },
+ {
+  "name": "fan/telescope/viable1",
+  "diff": "fan",
+  "objective": "telescope",
+  "design": {
+   "structure": "large",
+   "battery": "medium",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "medium",
+   "power": "large_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "l2",
+   "instruments": [
+    "ir_telescope"
+   ],
+   "protection": "sunshield",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "atlas_v"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 3251,
+   "cost": 939,
+   "science": 0.5165217391304348,
+   "downlink": 47.519999999999996,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 605,
+   "powerGen": 8000.0
+  }
+ },
+ {
+  "name": "fan/telescope/electron",
+  "diff": "fan",
+  "objective": "telescope",
+  "design": {
+   "structure": "large",
+   "battery": "medium",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "medium",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "l2",
+   "instruments": [
+    "ir_telescope"
+   ],
+   "protection": "sunshield",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "electron"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "vehicle_cannot_reach"
+   ],
+   "mass": 3021,
+   "cost": 762,
+   "science": 0.5165217391304348,
+   "downlink": 47.519999999999996,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 605,
+   "powerGen": 2500.0
+  }
+ },
+ {
+  "name": "fan/telescope/small_battery",
+  "diff": "fan",
+  "objective": "telescope",
+  "design": {
+   "structure": "large",
+   "battery": "medium",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "medium",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "l2",
+   "instruments": [
+    "ir_telescope"
+   ],
+   "protection": "sunshield",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "atlas_v"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 3021,
+   "cost": 904,
+   "science": 0.5165217391304348,
+   "downlink": 47.519999999999996,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 605,
+   "powerGen": 2500.0
+  }
+ },
+ {
+  "name": "fan/telescope/medium_antenna",
+  "diff": "fan",
+  "objective": "telescope",
+  "design": {
+   "structure": "large",
+   "battery": "medium",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "medium",
+   "power": "deploy_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "l2",
+   "instruments": [
+    "ir_telescope"
+   ],
+   "protection": "sunshield",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "atlas_v"
+  },
+  "expect": {
+   "outcome": "partial",
+   "faults": [
+    "downlink_bottleneck"
+   ],
+   "mass": 2937,
+   "cost": 873,
+   "science": 0.034434782608695653,
+   "downlink": 3.168,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 510,
+   "powerGen": 2500.0
+  }
+ },
+ {
+  "name": "fan/mars_ice/viable0",
+  "diff": "fan",
+  "objective": "mars_ice",
+  "design": {
+   "structure": "medium",
+   "battery": "medium",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "medium",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "mars_orbit",
+   "instruments": [
+    "spectrometer",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1391,
+   "cost": 344,
+   "science": 0.5876129032258063,
+   "downlink": 11.879999999999999,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 390,
+   "powerGen": 1075.0
+  }
+ },
+ {
+  "name": "fan/mars_ice/viable1",
+  "diff": "fan",
+  "objective": "mars_ice",
+  "design": {
+   "structure": "medium",
+   "battery": "medium",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "medium",
+   "power": "large_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "mars_orbit",
+   "instruments": [
+    "spectrometer",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1621,
+   "cost": 379,
+   "science": 0.5876129032258063,
+   "downlink": 11.879999999999999,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 390,
+   "powerGen": 3440.0
+  }
+ },
+ {
+  "name": "fan/mars_ice/electron",
+  "diff": "fan",
+  "objective": "mars_ice",
+  "design": {
+   "structure": "medium",
+   "battery": "medium",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "medium",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "mars_orbit",
+   "instruments": [
+    "spectrometer",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "electron"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "vehicle_cannot_reach"
+   ],
+   "mass": 1391,
+   "cost": 282,
+   "science": 0.5876129032258063,
+   "downlink": 11.879999999999999,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 390,
+   "powerGen": 1075.0
+  }
+ },
+ {
+  "name": "fan/mars_ice/small_battery",
+  "diff": "fan",
+  "objective": "mars_ice",
+  "design": {
+   "structure": "medium",
+   "battery": "medium",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "medium",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "mars_orbit",
+   "instruments": [
+    "spectrometer",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1391,
+   "cost": 344,
+   "science": 0.5876129032258063,
+   "downlink": 11.879999999999999,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 390,
+   "powerGen": 1075.0
+  }
+ },
+ {
+  "name": "fan/mars_ice/medium_antenna",
+  "diff": "fan",
+  "objective": "mars_ice",
+  "design": {
+   "structure": "medium",
+   "battery": "medium",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "medium",
+   "power": "deploy_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "mars_orbit",
+   "instruments": [
+    "spectrometer",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "downlink_bottleneck",
+    "no_link"
+   ],
+   "mass": 1307,
+   "cost": 313,
+   "science": 0.0,
+   "downlink": 0,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 295,
+   "powerGen": 1075.0
+  }
+ },
+ {
+  "name": "nerd/wildfire/viable0",
+  "diff": "nerd",
+  "objective": "wildfire",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels",
+   "thermal": "heaters",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "hires_cam",
+    "thermal_ir"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 351,
+   "cost": 132,
+   "science": 0.5974025974025973,
+   "downlink": 60.0,
+   "coverage": 0.25,
+   "life": 8,
+   "powerDraw": 245,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "nerd/wildfire/viable1",
+  "diff": "nerd",
+  "objective": "wildfire",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels",
+   "thermal": "heaters",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "hga",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "hires_cam",
+    "thermal_ir"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 375,
+   "cost": 140,
+   "science": 0.6969696969696969,
+   "downlink": 240.0,
+   "coverage": 0.25,
+   "life": 8,
+   "powerDraw": 290,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "nerd/wildfire/electron",
+  "diff": "nerd",
+  "objective": "wildfire",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels",
+   "thermal": "heaters",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "hires_cam",
+    "thermal_ir"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna"
+   ],
+   "vehicle": "electron"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "over_capacity"
+   ],
+   "mass": 351,
+   "cost": 110,
+   "science": 0.5974025974025973,
+   "downlink": 60.0,
+   "coverage": 0.25,
+   "life": 8,
+   "powerDraw": 245,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "nerd/wildfire/small_battery",
+  "diff": "nerd",
+  "objective": "wildfire",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels",
+   "thermal": "heaters",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "hires_cam",
+    "thermal_ir"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 351,
+   "cost": 132,
+   "science": 0.5974025974025973,
+   "downlink": 60.0,
+   "coverage": 0.25,
+   "life": 8,
+   "powerDraw": 245,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "nerd/wildfire/medium_antenna",
+  "diff": "nerd",
+  "objective": "wildfire",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels",
+   "thermal": "heaters",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "hires_cam",
+    "thermal_ir"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 351,
+   "cost": 132,
+   "science": 0.5974025974025973,
+   "downlink": 60.0,
+   "coverage": 0.25,
+   "life": 8,
+   "powerDraw": 245,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "nerd/polar_ice/viable0",
+  "diff": "nerd",
+  "objective": "polar_ice",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "magnetorquer",
+   "thermal": "heaters",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "thermal_ir",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 310,
+   "cost": 132,
+   "science": 0.5806451612903226,
+   "downlink": 36.0,
+   "coverage": 0.15,
+   "life": 8,
+   "powerDraw": 220,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "nerd/polar_ice/viable1",
+  "diff": "nerd",
+  "objective": "polar_ice",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels",
+   "thermal": "heaters",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "hga",
+   "band": "s",
+   "orbit": "sso",
+   "instruments": [
+    "thermal_ir",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 355,
+   "cost": 145,
+   "science": 0.5574193548387096,
+   "downlink": 28.799999999999997,
+   "coverage": 0.15,
+   "life": 8,
+   "powerDraw": 310,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "nerd/polar_ice/electron",
+  "diff": "nerd",
+  "objective": "polar_ice",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "magnetorquer",
+   "thermal": "heaters",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "thermal_ir",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard"
+   ],
+   "vehicle": "electron"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "over_capacity"
+   ],
+   "mass": 310,
+   "cost": 110,
+   "science": 0.5806451612903226,
+   "downlink": 36.0,
+   "coverage": 0.15,
+   "life": 8,
+   "powerDraw": 220,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "nerd/polar_ice/small_battery",
+  "diff": "nerd",
+  "objective": "polar_ice",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "magnetorquer",
+   "thermal": "heaters",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "thermal_ir",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 310,
+   "cost": 132,
+   "science": 0.5806451612903226,
+   "downlink": 36.0,
+   "coverage": 0.15,
+   "life": 8,
+   "powerDraw": 220,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "nerd/polar_ice/medium_antenna",
+  "diff": "nerd",
+  "objective": "polar_ice",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "magnetorquer",
+   "thermal": "heaters",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "thermal_ir",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 310,
+   "cost": 132,
+   "science": 0.5806451612903226,
+   "downlink": 36.0,
+   "coverage": 0.15,
+   "life": 8,
+   "powerDraw": 220,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "nerd/telescope/viable0",
+  "diff": "nerd",
+  "objective": "telescope",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "cold_gas",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "l2",
+   "instruments": [
+    "ir_telescope"
+   ],
+   "protection": "sunshield",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1810,
+   "cost": 717,
+   "science": 0.5165217391304348,
+   "downlink": 47.519999999999996,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 580,
+   "powerGen": 2500.0
+  }
+ },
+ {
+  "name": "nerd/telescope/viable1",
+  "diff": "nerd",
+  "objective": "telescope",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "cold_gas",
+   "storage": "small",
+   "power": "large_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "l2",
+   "instruments": [
+    "ir_telescope"
+   ],
+   "protection": "sunshield",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 2040,
+   "cost": 752,
+   "science": 0.5165217391304348,
+   "downlink": 47.519999999999996,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 580,
+   "powerGen": 8000.0
+  }
+ },
+ {
+  "name": "nerd/telescope/electron",
+  "diff": "nerd",
+  "objective": "telescope",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "cold_gas",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "l2",
+   "instruments": [
+    "ir_telescope"
+   ],
+   "protection": "sunshield",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "electron"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "vehicle_cannot_reach"
+   ],
+   "mass": 1810,
+   "cost": 655,
+   "science": 0.5165217391304348,
+   "downlink": 47.519999999999996,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 580,
+   "powerGen": 2500.0
+  }
+ },
+ {
+  "name": "nerd/telescope/small_battery",
+  "diff": "nerd",
+  "objective": "telescope",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "cold_gas",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "l2",
+   "instruments": [
+    "ir_telescope"
+   ],
+   "protection": "sunshield",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1810,
+   "cost": 717,
+   "science": 0.5165217391304348,
+   "downlink": 47.519999999999996,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 580,
+   "powerGen": 2500.0
+  }
+ },
+ {
+  "name": "nerd/telescope/medium_antenna",
+  "diff": "nerd",
+  "objective": "telescope",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "cold_gas",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "l2",
+   "instruments": [
+    "ir_telescope"
+   ],
+   "protection": "sunshield",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "partial",
+   "faults": [
+    "downlink_bottleneck"
+   ],
+   "mass": 1726,
+   "cost": 686,
+   "science": 0.034434782608695653,
+   "downlink": 3.168,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 485,
+   "powerGen": 2500.0
+  }
+ },
+ {
+  "name": "nerd/asteroid/viable0",
+  "diff": "nerd",
+  "objective": "asteroid",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "hga",
+   "band": "x",
+   "orbit": "asteroid",
+   "instruments": [
+    "spectrometer",
+    "magnetometer"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1265,
+   "cost": 279,
+   "science": 0.6129032258064515,
+   "downlink": 6.336,
+   "coverage": 0.66,
+   "life": 5,
+   "powerDraw": 269,
+   "powerGen": 1250.0
+  }
+ },
+ {
+  "name": "nerd/asteroid/viable1",
+  "diff": "nerd",
+  "objective": "asteroid",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "asteroid",
+   "instruments": [
+    "spectrometer",
+    "magnetometer"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1325,
+   "cost": 287,
+   "science": 0.6129032258064515,
+   "downlink": 11.879999999999999,
+   "coverage": 0.33,
+   "life": 5,
+   "powerDraw": 319,
+   "powerGen": 1250.0
+  }
+ },
+ {
+  "name": "nerd/asteroid/electron",
+  "diff": "nerd",
+  "objective": "asteroid",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "hga",
+   "band": "x",
+   "orbit": "asteroid",
+   "instruments": [
+    "spectrometer",
+    "magnetometer"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "electron"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "vehicle_cannot_reach"
+   ],
+   "mass": 1265,
+   "cost": 217,
+   "science": 0.6129032258064515,
+   "downlink": 6.336,
+   "coverage": 0.66,
+   "life": 5,
+   "powerDraw": 269,
+   "powerGen": 1250.0
+  }
+ },
+ {
+  "name": "nerd/asteroid/small_battery",
+  "diff": "nerd",
+  "objective": "asteroid",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "hga",
+   "band": "x",
+   "orbit": "asteroid",
+   "instruments": [
+    "spectrometer",
+    "magnetometer"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1265,
+   "cost": 279,
+   "science": 0.6129032258064515,
+   "downlink": 6.336,
+   "coverage": 0.66,
+   "life": 5,
+   "powerDraw": 269,
+   "powerGen": 1250.0
+  }
+ },
+ {
+  "name": "nerd/asteroid/medium_antenna",
+  "diff": "nerd",
+  "objective": "asteroid",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "asteroid",
+   "instruments": [
+    "spectrometer",
+    "magnetometer"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "downlink_bottleneck",
+    "no_link"
+   ],
+   "mass": 1241,
+   "cost": 271,
+   "science": 0.0,
+   "downlink": 0,
+   "coverage": 0.66,
+   "life": 5,
+   "powerDraw": 224,
+   "powerGen": 1250.0
+  }
+ },
+ {
+  "name": "nerd/mars_ice/viable0",
+  "diff": "nerd",
+  "objective": "mars_ice",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "mars_orbit",
+   "instruments": [
+    "spectrometer",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1360,
+   "cost": 329,
+   "science": 0.5876129032258063,
+   "downlink": 11.879999999999999,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 375,
+   "powerGen": 1075.0
+  }
+ },
+ {
+  "name": "nerd/mars_ice/viable1",
+  "diff": "nerd",
+  "objective": "mars_ice",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "large_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "mars_orbit",
+   "instruments": [
+    "spectrometer",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1590,
+   "cost": 364,
+   "science": 0.5876129032258063,
+   "downlink": 11.879999999999999,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 375,
+   "powerGen": 3440.0
+  }
+ },
+ {
+  "name": "nerd/mars_ice/electron",
+  "diff": "nerd",
+  "objective": "mars_ice",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "mars_orbit",
+   "instruments": [
+    "spectrometer",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "electron"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "vehicle_cannot_reach"
+   ],
+   "mass": 1360,
+   "cost": 267,
+   "science": 0.5876129032258063,
+   "downlink": 11.879999999999999,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 375,
+   "powerGen": 1075.0
+  }
+ },
+ {
+  "name": "nerd/mars_ice/small_battery",
+  "diff": "nerd",
+  "objective": "mars_ice",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "mars_orbit",
+   "instruments": [
+    "spectrometer",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1360,
+   "cost": 329,
+   "science": 0.5876129032258063,
+   "downlink": 11.879999999999999,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 375,
+   "powerGen": 1075.0
+  }
+ },
+ {
+  "name": "nerd/mars_ice/medium_antenna",
+  "diff": "nerd",
+  "objective": "mars_ice",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "mars_orbit",
+   "instruments": [
+    "spectrometer",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "downlink_bottleneck",
+    "no_link"
+   ],
+   "mass": 1276,
+   "cost": 298,
+   "science": 0.0,
+   "downlink": 0,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 280,
+   "powerGen": 1075.0
+  }
+ },
+ {
+  "name": "nerd/mars_scout/viable0",
+  "diff": "nerd",
+  "objective": "mars_scout",
+  "design": {
+   "structure": "medium",
+   "battery": "large",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "active",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "hga",
+   "band": "x",
+   "orbit": "mars_surf",
+   "instruments": [
+    "weather"
+   ],
+   "protection": "mars_edl",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1690,
+   "cost": 431,
+   "science": 0.5357142857142857,
+   "downlink": 1.584,
+   "coverage": 0.33,
+   "life": 3,
+   "powerDraw": 335,
+   "powerGen": 875.0
+  }
+ },
+ {
+  "name": "nerd/mars_scout/viable1",
+  "diff": "nerd",
+  "objective": "mars_scout",
+  "design": {
+   "structure": "medium",
+   "battery": "large",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "active",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "s",
+   "orbit": "mars_surf",
+   "instruments": [
+    "weather"
+   ],
+   "protection": "mars_edl",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1750,
+   "cost": 452,
+   "science": 0.5357142857142857,
+   "downlink": 1.1880000000000002,
+   "coverage": 0.33,
+   "life": 3,
+   "powerDraw": 385,
+   "powerGen": 875.0
+  }
+ },
+ {
+  "name": "nerd/mars_scout/electron",
+  "diff": "nerd",
+  "objective": "mars_scout",
+  "design": {
+   "structure": "medium",
+   "battery": "large",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "active",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "hga",
+   "band": "x",
+   "orbit": "mars_surf",
+   "instruments": [
+    "weather"
+   ],
+   "protection": "mars_edl",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "electron"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "vehicle_cannot_reach"
+   ],
+   "mass": 1690,
+   "cost": 369,
+   "science": 0.5357142857142857,
+   "downlink": 1.584,
+   "coverage": 0.33,
+   "life": 3,
+   "powerDraw": 335,
+   "powerGen": 875.0
+  }
+ },
+ {
+  "name": "nerd/mars_scout/small_battery",
+  "diff": "nerd",
+  "objective": "mars_scout",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "active",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "hga",
+   "band": "x",
+   "orbit": "mars_surf",
+   "instruments": [
+    "weather"
+   ],
+   "protection": "mars_edl",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "battery_short"
+   ],
+   "mass": 1580,
+   "cost": 418,
+   "science": 0.5357142857142857,
+   "downlink": 1.584,
+   "coverage": 0.33,
+   "life": 3,
+   "powerDraw": 335,
+   "powerGen": 875.0
+  }
+ },
+ {
+  "name": "nerd/mars_scout/medium_antenna",
+  "diff": "nerd",
+  "objective": "mars_scout",
+  "design": {
+   "structure": "medium",
+   "battery": "large",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "active",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "mars_surf",
+   "instruments": [
+    "weather"
+   ],
+   "protection": "mars_edl",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "downlink_bottleneck",
+    "no_link"
+   ],
+   "mass": 1666,
+   "cost": 423,
+   "science": 0.0,
+   "downlink": 0,
+   "coverage": 0.33,
+   "life": 3,
+   "powerDraw": 290,
+   "powerGen": 875.0
+  }
+ },
+ {
+  "name": "expert/wildfire/viable0",
+  "diff": "expert",
+  "objective": "wildfire",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels",
+   "thermal": "passive",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "hires_cam",
+    "thermal_ir"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 331,
+   "cost": 128,
+   "science": 0.5974025974025973,
+   "downlink": 60.0,
+   "coverage": 0.25,
+   "life": 8,
+   "powerDraw": 185,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "expert/wildfire/viable1",
+  "diff": "expert",
+  "objective": "wildfire",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels",
+   "thermal": "passive",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "hga",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "hires_cam",
+    "thermal_ir"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 355,
+   "cost": 136,
+   "science": 0.6969696969696969,
+   "downlink": 240.0,
+   "coverage": 0.25,
+   "life": 8,
+   "powerDraw": 230,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "expert/wildfire/electron",
+  "diff": "expert",
+  "objective": "wildfire",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels",
+   "thermal": "passive",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "hires_cam",
+    "thermal_ir"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna"
+   ],
+   "vehicle": "electron"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "over_capacity"
+   ],
+   "mass": 331,
+   "cost": 106,
+   "science": 0.5974025974025973,
+   "downlink": 60.0,
+   "coverage": 0.25,
+   "life": 8,
+   "powerDraw": 185,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "expert/wildfire/small_battery",
+  "diff": "expert",
+  "objective": "wildfire",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels",
+   "thermal": "passive",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "hires_cam",
+    "thermal_ir"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 331,
+   "cost": 128,
+   "science": 0.5974025974025973,
+   "downlink": 60.0,
+   "coverage": 0.25,
+   "life": 8,
+   "powerDraw": 185,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "expert/wildfire/medium_antenna",
+  "diff": "expert",
+  "objective": "wildfire",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels",
+   "thermal": "passive",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "hires_cam",
+    "thermal_ir"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 331,
+   "cost": 128,
+   "science": 0.5974025974025973,
+   "downlink": 60.0,
+   "coverage": 0.25,
+   "life": 8,
+   "powerDraw": 185,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "expert/polar_ice/viable0",
+  "diff": "expert",
+  "objective": "polar_ice",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "magnetorquer",
+   "thermal": "passive",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "thermal_ir",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 290,
+   "cost": 128,
+   "science": 0.5806451612903226,
+   "downlink": 36.0,
+   "coverage": 0.15,
+   "life": 8,
+   "powerDraw": 160,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "expert/polar_ice/viable1",
+  "diff": "expert",
+  "objective": "polar_ice",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels",
+   "thermal": "passive",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "hga",
+   "band": "s",
+   "orbit": "sso",
+   "instruments": [
+    "thermal_ir",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 335,
+   "cost": 141,
+   "science": 0.5574193548387096,
+   "downlink": 28.799999999999997,
+   "coverage": 0.15,
+   "life": 8,
+   "powerDraw": 250,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "expert/polar_ice/electron",
+  "diff": "expert",
+  "objective": "polar_ice",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "magnetorquer",
+   "thermal": "passive",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "thermal_ir",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard"
+   ],
+   "vehicle": "electron"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "over_capacity"
+   ],
+   "mass": 290,
+   "cost": 106,
+   "science": 0.5806451612903226,
+   "downlink": 36.0,
+   "coverage": 0.15,
+   "life": 8,
+   "powerDraw": 160,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "expert/polar_ice/small_battery",
+  "diff": "expert",
+  "objective": "polar_ice",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "magnetorquer",
+   "thermal": "passive",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "thermal_ir",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 290,
+   "cost": 128,
+   "science": 0.5806451612903226,
+   "downlink": 36.0,
+   "coverage": 0.15,
+   "life": 8,
+   "powerDraw": 160,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "expert/polar_ice/medium_antenna",
+  "diff": "expert",
+  "objective": "polar_ice",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "magnetorquer",
+   "thermal": "passive",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "thermal_ir",
+    "gpr"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 290,
+   "cost": 128,
+   "science": 0.5806451612903226,
+   "downlink": 36.0,
+   "coverage": 0.15,
+   "life": 8,
+   "powerDraw": 160,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "expert/crops/viable0",
+  "diff": "expert",
+  "objective": "crops",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels",
+   "thermal": "passive",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "hires_cam",
+    "multispectral"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna",
+    "fairbanks"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 336,
+   "cost": 136,
+   "science": 0.572043010752688,
+   "downlink": 84.0,
+   "coverage": 0.35,
+   "life": 8,
+   "powerDraw": 180,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "expert/crops/viable1",
+  "diff": "expert",
+  "objective": "crops",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels",
+   "thermal": "passive",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "hga",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "hires_cam",
+    "multispectral"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 360,
+   "cost": 138,
+   "science": 0.6129032258064515,
+   "downlink": 144.0,
+   "coverage": 0.15,
+   "life": 8,
+   "powerDraw": 225,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "expert/crops/electron",
+  "diff": "expert",
+  "objective": "crops",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels",
+   "thermal": "passive",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "hires_cam",
+    "multispectral"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna",
+    "fairbanks"
+   ],
+   "vehicle": "electron"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "over_capacity"
+   ],
+   "mass": 336,
+   "cost": 114,
+   "science": 0.572043010752688,
+   "downlink": 84.0,
+   "coverage": 0.35,
+   "life": 8,
+   "powerDraw": 180,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "expert/crops/small_battery",
+  "diff": "expert",
+  "objective": "crops",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels",
+   "thermal": "passive",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "hires_cam",
+    "multispectral"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna",
+    "fairbanks"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 336,
+   "cost": 136,
+   "science": 0.572043010752688,
+   "downlink": 84.0,
+   "coverage": 0.35,
+   "life": 8,
+   "powerDraw": 180,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "expert/crops/medium_antenna",
+  "diff": "expert",
+  "objective": "crops",
+  "design": {
+   "structure": "small",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels",
+   "thermal": "passive",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "body_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "sso",
+   "instruments": [
+    "hires_cam",
+    "multispectral"
+   ],
+   "protection": "none",
+   "stations": [
+    "svalbard",
+    "kiruna",
+    "fairbanks"
+   ],
+   "vehicle": "pslv"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 336,
+   "cost": 136,
+   "science": 0.572043010752688,
+   "downlink": 84.0,
+   "coverage": 0.35,
+   "life": 8,
+   "powerDraw": 180,
+   "powerGen": 400.0
+  }
+ },
+ {
+  "name": "expert/telescope/viable0",
+  "diff": "expert",
+  "objective": "telescope",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "cold_gas",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "l2",
+   "instruments": [
+    "ir_telescope"
+   ],
+   "protection": "sunshield",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1810,
+   "cost": 717,
+   "science": 0.5165217391304348,
+   "downlink": 47.519999999999996,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 580,
+   "powerGen": 2500.0
+  }
+ },
+ {
+  "name": "expert/telescope/viable1",
+  "diff": "expert",
+  "objective": "telescope",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "cold_gas",
+   "storage": "small",
+   "power": "large_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "l2",
+   "instruments": [
+    "ir_telescope"
+   ],
+   "protection": "sunshield",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 2040,
+   "cost": 752,
+   "science": 0.5165217391304348,
+   "downlink": 47.519999999999996,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 580,
+   "powerGen": 8000.0
+  }
+ },
+ {
+  "name": "expert/telescope/electron",
+  "diff": "expert",
+  "objective": "telescope",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "cold_gas",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "l2",
+   "instruments": [
+    "ir_telescope"
+   ],
+   "protection": "sunshield",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "electron"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "vehicle_cannot_reach"
+   ],
+   "mass": 1810,
+   "cost": 655,
+   "science": 0.5165217391304348,
+   "downlink": 47.519999999999996,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 580,
+   "powerGen": 2500.0
+  }
+ },
+ {
+  "name": "expert/telescope/small_battery",
+  "diff": "expert",
+  "objective": "telescope",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "cold_gas",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "l2",
+   "instruments": [
+    "ir_telescope"
+   ],
+   "protection": "sunshield",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1810,
+   "cost": 717,
+   "science": 0.5165217391304348,
+   "downlink": 47.519999999999996,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 580,
+   "powerGen": 2500.0
+  }
+ },
+ {
+  "name": "expert/telescope/medium_antenna",
+  "diff": "expert",
+  "objective": "telescope",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "cold_gas",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "l2",
+   "instruments": [
+    "ir_telescope"
+   ],
+   "protection": "sunshield",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "partial",
+   "faults": [
+    "downlink_bottleneck"
+   ],
+   "mass": 1726,
+   "cost": 686,
+   "science": 0.034434782608695653,
+   "downlink": 3.168,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 485,
+   "powerGen": 2500.0
+  }
+ },
+ {
+  "name": "expert/asteroid/viable0",
+  "diff": "expert",
+  "objective": "asteroid",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "hga",
+   "band": "x",
+   "orbit": "asteroid",
+   "instruments": [
+    "spectrometer",
+    "magnetometer"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1265,
+   "cost": 279,
+   "science": 0.6129032258064515,
+   "downlink": 6.336,
+   "coverage": 0.66,
+   "life": 5,
+   "powerDraw": 269,
+   "powerGen": 1250.0
+  }
+ },
+ {
+  "name": "expert/asteroid/viable1",
+  "diff": "expert",
+  "objective": "asteroid",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "asteroid",
+   "instruments": [
+    "spectrometer",
+    "magnetometer"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1325,
+   "cost": 287,
+   "science": 0.6129032258064515,
+   "downlink": 11.879999999999999,
+   "coverage": 0.33,
+   "life": 5,
+   "powerDraw": 319,
+   "powerGen": 1250.0
+  }
+ },
+ {
+  "name": "expert/asteroid/electron",
+  "diff": "expert",
+  "objective": "asteroid",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "hga",
+   "band": "x",
+   "orbit": "asteroid",
+   "instruments": [
+    "spectrometer",
+    "magnetometer"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "electron"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "vehicle_cannot_reach"
+   ],
+   "mass": 1265,
+   "cost": 217,
+   "science": 0.6129032258064515,
+   "downlink": 6.336,
+   "coverage": 0.66,
+   "life": 5,
+   "powerDraw": 269,
+   "powerGen": 1250.0
+  }
+ },
+ {
+  "name": "expert/asteroid/small_battery",
+  "diff": "expert",
+  "objective": "asteroid",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "hga",
+   "band": "x",
+   "orbit": "asteroid",
+   "instruments": [
+    "spectrometer",
+    "magnetometer"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1265,
+   "cost": 279,
+   "science": 0.6129032258064515,
+   "downlink": 6.336,
+   "coverage": 0.66,
+   "life": 5,
+   "powerDraw": 269,
+   "powerGen": 1250.0
+  }
+ },
+ {
+  "name": "expert/asteroid/medium_antenna",
+  "diff": "expert",
+  "objective": "asteroid",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "asteroid",
+   "instruments": [
+    "spectrometer",
+    "magnetometer"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "downlink_bottleneck",
+    "no_link"
+   ],
+   "mass": 1241,
+   "cost": 271,
+   "science": 0.0,
+   "downlink": 0,
+   "coverage": 0.66,
+   "life": 5,
+   "powerDraw": 224,
+   "powerGen": 1250.0
+  }
+ },
+ {
+  "name": "expert/jupiter/viable0",
+  "diff": "expert",
+  "objective": "jupiter",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "large_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "jupiter",
+   "instruments": [
+    "magnetometer",
+    "radiation"
+   ],
+   "protection": "rad_shield",
+   "stations": [
+    "goldstone"
+   ],
+   "vehicle": "new_glenn"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [
+    "thin_power_margin"
+   ],
+   "mass": 1688,
+   "cost": 371,
+   "science": 0.5135135135135135,
+   "downlink": 1.1880000000000002,
+   "coverage": 0.33,
+   "life": 6,
+   "powerDraw": 312,
+   "powerGen": 320.0
+  }
+ },
+ {
+  "name": "expert/jupiter/viable1",
+  "diff": "expert",
+  "objective": "jupiter",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "rtg",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "jupiter",
+   "instruments": [
+    "magnetometer",
+    "radiation"
+   ],
+   "protection": "rad_shield",
+   "stations": [
+    "goldstone"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1398,
+   "cost": 381,
+   "science": 0.5135135135135135,
+   "downlink": 1.1880000000000002,
+   "coverage": 0.33,
+   "life": 6,
+   "powerDraw": 312,
+   "powerGen": 450.0
+  }
+ },
+ {
+  "name": "expert/jupiter/electron",
+  "diff": "expert",
+  "objective": "jupiter",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "large_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "jupiter",
+   "instruments": [
+    "magnetometer",
+    "radiation"
+   ],
+   "protection": "rad_shield",
+   "stations": [
+    "goldstone"
+   ],
+   "vehicle": "electron"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "thin_power_margin",
+    "vehicle_cannot_reach"
+   ],
+   "mass": 1688,
+   "cost": 269,
+   "science": 0.5135135135135135,
+   "downlink": 1.1880000000000002,
+   "coverage": 0.33,
+   "life": 6,
+   "powerDraw": 312,
+   "powerGen": 320.0
+  }
+ },
+ {
+  "name": "expert/jupiter/small_battery",
+  "diff": "expert",
+  "objective": "jupiter",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "large_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "jupiter",
+   "instruments": [
+    "magnetometer",
+    "radiation"
+   ],
+   "protection": "rad_shield",
+   "stations": [
+    "goldstone"
+   ],
+   "vehicle": "new_glenn"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [
+    "thin_power_margin"
+   ],
+   "mass": 1688,
+   "cost": 371,
+   "science": 0.5135135135135135,
+   "downlink": 1.1880000000000002,
+   "coverage": 0.33,
+   "life": 6,
+   "powerDraw": 312,
+   "powerGen": 320.0
+  }
+ },
+ {
+  "name": "expert/jupiter/medium_antenna",
+  "diff": "expert",
+  "objective": "jupiter",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "radhard",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "large_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "jupiter",
+   "instruments": [
+    "magnetometer",
+    "radiation"
+   ],
+   "protection": "rad_shield",
+   "stations": [
+    "goldstone"
+   ],
+   "vehicle": "new_glenn"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "downlink_bottleneck",
+    "no_link"
+   ],
+   "mass": 1604,
+   "cost": 340,
+   "science": 0.0,
+   "downlink": 0,
+   "coverage": 0.33,
+   "life": 6,
+   "powerDraw": 217,
+   "powerGen": 320.0
+  }
+ },
+ {
+  "name": "expert/mars_ice/viable0",
+  "diff": "expert",
+  "objective": "mars_ice",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "mars_orbit",
+   "instruments": [
+    "gpr",
+    "spectrometer"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1360,
+   "cost": 329,
+   "science": 0.5876129032258063,
+   "downlink": 11.879999999999999,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 375,
+   "powerGen": 1075.0
+  }
+ },
+ {
+  "name": "expert/mars_ice/viable1",
+  "diff": "expert",
+  "objective": "mars_ice",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "large_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "mars_orbit",
+   "instruments": [
+    "gpr",
+    "spectrometer"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1590,
+   "cost": 364,
+   "science": 0.5876129032258063,
+   "downlink": 11.879999999999999,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 375,
+   "powerGen": 3440.0
+  }
+ },
+ {
+  "name": "expert/mars_ice/electron",
+  "diff": "expert",
+  "objective": "mars_ice",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "mars_orbit",
+   "instruments": [
+    "gpr",
+    "spectrometer"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "electron"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "vehicle_cannot_reach"
+   ],
+   "mass": 1360,
+   "cost": 267,
+   "science": 0.5876129032258063,
+   "downlink": 11.879999999999999,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 375,
+   "powerGen": 1075.0
+  }
+ },
+ {
+  "name": "expert/mars_ice/small_battery",
+  "diff": "expert",
+  "objective": "mars_ice",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "mars_orbit",
+   "instruments": [
+    "gpr",
+    "spectrometer"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1360,
+   "cost": 329,
+   "science": 0.5876129032258063,
+   "downlink": 11.879999999999999,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 375,
+   "powerGen": 1075.0
+  }
+ },
+ {
+  "name": "expert/mars_ice/medium_antenna",
+  "diff": "expert",
+  "objective": "mars_ice",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "heaters",
+   "propulsion": "chemical",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "mars_orbit",
+   "instruments": [
+    "gpr",
+    "spectrometer"
+   ],
+   "protection": "none",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "downlink_bottleneck",
+    "no_link"
+   ],
+   "mass": 1276,
+   "cost": 298,
+   "science": 0.0,
+   "downlink": 0,
+   "coverage": 0.66,
+   "life": 10,
+   "powerDraw": 280,
+   "powerGen": 1075.0
+  }
+ },
+ {
+  "name": "expert/mars_scout/viable0",
+  "diff": "expert",
+  "objective": "mars_scout",
+  "design": {
+   "structure": "medium",
+   "battery": "large",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "active",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "hga",
+   "band": "x",
+   "orbit": "mars_surf",
+   "instruments": [
+    "radiation",
+    "weather"
+   ],
+   "protection": "mars_edl",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1700,
+   "cost": 441,
+   "science": 0.7419354838709676,
+   "downlink": 1.584,
+   "coverage": 0.33,
+   "life": 3,
+   "powerDraw": 343,
+   "powerGen": 875.0
+  }
+ },
+ {
+  "name": "expert/mars_scout/viable1",
+  "diff": "expert",
+  "objective": "mars_scout",
+  "design": {
+   "structure": "medium",
+   "battery": "large",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "active",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "s",
+   "orbit": "mars_surf",
+   "instruments": [
+    "radiation",
+    "weather"
+   ],
+   "protection": "mars_edl",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1760,
+   "cost": 462,
+   "science": 0.7419354838709676,
+   "downlink": 1.1880000000000002,
+   "coverage": 0.33,
+   "life": 3,
+   "powerDraw": 393,
+   "powerGen": 875.0
+  }
+ },
+ {
+  "name": "expert/mars_scout/electron",
+  "diff": "expert",
+  "objective": "mars_scout",
+  "design": {
+   "structure": "medium",
+   "battery": "large",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "active",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "hga",
+   "band": "x",
+   "orbit": "mars_surf",
+   "instruments": [
+    "radiation",
+    "weather"
+   ],
+   "protection": "mars_edl",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "electron"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "vehicle_cannot_reach"
+   ],
+   "mass": 1700,
+   "cost": 379,
+   "science": 0.7419354838709676,
+   "downlink": 1.584,
+   "coverage": 0.33,
+   "life": 3,
+   "powerDraw": 343,
+   "powerGen": 875.0
+  }
+ },
+ {
+  "name": "expert/mars_scout/small_battery",
+  "diff": "expert",
+  "objective": "mars_scout",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "active",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "hga",
+   "band": "x",
+   "orbit": "mars_surf",
+   "instruments": [
+    "radiation",
+    "weather"
+   ],
+   "protection": "mars_edl",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "battery_short"
+   ],
+   "mass": 1590,
+   "cost": 428,
+   "science": 0.7419354838709676,
+   "downlink": 1.584,
+   "coverage": 0.33,
+   "life": 3,
+   "powerDraw": 343,
+   "powerGen": 875.0
+  }
+ },
+ {
+  "name": "expert/mars_scout/medium_antenna",
+  "diff": "expert",
+  "objective": "mars_scout",
+  "design": {
+   "structure": "medium",
+   "battery": "large",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "active",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "mars_surf",
+   "instruments": [
+    "radiation",
+    "weather"
+   ],
+   "protection": "mars_edl",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "downlink_bottleneck",
+    "no_link"
+   ],
+   "mass": 1676,
+   "cost": 433,
+   "science": 0.0,
+   "downlink": 0,
+   "coverage": 0.33,
+   "life": 3,
+   "powerDraw": 298,
+   "powerGen": 875.0
+  }
+ },
+ {
+  "name": "expert/mars_isru/viable0",
+  "diff": "expert",
+  "objective": "mars_isru",
+  "design": {
+   "structure": "medium",
+   "battery": "large",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "active",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "hga",
+   "band": "x",
+   "orbit": "mars_surf",
+   "instruments": [
+    "radiation",
+    "drill"
+   ],
+   "protection": "mars_edl",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1745,
+   "cost": 489,
+   "science": 0.6129032258064515,
+   "downlink": 1.584,
+   "coverage": 0.33,
+   "life": 3,
+   "powerDraw": 448,
+   "powerGen": 875.0
+  }
+ },
+ {
+  "name": "expert/mars_isru/viable1",
+  "diff": "expert",
+  "objective": "mars_isru",
+  "design": {
+   "structure": "medium",
+   "battery": "large",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "active",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "dsa",
+   "band": "x",
+   "orbit": "mars_surf",
+   "instruments": [
+    "spectrometer",
+    "radiation",
+    "weather"
+   ],
+   "protection": "mars_edl",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "success",
+   "faults": [],
+   "mass": 1790,
+   "cost": 494,
+   "science": 0.5483870967741935,
+   "downlink": 5.9399999999999995,
+   "coverage": 0.33,
+   "life": 3,
+   "powerDraw": 418,
+   "powerGen": 875.0
+  }
+ },
+ {
+  "name": "expert/mars_isru/electron",
+  "diff": "expert",
+  "objective": "mars_isru",
+  "design": {
+   "structure": "medium",
+   "battery": "large",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "active",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "hga",
+   "band": "x",
+   "orbit": "mars_surf",
+   "instruments": [
+    "radiation",
+    "drill"
+   ],
+   "protection": "mars_edl",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "electron"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "vehicle_cannot_reach"
+   ],
+   "mass": 1745,
+   "cost": 427,
+   "science": 0.6129032258064515,
+   "downlink": 1.584,
+   "coverage": 0.33,
+   "life": 3,
+   "powerDraw": 448,
+   "powerGen": 875.0
+  }
+ },
+ {
+  "name": "expert/mars_isru/small_battery",
+  "diff": "expert",
+  "objective": "mars_isru",
+  "design": {
+   "structure": "medium",
+   "battery": "small",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "active",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "hga",
+   "band": "x",
+   "orbit": "mars_surf",
+   "instruments": [
+    "radiation",
+    "drill"
+   ],
+   "protection": "mars_edl",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "battery_short"
+   ],
+   "mass": 1635,
+   "cost": 476,
+   "science": 0.6129032258064515,
+   "downlink": 1.584,
+   "coverage": 0.33,
+   "life": 3,
+   "powerDraw": 448,
+   "powerGen": 875.0
+  }
+ },
+ {
+  "name": "expert/mars_isru/medium_antenna",
+  "diff": "expert",
+  "objective": "mars_isru",
+  "design": {
+   "structure": "medium",
+   "battery": "large",
+   "computer": "basic",
+   "attitude": "wheels_star",
+   "thermal": "active",
+   "propulsion": "none",
+   "storage": "small",
+   "power": "deploy_solar",
+   "antenna": "medium",
+   "band": "x",
+   "orbit": "mars_surf",
+   "instruments": [
+    "radiation",
+    "drill"
+   ],
+   "protection": "mars_edl",
+   "stations": [
+    "goldstone",
+    "madrid"
+   ],
+   "vehicle": "falcon9"
+  },
+  "expect": {
+   "outcome": "failure",
+   "faults": [
+    "downlink_bottleneck",
+    "no_link"
+   ],
+   "mass": 1721,
+   "cost": 481,
+   "science": 0.0,
+   "downlink": 0,
+   "coverage": 0.33,
+   "life": 3,
+   "powerDraw": 403,
+   "powerGen": 875.0
+  }
+ }
+]
