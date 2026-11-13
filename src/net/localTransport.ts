@@ -14,6 +14,8 @@ export interface LocalOpts {
   resume?: GameState
   /** set false to keep the game out of localStorage (tutorial, tests) */
   persist?: boolean
+  /** which player this device is (defaults to the host) */
+  me?: string
 }
 
 export function loadSave(): GameState | null {
@@ -50,9 +52,9 @@ export function createLocalTransport(opts: LocalOpts): Transport {
   }
   return {
     mode: state.mode,
-    me: 'p1',
+    me: opts.me ?? 'p1',
     getState: () => state,
-    dispatch(action: Action, actorId = 'p1') {
+    dispatch(action: Action, actorId = opts.me ?? 'p1') {
       const r = applyAction(state, action, actorId)
       if (r.ok) {
         state = r.state

@@ -7,6 +7,6 @@ export function GameScreens({ onExit }: { onExit: () => void }) {
   const { state } = useGame()
   switch (state.phase) {
     case 'lobby': return <Lobby onExit={onExit} />
-    default: return <MissionBoard />
+    default: return <MissionBoard onExit={onExit} />
   }
 }

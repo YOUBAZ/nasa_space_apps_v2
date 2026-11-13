@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import type { Action, GameState } from '../engine/state'
 import type { Role } from '../engine/types'
 import type { Transport } from './transport'
+import { applyAction } from '../engine/game'
 
 export interface Game {
   state: GameState
@@ -11,6 +12,8 @@ export interface Game {
   act(action: Action, asRole?: Role): void
   /** Do something as a specific player (lobby seat changes in pass-and-play). */
   actAs(playerId: string, action: Action): void
+  /** Dry run: the error an action would hit, or null if it would be accepted. Nothing is sent. */
+  probe(action: Action, asRole?: Role): string | null
   /** May this device operate the given role's controls? */
   can(role: Role): boolean
   holder(role: Role): string | undefined
@@ -44,6 +47,11 @@ export function GameProvider({ transport, children }: { transport: Transport; ch
       act(action, asRole) {
         const actor = online || !asRole ? transport.me : holderId(asRole) ?? transport.me
         transport.dispatch(action, actor)
+      },
+      probe(action, asRole) {
+        const actor = online || !asRole ? transport.me : holderId(asRole) ?? transport.me
+        const r = applyAction(state, action, actor)
+        return r.ok ? null : r.error
       },
       actAs(playerId, action) { transport.dispatch(action, online ? transport.me : playerId) },
       can(role) {

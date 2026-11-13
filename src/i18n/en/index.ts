@@ -1,5 +1,10 @@
 import { core } from './core'
 import { faults } from './faults'
 import { ui, stages } from './ui'
+import { board } from './board'
+import { handbook } from './handbook'
+import { catalogNames, generatedHandbook } from './catalog'
 
-export const en: Record<string, string> = { ...core, ...faults, ...ui, ...stages }
+export const en: Record<string, string> = {
+  ...core, ...faults, ...ui, ...stages, ...board, ...catalogNames(), ...handbook, ...generatedHandbook(),
+}
