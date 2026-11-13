@@ -347,3 +347,37 @@ An independent review of the finished build led to these rule changes. Where the
 - **"Fly again with fixes" changes nothing.** The mission restarts in the design stage with the same objective, budget split (including money the Planner added), schedule and every part and instrument. The team applies only its fix. If the campaign can no longer afford the same budget, the Planner re-plans starting from the old numbers.
 - **Pass and play.** Player 1 can be renamed in the player list.
 - **Tutorial.** The coach sits at the bottom centre so it never covers Requests; the re-plan step is gone because fly again keeps the budget.
+
+## 18. The flight animation (requested 2026-11-14, replaces "one flight page" in §17)
+
+The flight is one continuous time-lapse on one page, with the Radio Operator's console beside it.
+
+**Stages.** Countdown → climb to space → (wait for the Radio Operator) → cruise → arrival → conversation on arrival. The Radio Operator's "Contact the spacecraft" button appears only once the rocket has passed 100 km and left the atmosphere. From then on the Radio Operator tracks the spacecraft: the console logs check-ins at 25%, 50% and 75% of the way, with distance from Earth and signal delay.
+
+**Timing follows distance and design** (`src/engine/flight.ts`, tested):
+- Real figures per destination: distance from Earth and normal trip time (about 8.5 minutes to a low orbit, 3 days to the Moon, 7 months to Mars, 5 years to Jupiter).
+- The readouts show real mission time, distance, one-way signal delay and sunlight.
+- The animation is a time-lapse whose length grows with the trip (about 5 s for a low orbit, 21 s for Mars, 25 s for Jupiter).
+- The design bends the times: a rocket loaded near its limit climbs more slowly (130–214 real seconds to space); spare rocket capacity shortens the trip by up to 15% and a full load lengthens it by up to 15%; an ion engine makes a trip beyond Earth 50% longer.
+
+**Three outcomes.**
+- *Success*: the whole journey, arrival into orbit (or a landing), then four commands and replies.
+- *Partial success*: the same journey, arriving with amber warnings in the replies.
+- *Failure*: one of twelve animations, each striking at the moment it would really happen. If a design has several mission-ending problems, the animation shows the one that comes first; the debrief lists all of them.
+
+| # | Problem | When | What is shown |
+|---|---|---|---|
+| 1 | Rocket can't get there | climb | engine flickers out, the rocket coasts, tips over and falls back glowing |
+| 2 | Too heavy for the rocket | climb | barely lifts, wobbles, sinks back onto the pad and explodes there |
+| 3 | Frame buckled | climb | the top folds in mid-climb and the payload spills out in pieces |
+| 4 | Wrong destination | arrival | arrives and orbits; the instrument scan sweeps the surface and turns red |
+| 5 | Not enough power | cruise | lights dim as the Sun shrinks, then the craft goes dark and drifts |
+| 6 | Froze overnight | arrival | lands safely, night covers the site, the beacon turns blue and goes out |
+| 7 | Couldn't stop | arrival | comes in and flies straight past the planet |
+| 8 | No way to land | arrival | dives at Mars and burns up in a fireball |
+| 9 | Fried by radiation | arrival | orbits inside Jupiter's glowing belts, sparks, then goes dark |
+| 10 | Tumbling | cruise | spins out of control soon after leaving Earth |
+| 11 | No radio contact | cruise | the signal beam to Earth thins with distance and dies |
+| 12 | Nobody listening | cruise | calls home right after reaching space; a red marker shows no station hears it |
+
+**Review page.** Opening the game with `#gallery` at the end of the address shows every animation without playing a mission.

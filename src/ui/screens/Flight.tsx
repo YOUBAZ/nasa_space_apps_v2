@@ -1,36 +1,103 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
-import type { FaultCode } from '../../engine/types'
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react'
+import { flightPlan, type FlightPlan } from '../../engine/flight'
+import type { Design, FaultCode, StationId, VehicleId } from '../../engine/types'
 import { t } from '../../i18n/i18n'
 import { useGame } from '../../net/useGame'
 import { Button } from '../components/Button'
 import { View3D } from '../components/View3D'
+import { formatDelay, formatDistance, formatMissionTime } from '../flight/format'
+import { useFlightTimeline, type Timeline } from '../flight/useFlightTimeline'
 import { Icon } from '../icons'
-import { num, orbName, vehName } from '../names'
+import { orbName, vehName } from '../names'
 import { sfx } from '../sound'
+import type { AscentStory } from '../three/LaunchScene3D'
 
 const LaunchScene3D = lazy(() => import('../three/LaunchScene3D'))
-const OrbitView3D = lazy(() => import('../three/OrbitView3D'))
+const JourneyScene3D = lazy(() => import('../three/JourneyScene3D'))
 
-const LOST: FaultCode[] = ['over_capacity', 'vehicle_cannot_reach', 'structure_overloaded']
-const NO_LINK: FaultCode[] = ['no_link', 'no_station_in_view']
-const COUNT_FROM = 10
-const TICK_MS = 550
 const REPLY_MS = 1200
+const LIGHT_KM_S = 299_792.458
+const ASCENT_STORIES: FaultCode[] = ['over_capacity', 'structure_overloaded', 'vehicle_cannot_reach']
+const smooth = (x: number) => x * x * (3 - 2 * x)
 
 type Tone = 'ok' | 'warn' | 'bad'
-interface Beat { key: string; bad: FaultCode[]; warn: FaultCode[] }
+interface Beat { key: string; warn: FaultCode[] }
+// What the Radio Operator asks once the spacecraft has arrived, and which lost-science problems colour each reply.
 const BEATS: Beat[] = [
-  { key: 'arrival', bad: ['no_capture_propulsion', 'no_landing_kit', 'wrong_destination'], warn: [] },
-  { key: 'power', bad: ['power_deficit', 'radiation_fried'], warn: ['battery_short', 'thermal_failure', 'thin_power_margin'] },
-  { key: 'instruments', bad: ['tumbling'], warn: ['pointing_too_coarse', 'telescope_blinded', 'computer_overloaded', 'irrelevant_instruments'] },
-  { key: 'downlink', bad: NO_LINK, warn: ['downlink_bottleneck', 'coverage_low', 'storage_overflow'] },
+  { key: 'arrival', warn: ['no_capture_propulsion', 'short_lifetime'] },
+  { key: 'power', warn: ['battery_short', 'thermal_failure', 'thin_power_margin'] },
+  { key: 'instruments', warn: ['pointing_too_coarse', 'telescope_blinded', 'computer_overloaded', 'irrelevant_instruments'] },
+  { key: 'downlink', warn: ['downlink_bottleneck', 'coverage_low', 'storage_overflow'] },
 ]
-interface Line { id: number; who: 'flight' | 'radio' | 'craft'; text: string; tone?: Tone }
+export interface Line { id: number; who: 'flight' | 'radio' | 'craft'; text: string; tone?: Tone }
 const TONE: Record<Tone, string> = { ok: 'border-active-green text-active-green', warn: 'border-intl-orange text-intl-orange', bad: 'border-nasa-red text-nasa-red-tint' }
 
+/** Where the spacecraft is right now, in real units, for the readouts over the view. */
+export function telemetry(plan: FlightPlan, tl: Pick<Timeline, 'stage' | 'animStage' | 'p'>) {
+  const travel = plan.travelDays * 86400
+  if (tl.animStage === 'countdown') return { seconds: 0, km: 0, altitude: true, sun: 1 }
+  if (tl.animStage === 'ascent') {
+    const reach = plan.story === 'over_capacity' ? 0.3 : 100
+    return { seconds: plan.ascentSeconds * tl.p, km: reach * tl.p * tl.p, altitude: true, sun: 1 }
+  }
+  if (tl.animStage === 'cruise') {
+    const k = smooth(tl.p)
+    return { seconds: plan.ascentSeconds + travel * tl.p, km: 100 + (plan.distanceKm - 100) * k, altitude: false, sun: 1 + (plan.sunAtDestination - 1) * k }
+  }
+  return { seconds: plan.ascentSeconds + travel, km: plan.distanceKm, altitude: false, sun: plan.sunAtDestination }
+}
+
+/** The 3D view with its readouts: the climb, then the cruise, then the arrival. Shared by the game and the gallery. */
+export function FlightView({ plan, tl, design, vehicle, stations }:
+  { plan: FlightPlan; tl: Timeline; design: Design; vehicle: VehicleId; stations: StationId[] }) {
+  const onPad = tl.animStage === 'countdown' || tl.animStage === 'ascent'
+  const tele = telemetry(plan, tl)
+  const ascentStory: AscentStory = ASCENT_STORIES.includes(plan.story as FaultCode) ? (plan.story as AscentStory) : 'ok'
+  const failed = tl.lost
+  const sky = tl.animStage === 'countdown' ? 'linear-gradient(#0b3d91, #f6a66a)' : onPad ? `linear-gradient(#000, ${tl.p > 0.6 ? '#02040c' : '#0b1a3a'})` : '#000'
+  return (
+    <View3D testId="flight-view" className="min-h-[22rem] lg:min-h-0" background={sky}
+      fallback={<div className="flex h-full min-h-[18rem] items-center justify-center"><Icon name="rocket" size={110} className={tl.stage === 'ascent' ? 'animate-bounce text-nasa-red' : 'text-carbon-10'} /></div>}
+      overlay={(
+        <>
+          <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-4">
+            <div>
+              <p className="label">{onPad ? vehName(vehicle) : orbName(design.orbit)}</p>
+              <p className="mono text-lg text-white">{t(`hud.stage.${tl.stage}`)}</p>
+            </div>
+            {tl.stage === 'countdown' && (
+              <p className="mono text-5xl font-medium tabular-nums text-white sm:text-7xl" dir="ltr" aria-live="polite">T-{String(tl.count).padStart(2, '0')}</p>
+            )}
+          </div>
+          {tl.stage !== 'countdown' && (
+            <dl className="pointer-events-none absolute inset-x-0 bottom-0 grid grid-cols-2 gap-x-4 gap-y-1 bg-gradient-to-t from-black/85 to-transparent p-4 pe-14 sm:grid-cols-4" dir="ltr">
+              <div><dt className="label">{t('hud.time')}</dt><dd className="mono text-base text-white" data-testid="hud-time">{formatMissionTime(tele.seconds)}</dd></div>
+              <div><dt className="label">{t(tele.altitude ? 'hud.altitude' : 'hud.distance')}</dt><dd className="mono text-base text-white" data-testid="hud-distance">{formatDistance(tele.km)}</dd></div>
+              <div><dt className="label">{t('hud.delay')}</dt><dd className="mono text-base text-white" data-testid="hud-delay">{formatDelay(tele.km / LIGHT_KM_S)}</dd></div>
+              <div><dt className="label">{t('hud.sun')}</dt><dd className="mono text-base text-white">{Math.round(tele.sun * 100)}%</dd></div>
+            </dl>
+          )}
+          {failed && (
+            <p className="pointer-events-none absolute start-4 top-[4.5rem] max-w-[70%] rounded bg-black/70 px-3 py-1.5 font-display text-lg font-black uppercase text-nasa-red-tint sm:text-xl" role="status">
+              {t(`fault.${plan.story}.title`)}
+            </p>
+          )}
+        </>
+      )}>
+      <Suspense fallback={null}>
+        {onPad
+          ? <LaunchScene3D vehicle={vehicle} startAt={tl.animStage === 'ascent' ? tl.animStart : null} duration={plan.anim.ascent} story={ascentStory} failAt={plan.failAt} />
+          : <JourneyScene3D orbit={design.orbit} design={design} stations={stations} story={plan.story} storyStage={plan.stage} failAt={plan.failAt}
+              shot={tl.animStage as 'cruise' | 'arrival'} startAt={tl.animStart} duration={plan.anim[tl.animStage as 'cruise' | 'arrival']} />}
+      </Suspense>
+    </View3D>
+  )
+}
+
 /**
- * Launch and operations on one page: the 3D view on one side, the Radio Operator's console on the other.
- * The console keeps one running transcript, from the countdown calls to every command and reply.
+ * The whole flight on one page: the 3D view on one side, the Radio Operator's console on the other.
+ * The rocket climbs to space, the Radio Operator makes contact and tracks the cruise, and the story
+ * this design earned plays out where it would really happen.
  */
 export function Flight() {
   const { state, act, can } = useGame()
@@ -39,20 +106,18 @@ export function Flight() {
   const design = m.finalDesign!
   const radio = can('radio')
   const inOps = state.phase === 'operations'
+  const plan = useMemo(() => flightPlan(design, report), [design, report])
+  const tl = useFlightTimeline(plan, { startInCruise: inOps })
+  const failure = plan.story !== 'success' && plan.story !== 'partial'
   const has = (codes: FaultCode[]) => report.faults.some((f) => codes.includes(f.code))
-  const lost = has(LOST)
-  const linkDead = has(NO_LINK)
 
-  // --- launch timeline (local to each device; arriving mid-operations skips straight past it)
-  const [count, setCount] = useState(inOps ? 0 : COUNT_FROM)
-  const [ascentDone, setAscentDone] = useState(inOps)
-  const [elapsed, setElapsed] = useState(0)
-  const started = count <= 0
+  // once the Radio Operator has made contact (on any device), the cruise may begin here too
+  useEffect(() => { if (inOps) tl.contact() }, [inOps]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // --- transcript
+  // ---- one running transcript
   const nextId = useRef(0)
-  const [lines, setLines] = useState<Line[]>([])
   const said = useRef(new Set<string>())
+  const [lines, setLines] = useState<Line[]>([])
   const say = (who: Line['who'], text: string, tone?: Tone, once?: string) => {
     if (once) {
       if (said.current.has(once)) return
@@ -65,113 +130,87 @@ export function Flight() {
   const end = useRef<HTMLLIElement>(null)
   useEffect(() => { end.current?.scrollIntoView?.({ block: 'nearest' }) }, [lines.length])
 
-  useEffect(() => { say('flight', t(inOps ? 'flight.call.meco' : 'flight.call.count'), undefined, inOps ? 'meco' : 'count') }, []) // eslint-disable-line react-hooks/exhaustive-deps
-
+  const tele = telemetry(plan, tl)
   useEffect(() => {
-    if (count <= 0) return
-    sfx('beep')
-    const id = setTimeout(() => setCount((c) => c - 1), TICK_MS)
-    return () => clearTimeout(id)
-  }, [count])
-
-  useEffect(() => {
-    if (!started || ascentDone) return
+    const { stage, animStage, p, lost } = tl
+    if (animStage === 'countdown') { say('flight', t('flight.call.count'), undefined, 'count'); return }
+    say('flight', t('flight.call.count'), undefined, 'count')
     say('flight', t('flight.call.liftoff'), undefined, 'liftoff')
-    sfx('rumble')
-    const timers = [
-      setTimeout(() => setAscentDone(true), lost ? 5000 : 7000),
-      lost ? setTimeout(() => sfx('boom'), 2600) : setTimeout(() => say('flight', t('flight.call.staging'), undefined, 'staging'), 3400),
-    ]
-    const clock = setInterval(() => setElapsed((e) => e + 1), 1000)
-    return () => { timers.forEach(clearTimeout); clearInterval(clock) }
-  }, [started, ascentDone]) // eslint-disable-line react-hooks/exhaustive-deps
+    const past = (s: 'ascent' | 'cruise' | 'arrival') => ['ascent', 'cruise', 'arrival'].indexOf(animStage) > ['ascent', 'cruise', 'arrival'].indexOf(s)
+    const ascent = animStage === 'ascent' ? p : 1
+    if (plan.story !== 'over_capacity' && (ascent >= 0.45 || past('ascent'))) say('flight', t('flight.call.staging'), undefined, 'staging')
+    if (plan.stage !== 'ascent' && (ascent >= 0.7 || past('ascent'))) say('flight', t('flight.call.fairing'), undefined, 'fairing')
+    if (stage === 'space' || past('ascent')) say('flight', t('flight.call.space'), 'ok', 'space')
+    if (animStage === 'cruise' || past('cruise')) {
+      say('radio', t('flight.call.tracking'), undefined, 'tracking')
+      for (const pct of [25, 50, 75]) {
+        const reached = past('cruise') || p * 100 >= pct
+        const beforeFailure = plan.stage !== 'cruise' || pct / 100 < plan.failAt
+        if (reached && beforeFailure) {
+          const km = 100 + (plan.distanceKm - 100) * smooth(pct / 100)
+          say('craft', t('flight.call.checkin', { pct, distance: formatDistance(km), delay: formatDelay(km / LIGHT_KM_S) }), 'ok', `checkin${pct}`)
+        }
+      }
+    }
+    if (animStage === 'arrival') say('flight', t('flight.call.approach'), undefined, 'approach')
+    if (lost) {
+      say('flight', t(`story.${plan.story}.line`), 'bad', 'story')
+      if (!said.current.has('boom')) { said.current.add('boom'); sfx(plan.stage === 'ascent' ? 'boom' : 'static') }
+    }
+    if (stage === 'end' && !failure) {
+      say('flight', t('flight.call.arrived', { time: formatMissionTime(tele.seconds) }), 'ok', 'arrived')
+      say('flight', t(`story.${plan.story}.line`), plan.story === 'partial' ? 'warn' : 'ok', 'story')
+    }
+  }, [tl.stage, tl.animStage, tl.lost, Math.floor(tl.p * 20)]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    if (!ascentDone) return
-    say('flight', t('flight.call.liftoff'), undefined, 'liftoff')
-    if (lost) say('flight', t('flight.call.lost'), 'bad', 'lost')
-    else say('flight', t('flight.call.meco'), 'ok', 'meco')
-  }, [ascentDone]) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (tl.stage === 'countdown' && tl.count > 0) sfx('beep') }, [tl.stage, tl.count])
+  useEffect(() => { if (tl.stage === 'ascent') sfx('rumble') }, [tl.stage])
 
-  // --- conversation with the spacecraft
+  // ---- the conversation once it has arrived
   const [answered, setAnswered] = useState(0)
   const [pending, setPending] = useState(false)
-  const toneOf = (b: Beat): Tone => (has(b.bad) ? 'bad' : has(b.warn) ? 'warn' : 'ok')
-  // With no radio link the first command already goes unanswered; otherwise the first hard failure ends the talk.
-  const firstBad = linkDead ? 0 : BEATS.findIndex((b) => has(b.bad))
-  const total = firstBad === -1 ? BEATS.length : firstBad + 1
-  const finished = inOps && answered >= total
-
+  const arrived = inOps && tl.stage === 'end' && !failure
+  const finished = arrived && answered >= BEATS.length
   const send = () => {
-    if (pending || answered >= total) return
-    const beat = BEATS[answered]
-    say('radio', t(`ops.cmd.${beat.key}`))
+    if (pending || !arrived || answered >= BEATS.length) return
+    say('radio', t(`ops.cmd.${BEATS[answered].key}`))
     setPending(true)
   }
   useEffect(() => {
     if (!pending) return
     const beat = BEATS[answered]
     const id = setTimeout(() => {
-      if (linkDead) say('craft', t('ops.bad.downlink'), 'bad')
-      else { const tone = toneOf(beat); say('craft', t(`ops.${tone}.${beat.key}`), tone) }
+      const tone: Tone = has(beat.warn) ? 'warn' : 'ok'
+      say('craft', t(`ops.${tone}.${beat.key}`), tone)
       sfx('static')
       setAnswered((n) => n + 1)
       setPending(false)
     }, REPLY_MS)
     return () => clearTimeout(id)
   }, [pending]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Other devices follow the same conversation automatically.
+  // other devices follow the same conversation automatically
   useEffect(() => {
-    if (radio || !inOps || pending || answered >= total) return
+    if (radio || !arrived || pending || answered >= BEATS.length) return
     const id = setTimeout(send, 1400)
     return () => clearTimeout(id)
-  }, [radio, inOps, pending, answered, total]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [radio, arrived, pending, answered]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const silent = finished && (linkDead || (firstBad !== -1 && firstBad < BEATS.length - 1))
-  const bars = !inOps || answered === 0 ? 0 : silent ? 0 : Math.max(1, Math.round(Math.min(1, report.coverage * 2.5) * 5))
-  const data = inOps && answered >= BEATS.length && !linkDead ? Math.min(report.downlink, report.dataGenerated) : 0
-  const status = !started ? t('launch.count') : !ascentDone ? t('launch.ascent') : lost ? t('launch.lost') : t('launch.orbit')
-  const skip = () => { setCount(0); setAscentDone(true) }
+  const playing = tl.stage === 'countdown' || tl.stage === 'ascent' || tl.stage === 'cruise' || tl.stage === 'arrival'
+  const over = tl.stage === 'end' && failure
+  const silent = over && plan.stage !== 'ascent'
+  const bars = tl.animStage === 'countdown' || tl.animStage === 'ascent' ? 0 : silent ? 0 : Math.max(1, Math.round(Math.min(1, report.coverage * 2.5) * 5))
+  const data = finished ? Math.min(report.downlink, report.dataGenerated) : 0
+  const toDebrief = () => act({ type: 'advanceOps' }, 'radio')
 
   return (
-    <div className="mx-auto grid min-h-[calc(100vh-3.5rem)] max-w-[1400px] gap-3 px-3 py-3 lg:grid-cols-[1.5fr_1fr]" data-testid="flight">
-      {/* ---- the view: launch, then the destination */}
-      <View3D testId="flight-view" className="min-h-[22rem] lg:min-h-0"
-        background={inOps ? '#000' : started ? 'linear-gradient(#000, #0b1a3a)' : 'linear-gradient(#0b3d91, #f6a66a)'}
-        fallback={<div className="flex h-full min-h-[18rem] items-center justify-center"><Icon name="rocket" size={110} className={started && !ascentDone ? 'animate-bounce text-nasa-red' : 'text-carbon-10'} /></div>}
-        overlay={(
-          <>
-            <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-4">
-              <div>
-                <p className="label">{inOps ? orbName(design.orbit) : vehName(design.vehicle)}</p>
-                <p className="mono text-lg text-white">{inOps ? t('ops.onStation') : status}</p>
-              </div>
-              {!inOps && (
-                <p className={`mono text-5xl font-medium tabular-nums sm:text-7xl ${started ? 'text-active-green' : 'text-white'}`} dir="ltr" aria-live="polite">
-                  {started ? `T+${String(elapsed).padStart(2, '0')}` : `T-${String(count).padStart(2, '0')}`}
-                </p>
-              )}
-            </div>
-            {!inOps && ascentDone && lost && (
-              <p className="pointer-events-none absolute inset-x-0 top-1/3 text-center font-display text-4xl font-black uppercase text-nasa-red">{t('launch.lostBig')}</p>
-            )}
-          </>
-        )}>
-        <Suspense fallback={null}>
-          {inOps
-            ? <OrbitView3D orbit={design.orbit} stations={design.stations} design={design} />
-            : <LaunchScene3D vehicle={design.vehicle} started={started} fail={lost} />}
-        </Suspense>
-      </View3D>
+    <div className="mx-auto grid min-h-[calc(100vh-3.5rem)] max-w-[1400px] gap-3 px-3 py-3 lg:grid-cols-[1.5fr_1fr]"
+      data-testid="flight" data-stage={tl.stage} data-story={plan.story}>
+      <FlightView plan={plan} tl={tl} design={design} vehicle={design.vehicle} stations={design.stations} />
 
-      {/* ---- the Radio Operator's console */}
       <section className="panel flex min-h-[24rem] flex-col gap-3 p-4" data-tut="console">
-        <header className="flex items-start justify-between gap-3">
-          <div>
-            <h1 className="flex items-center gap-2 text-xl font-black"><Icon name="radio" />{t('ops.title')}</h1>
-            <p className="text-sm text-carbon-30">{t(radio ? 'ops.youDrive' : 'ops.radioDrives')}</p>
-          </div>
+        <header>
+          <h1 className="flex items-center gap-2 text-xl font-black"><Icon name="radio" />{t('ops.title')}</h1>
+          <p className="text-sm text-carbon-30">{t(radio ? 'ops.youDrive' : 'ops.radioDrives')}</p>
         </header>
         <div className="grid grid-cols-2 gap-2">
           <div className="rounded border border-carbon-70 bg-black/40 p-2.5">
@@ -185,15 +224,15 @@ export function Flight() {
           </div>
           <div className="rounded border border-carbon-70 bg-black/40 p-2.5">
             <p className="label">{t('ops.data')}</p>
-            <p className="mono text-2xl text-white" dir="ltr">{num(data, 1)} <span className="text-sm text-carbon-30">Gb/d</span></p>
+            <p className="mono text-2xl text-white" dir="ltr">{data.toLocaleString('en-US', { maximumFractionDigits: 1 })} <span className="text-sm text-carbon-30">Gb/d</span></p>
           </div>
         </div>
 
         <ol role="log" aria-label={t('ops.title')} className="flex min-h-0 flex-1 flex-col gap-1.5 overflow-y-auto rounded border border-carbon-70 bg-black/50 p-2.5">
           {lines.map((l) => (
-            <li key={l.id} className={l.who === 'radio' ? 'self-end' : l.who === 'craft' ? 'self-start' : 'self-center'}>
+            <li key={l.id} className={l.who === 'radio' ? 'self-end' : l.who === 'craft' ? 'self-start' : 'self-center text-center'}>
               {l.who === 'flight'
-                ? <span className={`mono text-xs ${l.tone === 'bad' ? 'text-nasa-red-tint' : l.tone === 'ok' ? 'text-active-green' : 'text-carbon-30'}`}>{l.text}</span>
+                ? <span className={`mono text-xs ${l.tone === 'bad' ? 'text-sm font-medium text-nasa-red-tint' : l.tone === 'ok' ? 'text-active-green' : l.tone === 'warn' ? 'text-intl-orange' : 'text-carbon-30'}`}>{l.text}</span>
                 : (
                   <span className={`block max-w-[22rem] rounded border px-2.5 py-1.5 text-sm ${l.who === 'radio' ? 'border-nasa-blue-tint bg-nasa-blue-shade/50 text-white' : `bg-black/60 ${TONE[l.tone ?? 'ok']}`}`}>
                     <span className="mono block text-[0.65rem] uppercase opacity-80">
@@ -208,18 +247,18 @@ export function Flight() {
         </ol>
 
         <div className="flex flex-wrap items-center justify-end gap-2">
-          {!inOps && !ascentDone && <Button variant="ghost" size="sm" onClick={skip}>{t('launch.skip')}</Button>}
-          {!radio && (ascentDone || inOps) && <p className="mono text-sm text-carbon-30">{t('launch.waitRadio')}</p>}
-          {radio && !inOps && ascentDone && (
-            <Button variant="primary" size="lg" icon={lost ? 'arrow' : 'radio'} onClick={() => act({ type: 'advanceOps' }, 'radio')}>
-              {lost ? t('launch.toDebrief') : t('launch.toOps')}
-            </Button>
+          {playing && <Button variant="ghost" size="sm" onClick={tl.skip}>{t('launch.skip')}</Button>}
+          {!inOps && tl.stage === 'ascent' && !radio && <span />}
+          {!inOps && tl.stage !== 'space' && !over && radio && <p className="mono text-xs text-carbon-40">{t('flight.waitSpace')}</p>}
+          {!radio && (tl.stage === 'space' || tl.stage === 'end') && <p className="mono text-sm text-carbon-30">{t('launch.waitRadio')}</p>}
+          {radio && !inOps && tl.stage === 'space' && (
+            <Button variant="primary" size="lg" icon="radio" onClick={toDebrief}>{t('launch.toOps')}</Button>
           )}
-          {radio && inOps && !finished && (
+          {radio && arrived && !finished && (
             <Button icon="send" disabled={pending} onClick={send}>{pending ? t('ops.waiting') : t('ops.send')}</Button>
           )}
-          {radio && finished && (
-            <Button variant="primary" size="lg" icon="arrow" onClick={() => act({ type: 'advanceOps' }, 'radio')}>{t('ops.toDebrief')}</Button>
+          {radio && (over || finished) && (
+            <Button variant="primary" size="lg" icon="arrow" onClick={toDebrief}>{t('ops.toDebrief')}</Button>
           )}
         </div>
       </section>

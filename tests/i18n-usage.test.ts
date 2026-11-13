@@ -55,7 +55,9 @@ describe('i18n keys for the endgame screens', () => {
   it('operations beats, outcomes, awards, badges, ranks and severities have copy', () => {
     const beats = ['arrival', 'power', 'instruments', 'downlink']
     const keys = [
-      ...beats.flatMap((b) => [`ops.cmd.${b}`, `ops.ok.${b}`, `ops.warn.${b}`, `ops.bad.${b}`]),
+      ...beats.flatMap((b) => [`ops.cmd.${b}`, `ops.ok.${b}`, `ops.warn.${b}`]),
+      ...['countdown', 'ascent', 'space', 'cruise', 'arrival', 'end'].map((st) => `hud.stage.${st}`),
+      ...['success', 'partial'].map((st) => `story.${st}.line`),
       ...['success', 'partial', 'failure'].map((o) => `outcome.${o}`),
       'outcome.quip.success', 'outcome.quip.partial',
       ...['launch', 'comms', 'power', 'other'].map((g) => `outcome.quip.failure.${g}`),

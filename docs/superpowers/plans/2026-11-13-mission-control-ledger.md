@@ -89,3 +89,12 @@ Ruling: with no radio link the first command goes unanswered and the conversatio
 Ruling: Requests and Activity moved to the left column so the 3D column never scrolls; tutorial coach moved to bottom centre.
 Verified in browser: Expert Jupiter mission through every new screen (screenshots), launch frames for a good and a failed flight, tutorial end to end, two-tab online mission, Arabic solo, phone-width audit. 369 tests pass.
 Not verified: the new 3D on a real GPU or a phone (checked with software rendering only); frame rate on low-end devices.
+
+## Flight animation rebuild (2026-11-14)
+Ruling: "3 outcomes" read as success, partial success and failure; partial follows the success journey with amber replies — the user described only success and failure in detail — cost if wrong: partial needs its own animation.
+Ruling: "accurately timed" = real mission time, distance and signal delay on the readouts, with a time-lapse whose length grows with distance (log scale, 5–26 s) — real time is minutes to years, so it cannot be played literally — cost if wrong: user wanted a different scaling.
+Ruling: design effects on timing (load slows the climb, spare capacity shortens the trip, ion engine lengthens it) are my own simplified rules, not from the balance appendix — the user asked for timing "constrained by design" — cost if wrong: numbers need the team's sign-off; they affect only the animation, not scores or money.
+Ruling: with several mission-ending faults the animation shows the earliest in flight order; debrief still lists all.
+Ruling: a #gallery review page was added (not linked from the menu) so all 14 animations can be checked quickly.
+Verified in browser (software rendering): all 14 stories in the gallery with a frame each; tutorial end to end; two-tab online mission; Arabic solo; phone-width audit. 387 tests pass.
+Not verified: frame rate on real hardware; the fly-past, fireball and scan-cone moments were seen only as single frames.

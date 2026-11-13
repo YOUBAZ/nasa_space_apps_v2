@@ -14,3 +14,6 @@ Copy `.env.example` to `.env.local` and set `VITE_SUPABASE_URL` and `VITE_SUPABA
 
 ## Imagery
 The planets, the Moon and the star background are real NASA images (see `public/textures/CREDITS.md`). The spacecraft, rockets and asteroid are modelled in code. NASA does not endorse this project.
+
+## Reviewing the flight animations
+Run the game and add `#gallery` to the address (for example `http://localhost:5173/#gallery`). It plays the success, partial and all twelve failure animations without flying a mission.

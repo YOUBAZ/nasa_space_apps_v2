@@ -9,11 +9,14 @@ import { TutorialGame } from './ui/tutorial/TutorialGame'
 import { MuteToggle } from './ui/components/MuteToggle'
 import { LangToggle } from './ui/components/LangToggle'
 import { CrashBoundary } from './ui/components/CrashBoundary'
+import { FlightGallery } from './ui/screens/FlightGallery'
 
 export default function App() {
   useLang()
   const [transport, setTransport] = useState<Transport | null>(null)
   const [training, setTraining] = useState(false)
+  // #gallery opens the review page for every flight animation
+  const [gallery, setGallery] = useState(() => typeof window !== 'undefined' && window.location.hash === '#gallery')
   const exit = () => {
     transport?.dispose()
     setTransport(null)
@@ -22,7 +25,9 @@ export default function App() {
     <div className="flex min-h-screen flex-col">
       <div className="flex-1">
         <CrashBoundary>
-        {training
+        {gallery
+          ? <FlightGallery onExit={() => { window.location.hash = ''; setGallery(false) }} />
+          : training
           ? <TutorialGame onExit={() => setTraining(false)} />
           : transport
           ? <GameProvider transport={transport}><HandbookProvider><GameScreens onExit={exit} /></HandbookProvider></GameProvider>
