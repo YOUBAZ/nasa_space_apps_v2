@@ -11,6 +11,7 @@ import {
   moveFunds, requestFunds, requestInstruments, resolveBackorder, reviewFunding, reviewInstruments,
   setOrbit, setReady, setSlot, setStations, setVehicle,
 } from './phases/design'
+import { finishDebrief, nextMission } from './campaign'
 import { advanceOps, agreePairing, launch, reviewPurchase, submitPurchase, vote } from './phases/integration'
 
 export interface CreateOpts {
@@ -142,6 +143,8 @@ function reduce(s: GameState, a: Action, actorId: string): void {
     case 'vote': return vote(s, a, actorId)
     case 'launch': return launch(s, actorId)
     case 'advanceOps': return advanceOps(s, actorId)
+    case 'finishDebrief': return finishDebrief(s)
+    case 'nextMission': return nextMission(s, a, actorId)
     default: fail('unknown_action')
   }
 }

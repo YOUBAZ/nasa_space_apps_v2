@@ -15,9 +15,45 @@ export { BACKORDER_DELAY_MONTHS }
 const BACKORDER_COUNT = { fan: 0, nerd: 1, expert: 2 } as const
 const ownerOf = (slot: Slot): 'designer' | 'radio' => (RADIO_SLOTS.includes(slot) ? 'radio' : 'designer')
 
+/** Returns true when the change keeps every allocation intact; otherwise undoes it. */
+function tryPiece(s: GameState, apply: () => void, undo: () => void): boolean {
+  apply()
+  try {
+    checkCaps(s)
+    return true
+  } catch {
+    undo()
+    return false
+  }
+}
+
+/** "Fly again": re-apply last mission's design piece by piece, skipping what no longer fits. */
+function applyTemplate(s: GameState): void {
+  const m = missionOf(s)
+  const t = m.template
+  if (!t) return
+  const d = m.design
+  for (const slot of activeSlots(s.difficulty, s.campaign.unlocked)) {
+    if (!optionsFor(s.difficulty, slot, s.campaign.unlocked).includes(t[slot])) continue
+    tryPiece(s, () => { d[slot] = t[slot] }, () => { delete d[slot] })
+  }
+  if (orbitsFor(s.difficulty).includes(t.orbit)) tryPiece(s, () => { d.orbit = t.orbit }, () => { delete d.orbit })
+  if (vehiclesFor(s.difficulty).includes(t.vehicle)) tryPiece(s, () => { d.vehicle = t.vehicle }, () => { delete d.vehicle })
+  d.stations = []
+  for (const st of t.stations) tryPiece(s, () => { d.stations!.push(st) }, () => { d.stations!.pop() })
+  const allowed = instrumentsFor(s.difficulty, s.campaign.unlocked)
+  const list = t.instruments.filter((i) => allowed.includes(i))
+  if (list.length > 0 && tryPiece(s, () => { d.instruments = list }, () => { delete d.instruments })) {
+    m.instrumentRequest = [...list]
+    m.instrumentStatus = 'accepted'
+  }
+  m.template = undefined
+}
+
 export function enterDesign(s: GameState): void {
   const m = missionOf(s)
   s.phase = 'design'
+  applyTemplate(s)
   // Supply-chain surprises: some parts are backordered this mission.
   const pool: { slot: Slot; option: string }[] = []
   for (const slot of activeSlots(s.difficulty, s.campaign.unlocked)) {
