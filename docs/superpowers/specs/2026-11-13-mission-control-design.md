@@ -34,7 +34,7 @@ It must be: **fun, simple, mildly challenging, interactive**. There is rarely on
 - Failures feel random or unfair — every failure must be traceable to a decision.
 - A player sits idle with nothing to do for long stretches.
 - Unexplained jargon.
-- Mocking real people (the failure animation uses an **original** character).
+- Cruel or defamatory humour: the Elon Musk caricature is affectionate parody (tantrums, catchphrases), never insults about real life.
 
 ## 2. Constraints
 
@@ -56,7 +56,9 @@ Picked by the team: **A**.
 
 - Multiplayer: **both** online (own devices, room code, chat) and pass-and-play; plus solo.
 - Game loop: **campaign** — team budget carries over; each launch spends money; failures lose it but teach; successes earn grants and unlock gear.
-- Failure character: **original "Flight Director"** who kicks the ground and screams.
+- Failure character: **a cartoon Elon Musk** (the "Flight Director") who kicks the ground and screams. *(Team changed this from the original character on 2026-11-13.)*
+- Coach character: **the same cartoon Elon Musk** leads the tutorial instead of CAPCOM.
+- Visual theme: **NASA's Horizon Design System look** (colours, fonts, mission-control feel), made as game-like as possible.
 - Instruments: **Scientist requests, Designer can push back**; Scientist decides on resend.
 - Appeals: **2 appeals** per rejected request, then the requester must choose another option.
 - Solo mode: **approvals skipped entirely**; one player makes every choice.
@@ -128,7 +130,7 @@ Difficulty controls what's available:
 |---|---|---|---|
 | Objectives per mission type | 1 | 2 | 3 |
 | Launch vehicles | 6 | 9 | 11 |
-| Orbits/destinations | 7 | 9 | 10 |
+| Orbits/destinations | 7 | 9 | 11 |
 | Active bus slots (others auto-set to sensible defaults) | 6 | 9 | 10 + comms |
 | Options per slot | 2 | 3 | 3–4 |
 | Instruments | 6 | 9 | 12 |
@@ -166,7 +168,7 @@ Capacity (kg) by destination class; cost $M. Approximate, simplified.
 
 Outer-planet trajectories use Escape × 0.6. "–" = cannot reach (critical fault).
 
-### 7.3 Orbits / destinations (Radio Operator) — 10
+### 7.3 Orbits / destinations (Radio Operator) — 11
 | Orbit | Class | Good for | Key traits |
 |---|---|---|---|
 | Low Earth Orbit (400 km) | LEO | close-up imaging | sharp images, short station passes, ~35% of each orbit in shadow (needs batteries), air drag → short life without propulsion |
@@ -178,6 +180,7 @@ Outer-planet trajectories use Escape × 0.6. "–" = cannot reach (critical faul
 | Lunar orbit | Escape | Moon science, practice | needs propulsion to capture |
 | Mars orbit | Escape | Mars mapping, relay | needs propulsion to capture; Mars launch window every 26 months; sunlight 43% of Earth's |
 | Mars surface | Escape | landers | needs Mars landing kit; 12-hour nights (big batteries); dust and cold (thermal) |
+| Asteroid rendezvous | Escape × 0.8 | asteroid survey | needs propulsion to match the asteroid; sunlight 50%; far |
 | Outer planets (Jupiter) | Escape × 0.6 | icy moons | sunlight 4% (solar nearly useless → RTG), heavy radiation, very far |
 
 ### 7.4 Spacecraft — 11 component slots
@@ -251,7 +254,9 @@ Science value = Σ relevance(instrument, objective) × orbit-fit multiplier × f
 ## 9. Launch, operations, debrief
 - **Launch cinematic:** countdown, liftoff, staging, orbit insertion (CSS/SVG). Failure type picks the break point (e.g. over-mass → rocket can't reach orbit).
 - **Operations cinematic:** timeline with signal-quality meter and data counter; Radio Operator presses "Send commands" and "Downlink data" to advance (no failure possible here).
-- **Failure:** the **Flight Director** (original cartoon) kicks the ground and screams.
+- **Failure:** the **cartoon Elon Musk** Flight Director kicks the ground, screams, and throws his cap. There are 3 variants picked by the worst fault (explosion on the pad = over capacity; "we lost the signal" = comms; slow freeze = power or thermal). Each is about 4 seconds, can be skipped, and ends with a quip ("Okay, okay… rapid unscheduled disassembly.").
+- **Success:** the cartoon Elon Musk celebrates, with confetti and a mission patch stamped with the team name.
+- **Partial:** a shrug and a "Not bad, not great" pose.
 - **Debrief** ("Transmission from the Radio Operator"): outcome; each fault as *What happened → Why (plain-language concept) → Whose decision → How to fix → Learn more (NASA link)*; money lost/earned; per-role scores; awards.
 
 ## 10. Scoring and awards
@@ -267,7 +272,7 @@ Per role, 0–100:
 **Awards:** Cost Efficiency (success and cost ≤ 85% of budget) · Scientific Value (science ≥ 80% of possible) · New Gear (on success, unlock one advanced component) · Effective Decision (per player: role score ≥ 80 and no critical fault blamed on them).
 
 ## 11. Tutorial and learning
-- **Training Mission** (Space Fan, Wildfire watch), led by a coach character ("CAPCOM"). The player acts as each role in turn; **scripted teammates** (named characters posting in the chat panel) play the other side when needed: a scripted **Planner rejection → player appeals as Scientist**, a **Designer push-back** on the player's instrument list, and a **funding request** the player approves as Planner. The script is a fixed list of steps (spotlight target, coach text, expected action, scripted actor action) run on the normal engine.
+- **Training Mission** (Space Fan, Wildfire watch), led by the coach, **a cartoon Elon Musk** with speech bubbles, encouraging and a bit over-the-top. The player acts as each role in turn; **scripted teammates** (named characters posting in the chat panel) play the other side when needed: a scripted **Planner rejection → player appeals as Scientist**, a **Designer push-back** on the player's instrument list, and a **funding request** the player approves as Planner. The script is a fixed list of steps (spotlight target, coach text, expected action, scripted actor action) run on the normal engine.
 - The tutorial launches with a **planted flaw** (batteries too small for LEO shadow) → failure → debrief explains eclipse → "Fly again with fixes" → success. Teaches that the game won't warn you, and how to read a debrief.
 - Concepts introduced in context, one sentence each, with an optional "Learn more": orbital altitude, payload capacity, power consumption, data rate, communications coverage, lifetime, trade-offs.
 - **Mission Handbook** (always available): glossary + every option's "What is it / Why it matters", linking to NASA sources (NASA Space Place, JPL *Basics of Space Flight*, NASA *Small Spacecraft Technology State of the Art*, NASA Deep Space Network, NASA Earth Observatory).
@@ -290,5 +295,26 @@ Per role, 0–100:
 7. Arabic.
 If time runs short, items 6–7 shrink first; nothing above item 4 is cut.
 
-## 14. Left to the builder
-Exact per-option numbers for slots, coverage tables, relevance matrix, grant sizes and balancing (aim: each objective has ≥ 2 viable designs at every difficulty); visual style and art; sound (stretch).
+## 14. Numbers and balance
+All per-option numbers, coverage tables, the relevance matrix, grants and formulas are in [2026-11-13-mission-control-balance.md](2026-11-13-mission-control-balance.md). They are verified by [balance_reference.py](balance_reference.py): **all 18 objective × difficulty pairs have ≥ 2 viable designs** using starting gear. The engine's data files must match that script, and its tests reuse the script's reference designs.
+
+## 15. Look, feel and gamification
+
+**NASA Horizon Design System styling.** HDS Core is public domain (CC0); its fonts are under the SIL OFL.
+- Colours (HDS tokens): background `carbon-90 #17171b` / `carbon-black #000`. Primary action = NASA red `#f64137` (shade `#b60109`, used for "go somewhere" actions like Launch). On-page interactions = NASA blue `#1c67e3` (tint `#288bff`). Status OK = active-green `#47da84`. Accent = international orange `#ea6f24`. Greys use the carbon scale (`#f6f6f6` → `#2e2e32`).
+- Fonts: **Inter** for headings and big display text, **Public Sans** for body text, **DM Mono** for numbers, gauges and small labels (the "technical" look).
+- Dark mission-control UI: starfield background, thin grid lines, monospace telemetry, countdown clocks.
+- **Legal guardrails:** never use the NASA "meatball" insignia, the "worm" logotype or the NASA seal (NASA forbids non-NASA use). No wording that implies NASA endorsement. Footer: "Fan-made for NASA Space Apps. Not affiliated with or endorsed by NASA or SpaceX. Elon Musk appears as parody." The Space Apps logo may be used per Space Apps brand guidelines. NASA photos are usable with credit, but not NASA logos.
+
+**Elon Musk cartoon.** Original SVG caricature drawn by the team: a flat vector style with a big head and a few poses (idle, pointing, celebrating, tantrum, shrug). No real photos and no voice clone. Lines are written as text bubbles.
+
+**Gamification**
+- Mission patch generator: each mission gets a patch (shape, colours, team name, objective icon). Patches fill the campaign's "patch wall".
+- XP and ranks per player: Cadet → Flight Engineer → Mission Specialist → Flight Director. XP comes from role scores.
+- Achievement badges, e.g. "Penny Pincher" (cost award), "Data Hoarder" (science award), "Nailed the Landing", "Rapid Unscheduled Disassembly" (first failure), "Comeback Kid" (success right after a failure), "One Station Wonder" (GEO with one station).
+- Live telemetry gauges: mass, power, cost and data as animated DM Mono dials. Visible verdict hints follow the difficulty rules only.
+- Go/No-Go poll with a dramatic countdown and the launch button (red, hold to confirm).
+- Unlock moments: a "New gear unlocked" card animation.
+- Final leaderboard: the campaign report ranks players by XP, with a shareable summary card.
+- Sound *(stretch)*: countdown beeps, launch rumble, radio static for the Radio Operator's debrief, a success fanfare, and a tantrum "argh". Royalty-free or generated, with a mute toggle.
+
