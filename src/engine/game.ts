@@ -7,6 +7,10 @@ import { findRequest, requireReason } from './requests'
 import { holderOf, log, missionOf, newId, playerOf, requirePhase, requireRole } from './ctx'
 import { proposeObjective, reviewObjective } from './phases/objective'
 import { confirmPlan, setPlan } from './phases/planning'
+import {
+  moveFunds, requestFunds, requestInstruments, resolveBackorder, reviewFunding, reviewInstruments,
+  setOrbit, setReady, setSlot, setStations, setVehicle,
+} from './phases/design'
 
 export interface CreateOpts {
   mode: Mode
@@ -38,14 +42,12 @@ export function createGame(opts: CreateOpts): GameState {
   }
 }
 
-export function newMission(s: GameState): Mission {
-  const prefill = s.campaign.prefill
-  s.campaign.prefill = undefined
+export function newMission(): Mission {
   return {
     requests: [], rejectedObjectives: [], planSet: false,
     budget: { total: 0, designer: 0, radio: 0, reserve: 0 }, targetMonth: 0, scheduleMode: 'standard',
-    design: prefill ? { ...prefill } : {},
-    instrumentRequest: prefill ? [...prefill.instruments] : [],
+    design: {},
+    instrumentRequest: [],
     instrumentStatus: 'none', scientistOverrode: false, banned: [], backorders: [], fees: 0,
     ready: { scientist: false, designer: false, radio: false },
     pairing: { designer: false, radio: false }, purchaseApproved: false, votes: {},
@@ -105,7 +107,7 @@ function reduce(s: GameState, a: Action, actorId: string): void {
       requirePhase(s, 'lobby')
       if (actorId !== s.hostId) fail('host_only')
       if (ROLES.some((r) => !holderOf(s, r))) fail('roles_unclaimed')
-      s.mission = newMission(s)
+      s.mission = newMission()
       s.phase = 'objective_proposal'
       log(s, 'log.campaign.started', { funds: s.campaign.funds })
       return
@@ -124,6 +126,16 @@ function reduce(s: GameState, a: Action, actorId: string): void {
     case 'withdraw': return withdraw(s, a.requestId, actorId)
     case 'setPlan': return setPlan(s, a, actorId)
     case 'confirmPlan': return confirmPlan(s, actorId)
+    case 'setSlot': return setSlot(s, a, actorId)
+    case 'setVehicle': return setVehicle(s, a, actorId)
+    case 'setOrbit': return setOrbit(s, a, actorId)
+    case 'setStations': return setStations(s, a, actorId)
+    case 'requestInstruments': return requestInstruments(s, a, actorId)
+    case 'reviewInstruments': return reviewInstruments(s, a, actorId)
+    case 'requestFunds': return requestFunds(s, a, actorId)
+    case 'resolveBackorder': return resolveBackorder(s, a, actorId)
+    case 'moveFunds': return moveFunds(s, a, actorId)
+    case 'setReady': return setReady(s, a, actorId)
     default: fail('unknown_action')
   }
 }
@@ -149,6 +161,9 @@ function review(s: GameState, a: Extract<Action, { type: 'review' }>, actorId: s
   if (r.kind === 'objective') {
     setStatus()
     reviewObjective(s, r, approve)
+  } else if (r.kind === 'funding') {
+    reviewFunding(s, r, approve)
+    setStatus()
   } else fail('unknown_action')
 
   function setStatus() {

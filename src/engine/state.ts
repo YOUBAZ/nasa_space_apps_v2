@@ -97,6 +97,8 @@ export interface Mission {
   pairing: { designer: boolean; radio: boolean }
   purchaseApproved: boolean
   votes: Partial<Record<Role, 'go' | 'nogo'>>
+  /** "Fly again with fixes": the previous design, re-applied when the design phase opens */
+  template?: Design
   // --- filled at launch
   report?: MissionReport
   finalDesign?: Design
@@ -128,8 +130,6 @@ export interface Campaign {
   teamName: string
   lastDesign?: Design
   lastObjective?: ObjectiveId
-  /** set by nextMission{flyAgain}; the next mission's design starts from this */
-  prefill?: Design
 }
 
 export interface ChatMsg {

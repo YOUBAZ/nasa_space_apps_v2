@@ -28,3 +28,45 @@ export function teamGame(difficulty: Difficulty = 'fan', mode: Mode = 'online', 
 export function soloGame(difficulty: Difficulty = 'fan', seed = 7): GameState {
   return ok(createGame({ mode: 'solo', difficulty, seed, hostName: 'Solo' }), { type: 'startCampaign' }, 'p1')
 }
+
+import fixtures from '../../fixtures/reference-designs.json'
+import type { Design, ObjectiveId, Slot } from '../../../src/engine/types'
+import { SLOTS, RADIO_SLOTS } from '../../../src/engine/types'
+import { optionsFor } from '../../../src/engine/catalog'
+
+export type Fixture = { name: string; diff: Difficulty; objective: ObjectiveId; design: Design; expect: { outcome: string; cost: number; faults: string[] } }
+export const fixture = (name: string): Fixture => (fixtures as unknown as Fixture[]).find((f) => f.name === name)!
+
+export interface PlanOpts { total?: number; designer?: number; radio?: number; targetMonth?: number; scheduleMode?: 'rush' | 'standard' | 'careful' }
+
+/** Team game advanced to the design phase with the given objective approved and budget split. */
+export function designGame(difficulty: Difficulty = 'fan', objectiveId: ObjectiveId = 'wildfire', plan: PlanOpts = {}, seed = 7): GameState {
+  let s = teamGame(difficulty, 'online', seed)
+  s = ok(s, { type: 'proposeObjective', objectiveId, pitch: 'pitch' }, P.scientist)
+  s = ok(s, { type: 'review', requestId: s.mission!.requests[0].id, decision: 'approve' }, P.planner)
+  s = ok(s, { type: 'setPlan', total: plan.total ?? 400, designer: plan.designer ?? 250, radio: plan.radio ?? 50,
+    targetMonth: plan.targetMonth ?? 24, scheduleMode: plan.scheduleMode ?? 'standard' }, P.planner)
+  return ok(s, { type: 'confirmPlan' }, P.planner)
+}
+
+/** Plays a whole design into the game using the right role for each choice. */
+export function applyDesign(s0: GameState, d: Design, ids: Record<Role, string> = P): GameState {
+  let s = s0
+  const solo = s.mode === 'solo'
+  for (const slot of SLOTS as Slot[]) {
+    if (!optionsFor(s.difficulty, slot, s.campaign.unlocked).includes(d[slot])) continue
+    s = ok(s, { type: 'setSlot', slot, option: d[slot] }, RADIO_SLOTS.includes(slot) ? ids.radio : ids.designer)
+  }
+  s = ok(s, { type: 'setOrbit', orbit: d.orbit }, ids.radio)
+  s = ok(s, { type: 'setVehicle', vehicle: d.vehicle }, ids.designer)
+  s = ok(s, { type: 'setStations', stations: d.stations }, ids.radio)
+  s = ok(s, { type: 'requestInstruments', list: d.instruments }, ids.scientist)
+  if (!solo) s = ok(s, { type: 'reviewInstruments', decision: 'accept' }, ids.designer)
+  return s
+}
+
+export function allReady(s0: GameState): GameState {
+  let s = s0
+  for (const role of ['scientist', 'designer', 'radio'] as const) s = ok(s, { type: 'setReady', role, ready: true }, P[role])
+  return s
+}
