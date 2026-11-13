@@ -1,4 +1,4 @@
-import { debriefOf, fixture, ok, err, P, applyDesign } from './helpers/play'
+import { debriefOf, fixture, ok, err, P } from './helpers/play'
 import { badgesFor, makePatch, rankOf, xpFor } from '../../src/engine/gamify'
 import type { GameState } from '../../src/engine/state'
 

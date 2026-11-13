@@ -1,14 +1,24 @@
+import { useState } from 'react'
 import { t, useLang } from './i18n/i18n'
+import { GameProvider } from './net/useGame'
+import type { Transport } from './net/transport'
+import { GameScreens } from './ui/GameScreens'
+import { Home } from './ui/screens/Home'
 
 export default function App() {
   useLang()
+  const [transport, setTransport] = useState<Transport | null>(null)
+  const exit = () => {
+    transport?.dispose()
+    setTransport(null)
+  }
   return (
-    <div className="min-h-screen flex flex-col">
-      <main className="flex-1 flex flex-col items-center justify-center gap-4 px-4 text-center">
-        <p className="label">NASA Space Apps · Team Mission Simulator</p>
-        <h1 className="text-5xl font-black">{t('app.title')}</h1>
-        <p className="text-carbon-20">{t('app.tagline')}</p>
-      </main>
+    <div className="flex min-h-screen flex-col">
+      <div className="flex-1">
+        {transport
+          ? <GameProvider transport={transport}><GameScreens onExit={exit} /></GameProvider>
+          : <Home onStart={setTransport} onTutorial={() => {}} />}
+      </div>
       <footer className="px-4 py-3 text-center text-xs text-carbon-40">{t('app.footer')}</footer>
     </div>
   )
