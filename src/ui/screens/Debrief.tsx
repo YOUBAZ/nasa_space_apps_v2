@@ -58,7 +58,7 @@ function ScoreBar({ role, score, name }: { role: Role; score: number; name?: str
 
 /** The Radio Operator's transmission: what happened, why, whose call it was, and how to fix it. */
 export function Debrief() {
-  const { state, act, holder } = useGame()
+  const { state, act, holder, can } = useGame()
   const m = state.mission!
   const r = m.result!
   const order = { critical: 0, major: 1, minor: 2 }
@@ -120,7 +120,9 @@ export function Debrief() {
       </div>
 
       <div className="flex justify-end">
-        <Button variant="primary" size="lg" icon="arrow" onClick={() => act({ type: 'finishDebrief' })}>{t('debrief.close')}</Button>
+        {can('radio')
+          ? <Button variant="primary" size="lg" icon="arrow" onClick={() => act({ type: 'finishDebrief' }, 'radio')}>{t('debrief.close')}</Button>
+          : <p className="mono text-sm text-carbon-30">{t('debrief.waitRadio')}</p>}
       </div>
     </div>
   )

@@ -34,7 +34,10 @@ export interface TutorialStep {
 
 const m = (s: GameState) => s.mission!
 const pendingOf = (s: GameState, kind: string) => m(s).requests.find((r) => r.kind === kind && r.status === 'pending')
-const planOk = (a: Action) => a.type === 'confirmPlan' || (a.type === 'setPlan' && a.designer >= 200 && a.radio >= 10)
+// The lesson needs a known budget and a known payload, or a later step could become impossible.
+const planOk = (a: Action) => a.type === 'confirmPlan' || (a.type === 'setPlan' && a.scheduleMode === 'standard' && a.designer >= 200 && a.radio >= 10)
+const LESSON_INSTRUMENTS = ['thermal_ir', 'hires_cam']
+const instrumentsOk = (a: Action) => a.type === 'requestInstruments' && a.list.length > 0 && a.list.every((i) => LESSON_INSTRUMENTS.includes(i))
 const BUILD: Record<string, string> = { structure: 'medium', power: 'deploy_solar', battery: 'medium', propulsion: 'none', protection: 'none' }
 
 /** Teammates carry the mission from "everyone ready" to the launch button. */
@@ -88,7 +91,7 @@ export const TUTORIAL: TutorialStep[] = [
   },
   {
     id: 'instruments', coachKey: 'tut.instruments', pose: 'point', tab: 'scientist', spotlight: 'instruments', hintKey: 'tut.hint.instruments',
-    allow: (a) => a.type === 'requestInstruments',
+    allow: instrumentsOk,
     done: (s) => m(s).instrumentStatus !== 'none',
   },
   {
@@ -98,7 +101,7 @@ export const TUTORIAL: TutorialStep[] = [
   },
   {
     id: 'resend', coachKey: 'tut.resend', pose: 'point', tab: 'scientist', spotlight: 'instruments', hintKey: 'tut.hint.instruments',
-    allow: (a) => a.type === 'requestInstruments',
+    allow: instrumentsOk,
     react: (s) => (m(s).instrumentStatus === 'final'
       ? { role: 'designer', sayKey: 'tut.say.accept', action: () => ({ type: 'reviewInstruments', decision: 'accept' }) } : null),
     done: (s) => m(s).instrumentStatus === 'accepted',

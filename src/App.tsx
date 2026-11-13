@@ -8,6 +8,7 @@ import { HandbookProvider } from './ui/handbook/Handbook'
 import { TutorialGame } from './ui/tutorial/TutorialGame'
 import { MuteToggle } from './ui/components/MuteToggle'
 import { LangToggle } from './ui/components/LangToggle'
+import { CrashBoundary } from './ui/components/CrashBoundary'
 
 export default function App() {
   useLang()
@@ -20,11 +21,13 @@ export default function App() {
   return (
     <div className="flex min-h-screen flex-col">
       <div className="flex-1">
+        <CrashBoundary>
         {training
           ? <TutorialGame onExit={() => setTraining(false)} />
           : transport
           ? <GameProvider transport={transport}><HandbookProvider><GameScreens onExit={exit} /></HandbookProvider></GameProvider>
           : <Home onStart={setTransport} onTutorial={() => setTraining(true)} />}
+        </CrashBoundary>
       </div>
       <footer className="flex flex-wrap items-center justify-center gap-3 px-4 py-3 text-center text-xs text-carbon-40">
         <span>{t('app.footer')}</span>

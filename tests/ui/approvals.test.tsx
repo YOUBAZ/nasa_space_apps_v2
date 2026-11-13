@@ -70,6 +70,6 @@ describe('objective approval flow', () => {
     fireEvent.click(screen.getByRole('button', { name: /confirm plan/i }))
     const s = transport.getState()!
     expect(s.phase).toBe('design')
-    expect(s.mission!.budget).toEqual({ total: 400, designer: 250, radio: 50, reserve: 100 })
+    expect(s.mission!.budget).toMatchObject({ total: 400, designer: 250, radio: 50, reserve: 100 })
   })
 })

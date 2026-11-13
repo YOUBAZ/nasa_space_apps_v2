@@ -2,6 +2,7 @@ import type { Action, GameState } from '../state'
 import { fail } from '../state'
 import { isSolo, log, missionOf, requirePhase, requireRole, validAmount } from '../ctx'
 import { enterDesign } from './design'
+import { baselineCost } from '../spend'
 
 export function setPlan(s: GameState, a: Extract<Action, { type: 'setPlan' }>, actorId: string): void {
   requirePhase(s, 'planning')
@@ -14,7 +15,9 @@ export function setPlan(s: GameState, a: Extract<Action, { type: 'setPlan' }>, a
   if (total > s.campaign.funds) fail('exceeds_funds')
   if (!Number.isInteger(a.targetMonth) || a.targetMonth <= s.campaign.month) fail('invalid_target')
   if (!['rush', 'standard', 'careful'].includes(a.scheduleMode)) fail('invalid_mode')
-  m.budget = { total, designer, radio, reserve: total - designer - radio }
+  // The spacecraft already carries standard equipment; an allocation below its cost could never be used.
+  if (designer + 1e-9 < baselineCost(s.difficulty, a.scheduleMode)) fail('allocation_too_small')
+  m.budget = { total, designer, radio, reserve: total - designer - radio, initialDesigner: designer }
   m.targetMonth = a.targetMonth
   m.scheduleMode = a.scheduleMode
   m.planSet = true

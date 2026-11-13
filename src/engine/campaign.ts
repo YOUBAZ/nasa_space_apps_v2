@@ -1,13 +1,16 @@
 import type { Action, GameState } from './state'
 import { fail } from './state'
-import { CAMPAIGN_MAX_LAUNCHES, CAMPAIGN_MIN_FUNDS } from './catalog'
+import { CAMPAIGN_MAX_LAUNCHES } from './catalog'
+import { minLaunchCost } from './spend'
 import { log, missionOf, requirePhase, requireRole } from './ctx'
 import { badgesFor, makePatch, xpFor } from './gamify'
 import { newMission } from './game'
 
 /** Closes the debrief: pays the grant, hands out XP, badges, unlocks and the mission patch. */
-export function finishDebrief(s: GameState): void {
+export function finishDebrief(s: GameState, actorId: string): void {
   requirePhase(s, 'debrief')
+  // The Radio Operator presents the debrief, so the Radio Operator decides when it is over.
+  requireRole(s, actorId, 'radio')
   const m = missionOf(s)
   const result = m.result ?? fail('no_result')
   const design = m.finalDesign ?? fail('no_result')
@@ -31,7 +34,8 @@ export function finishDebrief(s: GameState): void {
     for (const b of badges) if (!p.badges.includes(b)) p.badges.push(b)
   }
 
-  const over = c.launches >= CAMPAIGN_MAX_LAUNCHES || c.funds < CAMPAIGN_MIN_FUNDS
+  // The campaign ends when no complete spacecraft could be paid for any more.
+  const over = c.launches >= CAMPAIGN_MAX_LAUNCHES || c.funds < minLaunchCost(s.difficulty, c.unlocked)
   s.phase = over ? 'campaign_over' : 'campaign'
   log(s, over ? 'log.campaign.over' : 'log.debrief.finished', { funds: c.funds, grant: result.grant })
 }

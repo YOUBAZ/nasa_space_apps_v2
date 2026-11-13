@@ -324,3 +324,16 @@ All per-option numbers, coverage tables, the relevance matrix, grants and formul
 - **Orbit view:** a 3D planet (Earth, Mars, Jupiter or the L2 point) with the chosen orbit ring, the spacecraft moving along it, and ground-station pins on Earth.
 - **Launch and operations:** a 3D rocket sized by the chosen vehicle lifts off, stages and reaches orbit, or fails at the break point.
 - Every 3D scene has a plain 2D fallback when WebGL isn't available (and in tests).
+
+## 16. Changes after the final review (2026-11-14)
+
+An independent review of the finished build led to these rule changes. Where they differ from earlier sections, this section wins.
+
+- **Reconnecting online.** A role freed by a dropped player can be taken from the mission board ("Take the … role"). A player who returns gets back any of their roles that nobody took. A new device can take a disconnected player's seat in a full room. Clients ask the host for the current state every few seconds, so a lost message heals itself.
+- **Budgets can't strand a mission.** The Planner can't allocate less than the standard equipment already costs. During design the Planner can add campaign money to the mission ("Add from campaign funds").
+- **Campaign end.** The campaign ends after 5 launches, or when the funds can't pay for the cheapest complete spacecraft at that difficulty (about $144M on Space Fan, $50M on Space Nerd, $43M on Space Expert). This replaces the flat $50M.
+- **Appeals.** Coming back to a rejected objective, or asking again for the same money or more, counts as an appeal. Asking for less money is a new request. A rejected purchase order is answered by appealing or by changing the design.
+- **Debrief.** Only the Radio Operator, who presents it, can close the debrief.
+- **Scoring.** The Designer is no longer marked down for asking for funds; the score looks at how far spending went beyond the first allocation. The Radio Operator is no longer marked down for stations the data needed.
+- **Small fixes.** Re-selecting the part already chosen does nothing (it used to cancel the team's votes). Saved games carry a version, and a crash offers "clear saved game and restart".
+- **Tutorial.** The lesson accepts only the two lesson instruments and the Standard schedule, so no step can become impossible.

@@ -66,7 +66,10 @@ function InstrumentPicker() {
   const m = state.mission!
   const solo = state.mode === 'solo'
   const [draft, setDraft] = useState<InstrumentId[]>(m.instrumentRequest)
-  useEffect(() => setDraft(m.instrumentRequest), [m.instrumentRequest])
+  // Re-sync only when the requested list itself changes, not on every unrelated game update.
+  const requestedKey = m.instrumentRequest.join(',')
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => setDraft(m.instrumentRequest), [requestedKey])
   const toggle = (id: InstrumentId) => setDraft(draft.includes(id) ? draft.filter((x) => x !== id) : [...draft, id])
   const same = draft.length === m.instrumentRequest.length && draft.every((x) => m.instrumentRequest.includes(x))
   const sum = (key: 'mass' | 'power' | 'cost' | 'gb') => draft.reduce((n, i) => n + INSTRUMENTS[i][key], 0)

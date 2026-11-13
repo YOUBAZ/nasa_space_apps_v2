@@ -8,7 +8,7 @@ import { holderOf, log, missionOf, newId, playerOf, requirePhase, requireRole } 
 import { proposeObjective, reviewObjective } from './phases/objective'
 import { confirmPlan, setPlan } from './phases/planning'
 import {
-  moveFunds, requestFunds, requestInstruments, resolveBackorder, reviewFunding, reviewInstruments,
+  moveFunds, topUp, requestFunds, requestInstruments, resolveBackorder, reviewFunding, reviewInstruments,
   setOrbit, setReady, setSlot, setStations, setVehicle,
 } from './phases/design'
 import { finishDebrief, nextMission } from './campaign'
@@ -46,7 +46,7 @@ export function createGame(opts: CreateOpts): GameState {
 
 export function newMission(): Mission {
   return {
-    requests: [], rejectedObjectives: [], planSet: false,
+    requests: [], rejectedObjectives: [], objectiveRejections: {}, planSet: false,
     budget: { total: 0, designer: 0, radio: 0, reserve: 0 }, targetMonth: 0, scheduleMode: 'standard',
     design: {},
     instrumentRequest: [],
@@ -94,6 +94,7 @@ function reduce(s: GameState, a: Action, actorId: string): void {
       const p = playerOf(s, a.playerId)
       p.connected = a.connected
       if (!a.connected) {
+        if (p.roles.length) p.lostRoles = p.roles
         p.roles = []
         log(s, 'log.player.left', { name: p.name })
       }
@@ -115,7 +116,7 @@ function reduce(s: GameState, a: Action, actorId: string): void {
       return
     }
     case 'chat': {
-      const text = (a.text ?? '').trim()
+      const text = typeof a.text === 'string' ? a.text.trim() : ''
       if (!text) fail('empty_message')
       if (text.length > 300) fail('message_too_long')
       s.chat.push({ n: Number(newId(s, '')), playerId: actorId, name: playerOf(s, actorId).name, text })
@@ -137,13 +138,14 @@ function reduce(s: GameState, a: Action, actorId: string): void {
     case 'requestFunds': return requestFunds(s, a, actorId)
     case 'resolveBackorder': return resolveBackorder(s, a, actorId)
     case 'moveFunds': return moveFunds(s, a, actorId)
+    case 'topUp': return topUp(s, a, actorId)
     case 'setReady': return setReady(s, a, actorId)
     case 'agreePairing': return agreePairing(s, a, actorId)
     case 'submitPurchase': return submitPurchase(s, actorId)
     case 'vote': return vote(s, a, actorId)
     case 'launch': return launch(s, actorId)
     case 'advanceOps': return advanceOps(s, actorId)
-    case 'finishDebrief': return finishDebrief(s)
+    case 'finishDebrief': return finishDebrief(s, actorId)
     case 'nextMission': return nextMission(s, a, actorId)
     default: fail('unknown_action')
   }
@@ -153,10 +155,19 @@ function join(s: GameState, name: string, actorId: string): void {
   const existing = s.players.find((p) => p.id === actorId)
   if (existing) {
     existing.connected = true
+    // Welcome back: hand over the roles they dropped, unless someone has taken them since.
+    for (const role of existing.lostRoles ?? []) if (!holderOf(s, role)) existing.roles.push(role)
+    existing.lostRoles = undefined
     return
   }
   if (s.mode === 'solo') fail('solo_game')
-  if (s.players.length >= 4) fail('room_full')
+  if (s.players.length >= 4) {
+    // A full room still has space if somebody has dropped out: the newcomer takes that seat.
+    const empty = s.players.find((p) => !p.connected && p.id !== s.hostId) ?? fail('room_full')
+    Object.assign(empty, { id: actorId, name: cleanName(name), connected: true, roles: [], lostRoles: undefined })
+    log(s, 'log.player.joined', { name: cleanName(name) })
+    return
+  }
   s.players.push({ id: actorId, name: cleanName(name), roles: [], connected: true, xp: 0, badges: [] })
   log(s, 'log.player.joined', { name: cleanName(name) })
 }
@@ -180,6 +191,7 @@ function review(s: GameState, a: Extract<Action, { type: 'review' }>, actorId: s
 
   function setStatus() {
     r.status = approve ? 'approved' : 'rejected'
+    if (!approve && r.appeals >= 2) r.exhausted = true
     if (reason) r.reasons.push({ by: 'planner', text: reason })
   }
 }
@@ -200,6 +212,8 @@ function withdraw(s: GameState, requestId: string, actorId: string): void {
   const r = findRequest(missionOf(s), requestId)
   requireRole(s, actorId, r.from)
   if (r.status !== 'pending' && r.status !== 'rejected') fail('not_open')
+  // A purchase order is the design itself: answer a rejection by appealing or changing the design.
+  if (r.kind === 'purchase') fail('use_appeal')
   r.status = 'closed'
   if (r.kind === 'objective') s.phase = 'objective_proposal'
 }

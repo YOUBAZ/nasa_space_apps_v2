@@ -77,23 +77,27 @@ export function backToDesign(s: GameState): void {
   m.purchaseApproved = false
   m.votes = {}
   m.ready = { scientist: false, designer: false, radio: false }
-  for (const r of m.requests) {
-    if (r.kind === 'purchase' && (r.status === 'pending' || r.status === 'rejected')) r.status = 'closed'
-  }
+  // The purchase order described the old design, whatever had been decided about it.
+  for (const r of m.requests) if (r.kind === 'purchase' && r.status !== 'closed') r.status = 'closed'
   log(s, 'log.back_to_design')
 }
 
-/** Shared entry for every design edit: right phase, right role, then reopen the design if needed. */
-function beginEdit(s: GameState, actorId: string, role: 'scientist' | 'designer' | 'radio'): Mission {
+/**
+ * Shared entry for every design edit: right phase, right role, then reopen the design if needed.
+ * Returns null when the edit would change nothing, so a stray click cannot undo the team's approvals.
+ */
+function beginEdit(s: GameState, actorId: string, role: 'scientist' | 'designer' | 'radio', unchanged: (m: Mission) => boolean = () => false): Mission | null {
   requirePhase(s, 'design', 'integration', 'go_poll')
   requireRole(s, actorId, role)
+  if (unchanged(missionOf(s))) return null
   backToDesign(s)
   return missionOf(s)
 }
 
 export function setSlot(s: GameState, a: Extract<Action, { type: 'setSlot' }>, actorId: string): void {
   const owner = ownerOf(a.slot)
-  const m = beginEdit(s, actorId, owner)
+  const m = beginEdit(s, actorId, owner, (x) => x.design[a.slot] === a.option)
+  if (!m) return
   if (!optionsFor(s.difficulty, a.slot, s.campaign.unlocked).includes(a.option)) fail('unavailable')
   if (m.banned.some((b) => b.slot === a.slot && b.option === a.option)) fail('substituted')
   m.design[a.slot] = a.option
@@ -103,7 +107,8 @@ export function setSlot(s: GameState, a: Extract<Action, { type: 'setSlot' }>, a
 }
 
 export function setVehicle(s: GameState, a: Extract<Action, { type: 'setVehicle' }>, actorId: string): void {
-  const m = beginEdit(s, actorId, 'designer')
+  const m = beginEdit(s, actorId, 'designer', (x) => x.design.vehicle === a.vehicle)
+  if (!m) return
   if (!vehiclesFor(s.difficulty).includes(a.vehicle)) fail('unavailable')
   m.design.vehicle = a.vehicle
   m.ready.designer = false
@@ -111,7 +116,8 @@ export function setVehicle(s: GameState, a: Extract<Action, { type: 'setVehicle'
 }
 
 export function setOrbit(s: GameState, a: Extract<Action, { type: 'setOrbit' }>, actorId: string): void {
-  const m = beginEdit(s, actorId, 'radio')
+  const m = beginEdit(s, actorId, 'radio', (x) => x.design.orbit === a.orbit)
+  if (!m) return
   if (!orbitsFor(s.difficulty).includes(a.orbit)) fail('unavailable')
   m.design.orbit = a.orbit
   m.ready.radio = false
@@ -119,8 +125,10 @@ export function setOrbit(s: GameState, a: Extract<Action, { type: 'setOrbit' }>,
 }
 
 export function setStations(s: GameState, a: Extract<Action, { type: 'setStations' }>, actorId: string): void {
-  const m = beginEdit(s, actorId, 'radio')
   const list = a.stations ?? []
+  const same = (x: Mission) => (x.design.stations ?? []).length === list.length && list.every((id, i) => x.design.stations![i] === id)
+  const m = beginEdit(s, actorId, 'radio', same)
+  if (!m) return
   if (new Set(list).size !== list.length || list.some((id) => !STATIONS[id])) fail('invalid_stations')
   m.design.stations = [...list]
   m.ready.radio = false
@@ -130,7 +138,7 @@ export function setStations(s: GameState, a: Extract<Action, { type: 'setStation
 const massOf = (list: InstrumentId[]) => list.reduce((sum, i) => sum + INSTRUMENTS[i].mass, 0)
 
 export function requestInstruments(s: GameState, a: Extract<Action, { type: 'requestInstruments' }>, actorId: string): void {
-  const m = beginEdit(s, actorId, 'scientist')
+  const m = beginEdit(s, actorId, 'scientist')!
   const list = a.list ?? []
   const allowed = instrumentsFor(s.difficulty, s.campaign.unlocked)
   if (list.length === 0 || new Set(list).size !== list.length || list.some((i) => !allowed.includes(i))) {
@@ -185,6 +193,14 @@ export function requestFunds(s: GameState, a: Extract<Action, { type: 'requestFu
   if (validAmount(a.amount) <= 0) fail('invalid_amount')
   if (a.target !== 'designer' && a.target !== 'radio') fail('invalid_target')
   if (hasOpenRequest(m, a.from, 'funding')) fail('request_open')
+  // Asking again for the same money (or more) is an appeal, not a new request.
+  const earlier = m.requests.filter((r) => r.kind === 'funding' && r.from === a.from && r.target === a.target)
+  if (earlier.some((r) => r.exhausted && a.amount >= (r.amount ?? 0))) fail('appeals_exhausted')
+  const open = earlier.find((r) => r.status === 'rejected')
+  if (open) {
+    if (a.amount >= (open.amount ?? 0)) fail('use_appeal')
+    open.status = 'closed' // a smaller ask is "another option"
+  }
   openRequest(s, m, 'funding', a.from, requireReason(a.reason), { amount: a.amount, target: a.target })
   m.ready[a.from] = false
   log(s, 'log.funds.requested', { amount: a.amount }, a.from)
@@ -216,6 +232,20 @@ export function moveFunds(s: GameState, a: Extract<Action, { type: 'moveFunds' }
   } else if (m.budget[a.from] - amount < spendOf(s, a.from) - 1e-9) fail('below_spend')
   m.budget[a.from] -= amount
   m.budget[a.to] += amount
+}
+
+/** The Planner adds campaign money to this mission (into the reserve), e.g. when the first budget proves too small. */
+export function topUp(s: GameState, a: Extract<Action, { type: 'topUp' }>, actorId: string): void {
+  requirePhase(s, 'design')
+  requireRole(s, actorId, 'planner')
+  const m = missionOf(s)
+  const amount = validAmount(a.amount)
+  if (amount <= 0) fail('invalid_amount')
+  if (m.budget.total + amount > s.campaign.funds) fail('exceeds_funds')
+  m.budget.total += amount
+  if (isSolo(s)) m.budget.designer += amount
+  else m.budget.reserve += amount
+  log(s, 'log.funds.topup', { amount }, 'planner')
 }
 
 export function resolveBackorder(s: GameState, a: Extract<Action, { type: 'resolveBackorder' }>, actorId: string): void {

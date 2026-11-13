@@ -4,10 +4,11 @@ import { useGame } from '../../net/useGame'
 import { Button } from './Button'
 import { Modal } from './Modal'
 
-export function FundsDialog({ from, amount: initial, onClose }: { from: 'designer' | 'radio'; amount: number; onClose(): void }) {
+export function FundsDialog({ from, target: initialTarget, amount: initial, onClose }:
+  { from: 'designer' | 'radio'; target?: 'designer' | 'radio'; amount: number; onClose(): void }) {
   const { act, state } = useGame()
   const [amount, setAmount] = useState(Math.max(1, Math.ceil(initial)))
-  const [target, setTarget] = useState<'designer' | 'radio'>(from)
+  const [target, setTarget] = useState<'designer' | 'radio'>(initialTarget ?? from)
   const [reason, setReason] = useState('')
   const reserve = state.mission?.budget.reserve ?? 0
   return (

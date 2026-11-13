@@ -144,3 +144,57 @@ describe('tutorial runner', () => {
     expect(new Set(TUTORIAL.map((s) => s.id)).size).toBe(TUTORIAL.length)
   })
 })
+
+describe('tutorial cannot dead-end (review C2)', () => {
+  const toInstruments = () => {
+    const s = session()
+    s.next(); s.next()
+    s.must({ type: 'proposeObjective', objectiveId: 'wildfire', pitch: '' })
+    s.next()
+    s.must({ type: 'appeal', requestId: s.game.mission!.requests[0].id, reason: 'x' })
+    s.next()
+    return s
+  }
+  it('only the two lesson instruments are accepted', () => {
+    const s = toInstruments()
+    s.must(plan); s.must({ type: 'confirmPlan' })
+    expect(s.act({ type: 'requestInstruments', list: ['thermal_ir', 'hires_cam', 'multispectral', 'spectrometer', 'gpr'] })).toBe(false)
+    expect(s.act({ type: 'requestInstruments', list: ['ir_telescope'] })).toBe(false)
+    expect(s.tut.hint).toBe('tut.hint.instruments')
+    expect(s.step).toBe('instruments')
+  })
+  it('a rushed schedule is refused with a hint', () => {
+    const s = toInstruments()
+    expect(s.act({ ...plan, scheduleMode: 'rush' } as Action)).toBe(false)
+    expect(s.tut.hint).toBe('tut.hint.budget')
+  })
+  it('the smallest budgets the coach allows still reach the end', () => {
+    const s = toInstruments()
+    const tight: Action = { type: 'setPlan', total: 220, designer: 200, radio: 10, targetMonth: 40, scheduleMode: 'standard' }
+    s.must(tight); s.must({ type: 'confirmPlan' })
+    s.must({ type: 'requestInstruments', list: ['thermal_ir', 'hires_cam'] })
+    s.next()
+    s.must({ type: 'requestInstruments', list: ['thermal_ir', 'hires_cam'] }) // insist on both
+    for (const [slot, option] of [['structure', 'medium'], ['power', 'deploy_solar'], ['battery', 'medium'], ['propulsion', 'none'], ['protection', 'none']] as const) {
+      s.must({ type: 'setSlot', slot, option })
+    }
+    s.must({ type: 'setVehicle', vehicle: 'electron' })
+    s.next()
+    s.must({ type: 'setOrbit', orbit: 'sso' }); s.must({ type: 'setSlot', slot: 'antenna', option: 'medium' })
+    s.must({ type: 'setStations', stations: ['svalbard', 'kiruna'] })
+    s.must({ type: 'review', requestId: s.game.mission!.requests.find((r) => r.kind === 'funding')!.id, decision: 'reject', reason: 'no' })
+    s.must({ type: 'setReady', role: 'designer', ready: true })
+    s.must({ type: 'agreePairing', role: 'designer', agree: true }); s.must({ type: 'submitPurchase' })
+    s.must({ type: 'vote', role: 'designer', vote: 'go' }); s.must({ type: 'launch' }); s.must({ type: 'advanceOps' })
+    s.next(); s.next()
+    s.must({ type: 'finishDebrief' }); s.must({ type: 'nextMission', flyAgain: true })
+    s.must({ ...tight, targetMonth: 60 } as Action); s.must({ type: 'confirmPlan' })
+    expect(s.game.mission!.design.instruments).toEqual(['thermal_ir', 'hires_cam'])
+    s.must({ type: 'setVehicle', vehicle: 'pslv' })
+    s.must({ type: 'setReady', role: 'designer', ready: true })
+    s.must({ type: 'agreePairing', role: 'designer', agree: true }); s.must({ type: 'submitPurchase' })
+    s.must({ type: 'vote', role: 'designer', vote: 'go' }); s.must({ type: 'launch' })
+    s.must({ type: 'advanceOps' }); s.must({ type: 'advanceOps' })
+    expect(s.game.mission!.result!.outcome).toBe('success')
+  })
+})

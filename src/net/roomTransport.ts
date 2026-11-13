@@ -79,7 +79,11 @@ export async function createHostTransport(opts: HostOpts, busFactory: BusFactory
   }
 }
 
-export interface ClientOpts { code: string; name: string; playerId?: string; timeoutMs?: number }
+export interface ClientOpts {
+  code: string; name: string; playerId?: string; timeoutMs?: number
+  /** how often to ask the host for the current state, in case a broadcast was lost (0 = never) */
+  resyncMs?: number
+}
 
 const newPlayerId = () => 'c' + Math.random().toString(36).slice(2, 8)
 
@@ -123,6 +127,13 @@ export async function createClientTransport(opts: ClientOpts, busFactory: BusFac
     bus.send({ t: 'hello', playerId: me, name: opts.name })
   })
 
+  // Broadcasts are not guaranteed: ask for the state now and then, and whenever the tab wakes up.
+  const resync = () => { if (!closed) bus.send({ t: 'snapshot_req', playerId: me }) }
+  const every = opts.resyncMs ?? 8000
+  const timer = every > 0 ? setInterval(resync, every) : null
+  const onWake = () => { if (typeof document !== 'undefined' && document.visibilityState === 'visible') resync() }
+  if (typeof document !== 'undefined') document.addEventListener('visibilitychange', onWake)
+
   let seq = 0
   return {
     mode: 'online',
@@ -132,6 +143,8 @@ export async function createClientTransport(opts: ClientOpts, busFactory: BusFac
     dispatch(action: Action) { if (!closed) bus.send({ t: 'action', from: me, action, seq: ++seq }) },
     subscribe(cb) { listeners.add(cb); return () => listeners.delete(cb) },
     dispose() {
+      if (timer) clearInterval(timer)
+      if (typeof document !== 'undefined') document.removeEventListener('visibilitychange', onWake)
       if (!closed) bus.send({ t: 'bye', playerId: me })
       bus.close()
       listeners.clear()

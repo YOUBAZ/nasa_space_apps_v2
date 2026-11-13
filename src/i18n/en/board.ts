@@ -321,4 +321,18 @@ export const board: Record<string, string> = {
   'err.invalid_target': 'The target month must be in the future.',
   'err.purchase_rejected': 'The purchase order was rejected. Appeal or change the design.',
   'err.objective_rejected': 'That objective was turned down after both appeals.',
+
+  // added after the final review
+  'board.take': 'Take the {role} role',
+  'plan.topUp': 'Add from campaign funds',
+  'plan.topUpGo': 'Add to reserve',
+  'plan.topUpSolo': 'Add to budget',
+  'plan.topUpLeft': '${n}M of campaign funds not yet committed',
+  'debrief.waitRadio': 'The Radio Operator will close the debrief.',
+  'crash.title': 'Something broke',
+  'crash.body': 'The game hit an error it could not recover from. Clearing the saved game usually fixes it.',
+  'crash.reset': 'Clear saved game and restart',
+  'err.allocation_too_small': "That is less than the spacecraft's standard equipment already costs.",
+  'err.use_appeal': 'That was rejected. Appeal it, or ask for something different.',
+  'log.funds.topup': 'added ${amount}M to the mission from campaign funds',
 }

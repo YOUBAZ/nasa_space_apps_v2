@@ -109,7 +109,7 @@ export function Lobby({ onExit }: { onExit: () => void }) {
       <footer className="flex flex-wrap items-center justify-between gap-3">
         <Button variant="ghost" icon="back" onClick={onExit}>{t('lobby.leave')}</Button>
         <div className="flex flex-wrap items-center gap-3">
-          {isHost && state.players.length > 0 && (
+          {!online && (
             <Button variant="ghost" icon="users" onClick={autoAssign}>{t('lobby.auto')}</Button>
           )}
           {isHost

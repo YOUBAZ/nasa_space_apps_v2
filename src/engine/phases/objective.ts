@@ -11,6 +11,8 @@ export function proposeObjective(s: GameState, a: Extract<Action, { type: 'propo
   if (!objectivesFor(s.difficulty).includes(a.objectiveId)) fail('unavailable')
   if (m.rejectedObjectives.includes(a.objectiveId)) fail('objective_rejected')
   closeOpen(m, 'objective')
+  // Coming back to an objective that was turned down uses up an appeal, however it is done.
+  const priorRejections = m.objectiveRejections[a.objectiveId] ?? 0
   m.objectiveId = a.objectiveId
   m.pitch = (a.pitch ?? '').trim().slice(0, 200)
   log(s, 'log.objective.proposed', { objective: a.objectiveId }, 'scientist')
@@ -18,7 +20,8 @@ export function proposeObjective(s: GameState, a: Extract<Action, { type: 'propo
     s.phase = 'planning'
     return
   }
-  openRequest(s, m, 'objective', 'scientist', m.pitch, { objectiveId: a.objectiveId })
+  const r = openRequest(s, m, 'objective', 'scientist', m.pitch, { objectiveId: a.objectiveId })
+  r.appeals = Math.min(MAX_APPEALS, priorRejections)
   s.phase = 'objective_review'
 }
 
@@ -29,6 +32,7 @@ export function reviewObjective(s: GameState, r: Request, approve: boolean): voi
     log(s, 'log.objective.approved', { objective: r.objectiveId ?? '' }, 'planner')
     return
   }
+  if (r.objectiveId) m.objectiveRejections[r.objectiveId] = (m.objectiveRejections[r.objectiveId] ?? 0) + 1
   if (r.appeals >= MAX_APPEALS && r.objectiveId) m.rejectedObjectives.push(r.objectiveId)
   s.phase = 'objective_proposal'
   log(s, 'log.objective.rejected', { objective: r.objectiveId ?? '', left: MAX_APPEALS - r.appeals }, 'planner')

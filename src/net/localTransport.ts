@@ -3,7 +3,8 @@ import type { Action, GameState } from '../engine/state'
 import type { Difficulty } from '../engine/types'
 import type { Listener, Transport } from './transport'
 
-export const SAVE_KEY = 'mc.save.v1'
+// Bump the version whenever the saved game's shape changes, so old saves are ignored rather than loaded.
+export const SAVE_KEY = 'mc.save.v2'
 
 export interface LocalOpts {
   mode: 'solo' | 'local'

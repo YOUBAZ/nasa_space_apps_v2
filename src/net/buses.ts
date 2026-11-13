@@ -12,7 +12,16 @@ export const supabaseBus: BusFactory = async (code, playerId) => {
   let onMsg: ((m: Msg) => void) | undefined
   let onLeave: ((id: string) => void) | undefined
   channel.on('broadcast', { event: 'm' }, ({ payload }) => onMsg?.(payload as Msg))
-  channel.on('presence', { event: 'leave' }, ({ key }) => { if (key) onLeave?.(key) })
+  // Presence can flap for a moment on a shaky connection: only report a leave that lasts.
+  const leaving = new Map<string, ReturnType<typeof setTimeout>>()
+  channel.on('presence', { event: 'join' }, ({ key }) => {
+    const t = key ? leaving.get(key) : undefined
+    if (t) { clearTimeout(t); leaving.delete(key) }
+  })
+  channel.on('presence', { event: 'leave' }, ({ key }) => {
+    if (!key || leaving.has(key)) return
+    leaving.set(key, setTimeout(() => { leaving.delete(key); onLeave?.(key) }, 5000))
+  })
   await new Promise<void>((resolve, reject) => {
     channel.subscribe((status) => {
       if (status === 'SUBSCRIBED') { void channel.track({ id: playerId }); resolve() }
@@ -23,7 +32,7 @@ export const supabaseBus: BusFactory = async (code, playerId) => {
     send(msg) { void channel.send({ type: 'broadcast', event: 'm', payload: msg }) },
     onMessage(cb) { onMsg = cb },
     onLeave(cb) { onLeave = cb },
-    close() { void client.removeChannel(channel) },
+    close() { leaving.forEach((t) => clearTimeout(t)); void client.removeChannel(channel) },
   }
   return bus
 }

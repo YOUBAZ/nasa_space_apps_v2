@@ -109,6 +109,8 @@ function BudgetOverview() {
   const [amount, setAmount] = useState(10)
   const [from, setFrom] = useState<'reserve' | 'designer' | 'radio'>('reserve')
   const [to, setTo] = useState<'reserve' | 'designer' | 'radio'>('designer')
+  const [extra, setExtra] = useState(50)
+  const spare = Math.max(0, state.campaign.funds - m.budget.total)
   const pots = ['reserve', 'designer', 'radio'] as const
   const spentD = spendOf(state, 'designer')
   const spentR = spendOf(state, 'radio')
@@ -144,6 +146,20 @@ function BudgetOverview() {
             {pots.map((p) => <option key={p} value={p}>{t(`pot.${p}`)}</option>)}
           </select>
           <Button size="sm" disabled={from === to || !(amount > 0)} onClick={() => act({ type: 'moveFunds', from, to, amount }, 'planner')}>{t('plan.moveGo')}</Button>
+        </fieldset>
+      )}
+
+      {state.phase === 'design' && (
+        <fieldset disabled={!can('planner')} className="flex flex-wrap items-end gap-2 rounded border border-carbon-70 p-3" data-tut="topup">
+          <label className="flex flex-col gap-1">
+            <span className="label">{t('plan.topUp')}</span>
+            <input type="number" min={1} max={spare} value={extra} onChange={(e) => setExtra(Number(e.target.value))}
+              className="mono w-28 rounded border border-carbon-60 bg-black/60 px-2 py-1 text-white" />
+          </label>
+          <Button size="sm" icon="plus" disabled={!(extra > 0) || extra > spare} onClick={() => act({ type: 'topUp', amount: extra }, 'planner')}>
+            {t(solo ? 'plan.topUpSolo' : 'plan.topUpGo')}
+          </Button>
+          <span className="mono text-xs text-carbon-40" dir="ltr">{t('plan.topUpLeft', { n: Math.round(spare) })}</span>
         </fieldset>
       )}
 

@@ -17,6 +17,8 @@ export interface Player {
   connected: boolean
   xp: number
   badges: string[]
+  /** roles this player held when they dropped; handed back on return if still free */
+  lostRoles?: Role[]
 }
 
 export type RequestKind = 'objective' | 'funding' | 'purchase'
@@ -27,6 +29,8 @@ export interface Request {
   status: 'pending' | 'approved' | 'rejected' | 'closed'
   /** appeals used so far (max 2) */
   appeals: number
+  /** rejected with no appeals left */
+  exhausted?: boolean
   /** alternating thread: requester's pitch, planner's reason, appeal, … */
   reasons: { by: Role; text: string }[]
   objectiveId?: ObjectiveId
@@ -50,6 +54,8 @@ export interface Budget {
   designer: number
   radio: number
   reserve: number
+  /** what the Designer was first given, before any top-ups (for scoring) */
+  initialDesigner?: number
 }
 
 export interface Award {
@@ -77,6 +83,8 @@ export interface Mission {
   requests: Request[]
   /** objectives turned down after both appeals */
   rejectedObjectives: ObjectiveId[]
+  /** how many times each objective has been turned down this mission */
+  objectiveRejections: Partial<Record<ObjectiveId, number>>
   planSet: boolean
   budget: Budget
   targetMonth: number
@@ -184,6 +192,7 @@ export type Action =
   | { type: 'reviewInstruments'; decision: 'accept' | 'pushback'; reason?: string }
   | { type: 'requestFunds'; from: 'designer' | 'radio'; target: 'designer' | 'radio'; amount: number; reason: string }
   | { type: 'resolveBackorder'; id: string; choice: 'wait' | 'express' | 'substitute' }
+  | { type: 'topUp'; amount: number }
   | { type: 'moveFunds'; from: 'designer' | 'radio' | 'reserve'; to: 'designer' | 'radio' | 'reserve'; amount: number }
   | { type: 'setReady'; role: ReadyRole; ready: boolean }
   | { type: 'agreePairing'; role: 'designer' | 'radio'; agree: boolean }

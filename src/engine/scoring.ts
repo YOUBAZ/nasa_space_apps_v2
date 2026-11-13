@@ -1,9 +1,10 @@
 import type { Award, GameState, MissionResult } from './state'
 import type { Fault, OrbitId, Role, StationId } from './types'
 import { ROLES } from './types'
-import { COMPONENTS, INSTRUMENTS, OBJECTIVES, STATIONS, nextUnlock } from './catalog'
+import { COMPONENTS, INSTRUMENTS, OBJECTIVES, ORBITS, STATIONS, nextUnlock } from './catalog'
 import { coverage } from './evaluate'
 import { isSolo, missionOf } from './ctx'
+import { spendOf } from './spend'
 
 const PENALTY = { critical: 30, major: 15, minor: 5 } as const
 const clamp = (n: number) => Math.max(0, Math.min(100, Math.round(n)))
@@ -86,8 +87,10 @@ export function scoreMission(s: GameState): MissionResult {
   // --- Designer: healthy mass and power margins, living within the allocation
   const massMargin = report.capacity > 0 ? (report.capacity - report.mass) / report.capacity : -1
   const powerMargin = report.powerDraw > 0 ? (report.powerGen - report.powerDraw) / report.powerDraw : 1
-  const designerAsks = m.requests.filter((r) => r.kind === 'funding' && r.from === 'designer').length
-  const designerCost = solo ? 100 : Math.max(40, 100 - 10 * designerAsks)
+  // Living within the first allocation: asking for money is fine, needing a lot more than planned is not.
+  const firstGiven = m.budget.initialDesigner ?? m.budget.designer
+  const overshoot = firstGiven > 0 ? Math.max(0, spendOf(s, 'designer') - firstGiven) / firstGiven : 0
+  const designerCost = solo ? 100 : Math.max(40, Math.round(100 - 100 * overshoot))
   const designer = 0.35 * marginScore(massMargin, 0.1, 0.3) + 0.35 * marginScore(powerMargin, 0.1, 0.4) + 0.3 * designerCost
 
   // --- Planner: budget, schedule, quality of approvals
@@ -106,7 +109,11 @@ export function scoreMission(s: GameState): MissionResult {
 
   // --- Radio Operator: coverage per dollar, data brought home, a link that works
   const stationCost = design.stations.reduce((sum, id) => sum + STATIONS[id].cost, 0)
-  const cheapest = cheapestStationCost(design.orbit, ob.minCov, design.band)
+  // "Enough" coverage is what the objective asks for or what the data needs, whichever is more.
+  const perDay = (COMPONENTS.band.options[design.band]?.rate ?? 0) * (COMPONENTS.antenna.options[design.antenna]?.gain ?? 0) * ORBITS[design.orbit].dist * 24
+  const forData = perDay > 0 ? Math.min(1, report.dataGenerated / perDay) : 0
+  const wanted = cheapestStationCost(design.orbit, Math.max(ob.minCov, forData), design.band)
+  const cheapest = Number.isFinite(wanted) ? wanted : cheapestStationCost(design.orbit, ob.minCov, design.band)
   const reach = Math.min(1, report.coverage / ob.minCov)
   const thrift = stationCost > 0 && Number.isFinite(cheapest) ? Math.min(1, cheapest / stationCost) : stationCost > 0 ? 1 : 0
   const dataHome = report.dataGenerated > 0 ? Math.min(1, report.downlink / report.dataGenerated) : 1

@@ -2,7 +2,7 @@ import type { GameState, Mission } from './state'
 import { fail } from './state'
 import type { Design, Difficulty, Slot } from './types'
 import { SLOTS } from './types'
-import { COMPONENTS, INSTRUMENTS, STATIONS, VEHICLES, autoOption, optionsFor } from './catalog'
+import { COMPONENTS, INSTRUMENTS, STATIONS, VEHICLES, autoOption, instrumentsFor, optionsFor, vehiclesFor } from './catalog'
 import { SCHEDULE } from './evaluate'
 import { isSolo, missionOf } from './ctx'
 
@@ -39,6 +39,27 @@ export function spendOf(s: GameState, role: 'designer' | 'radio'): number {
   for (const i of d.instruments ?? []) total += INSTRUMENTS[i].cost
   if (d.vehicle) total += VEHICLES[d.vehicle].cost
   return total * mult
+}
+
+/** Cost of the standard equipment a spacecraft carries before anyone has chosen anything. */
+export function baselineCost(diff: Difficulty, mode: keyof typeof SCHEDULE): number {
+  const d = withAutoSlots({}, diff)
+  let total = 0
+  for (const slot of SLOTS) if (d[slot]) total += COMPONENTS[slot].options[d[slot]!].cost
+  return total * SCHEDULE[mode].cost
+}
+
+/** The cheapest complete spacecraft that could be launched at this difficulty (Careful schedule). */
+export function minLaunchCost(diff: Difficulty, unlocked: string[]): number {
+  let total = 0
+  for (const slot of SLOTS) {
+    const options = optionsFor(diff, slot, unlocked)
+    const ids = options.length ? options : [autoOption(diff, slot, 'sso')!]
+    total += Math.min(...ids.map((id) => COMPONENTS[slot].options[id].cost))
+  }
+  total += Math.min(...vehiclesFor(diff).map((v) => VEHICLES[v].cost))
+  total += Math.min(...instrumentsFor(diff, unlocked).map((i) => INSTRUMENTS[i].cost))
+  return Math.ceil(total * SCHEDULE.careful.cost)
 }
 
 const EPS = 1e-9

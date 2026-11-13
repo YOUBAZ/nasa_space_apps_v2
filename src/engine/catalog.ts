@@ -12,7 +12,6 @@ export { COMPONENTS, VEHICLES, ORBITS, STATIONS, INSTRUMENTS, OBJECTIVES }
 export const LOCKED_AT_START = ['highperf', 'ion', 'ka', 'hyperspectral']
 export const STARTING_BUDGET: Record<Difficulty, number> = { fan: 2000, nerd: 1600, expert: 1300 }
 export const CAMPAIGN_MAX_LAUNCHES = 5
-export const CAMPAIGN_MIN_FUNDS = 50
 export const MARS_WINDOW_MONTHS = 26
 export const MARS_WAIT_COST_PER_MONTH = 4
 export const EXPRESS_FEE = 10

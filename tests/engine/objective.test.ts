@@ -83,7 +83,7 @@ describe('planning', () => {
   const plan = { type: 'setPlan' as const, total: 400, designer: 250, radio: 50, targetMonth: 20, scheduleMode: 'standard' as const }
   it('splits the mission budget and keeps the rest in reserve', () => {
     const s = ok(planning(), plan, P.planner)
-    expect(s.mission!.budget).toEqual({ total: 400, designer: 250, radio: 50, reserve: 100 })
+    expect(s.mission!.budget).toMatchObject({ total: 400, designer: 250, radio: 50, reserve: 100 })
   })
   it('allocations cannot exceed the mission budget', () => {
     expect(err(planning(), { ...plan, designer: 380 }, P.planner)).toBe('allocation_exceeds_total')

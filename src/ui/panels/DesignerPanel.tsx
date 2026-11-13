@@ -53,7 +53,8 @@ export function SlotPicker({ slot, role }: { slot: Slot; role: 'designer' | 'rad
           )
         })}
       </div>
-      {ask !== null && <FundsDialog from={role} amount={ask} onClose={() => setAsk(null)} />}
+      {/* every spacecraft part, the antenna included, is paid from the Designer's allocation */}
+      {ask !== null && <FundsDialog from={role} target="designer" amount={ask} onClose={() => setAsk(null)} />}
     </section>
   )
 }

@@ -134,7 +134,6 @@ export function MissionBoard({ onExit, focusRole, focusKey }: { onExit(): void; 
           </div>
         </aside>
       </div>
-      <ErrorToast />
     </div>
   )
 }

@@ -7,7 +7,7 @@ import { Campaign, CampaignOver } from './screens/Campaign'
 import { Debrief } from './screens/Debrief'
 import { Launch } from './screens/Launch'
 import { Lobby } from './screens/Lobby'
-import { MissionBoard } from './screens/MissionBoard'
+import { ErrorToast, MissionBoard } from './screens/MissionBoard'
 import { Operations } from './screens/Operations'
 
 interface Focus { focusRole?: Role; focusKey?: string }
@@ -32,6 +32,7 @@ export function GameScreens({ onExit, chat = false, focusRole, focusKey }: { onE
     <>
       <Screen onExit={onExit} focusRole={focusRole} focusKey={focusKey} />
       <ChatDock always={chat} />
+      <ErrorToast />
       {closed && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4" role="alertdialog" aria-label={t('room.closed')}>
           <div className="panel flex max-w-sm flex-col items-center gap-4 bg-carbon-90 p-6 text-center">

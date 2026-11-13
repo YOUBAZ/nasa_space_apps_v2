@@ -304,4 +304,18 @@ export const board: Record<string, string> = {
   'err.invalid_target': 'يجب أن يكون الشهر المستهدف في المستقبل.',
   'err.purchase_rejected': 'رُفض أمر الشراء. استأنف أو غيّر التصميم.',
   'err.objective_rejected': 'رُفض هذا الهدف بعد الاستئنافين.',
+
+  // added after the final review
+  'board.take': 'خذ دور {role}',
+  'plan.topUp': 'أضف من أموال الحملة',
+  'plan.topUpGo': 'أضف إلى الاحتياطي',
+  'plan.topUpSolo': 'أضف إلى الميزانية',
+  'plan.topUpLeft': '${n}M من أموال الحملة لم تُخصَّص بعد',
+  'debrief.waitRadio': 'مشغّل الراديو هو من يغلق التقرير.',
+  'crash.title': 'حدث عطل',
+  'crash.body': 'واجهت اللعبة خطأ لم تستطع تجاوزه. حذف اللعبة المحفوظة يحل المشكلة غالبًا.',
+  'crash.reset': 'احذف اللعبة المحفوظة وأعد التشغيل',
+  'err.allocation_too_small': 'هذا أقل من تكلفة المعدات القياسية الموجودة في المركبة أصلًا.',
+  'err.use_appeal': 'رُفض هذا الطلب. استأنف أو اطلب شيئًا مختلفًا.',
+  'log.funds.topup': 'أضاف ${amount}M إلى المهمة من أموال الحملة',
 }

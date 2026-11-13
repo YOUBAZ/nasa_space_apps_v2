@@ -108,3 +108,28 @@ describe('host and client transports over an in-memory bus', () => {
     await expect(createClientTransport({ code: 'NOROOM', name: 'Bo', timeoutMs: 30 }, memoryBusFactory())).rejects.toThrow('no_room')
   })
 })
+
+describe('resync (review I4)', () => {
+  it('a client that missed a broadcast catches up on its own', async () => {
+    vi.useFakeTimers()
+    try {
+      const inner = memoryBusFactory()
+      let drop = false
+      // a bus that can lose state messages on their way to the client
+      const lossy: typeof inner = async (code, id) => {
+        const bus = await inner(code, id)
+        if (id === 'p1') return bus
+        return { ...bus, onMessage: (cb) => bus.onMessage((m) => { if (!(drop && m.t === 'state')) cb(m) }) }
+      }
+      const host = await createHostTransport({ difficulty: 'fan', name: 'Host' }, lossy)
+      const client = await createClientTransport({ code: host.code!, name: 'Bo', resyncMs: 1000 }, lossy)
+      drop = true
+      host.dispatch({ type: 'claimRole', role: 'planner' })
+      expect(client.getState()!.players[0].roles).toEqual([])
+      drop = false
+      vi.advanceTimersByTime(1100)
+      expect(client.getState()!.players[0].roles).toEqual(['planner'])
+      client.dispose(); host.dispose()
+    } finally { vi.useRealTimers() }
+  })
+})

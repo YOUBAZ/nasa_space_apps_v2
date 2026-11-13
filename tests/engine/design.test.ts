@@ -101,7 +101,7 @@ describe('funding requests', () => {
   it('approval moves money from the reserve', () => {
     let s = ask(designGame())
     s = ok(s, { type: 'review', requestId: lastReq(s).id, decision: 'approve' }, P.planner)
-    expect(s.mission!.budget).toEqual({ total: 400, designer: 300, radio: 50, reserve: 50 })
+    expect(s.mission!.budget).toMatchObject({ total: 400, designer: 300, radio: 50, reserve: 50 })
   })
   it('cannot approve more than the reserve holds', () => {
     const s = ask(designGame(), 150)
