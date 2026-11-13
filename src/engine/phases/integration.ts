@@ -10,6 +10,7 @@ import { isSolo, log, missionOf, requirePhase, requireRole } from '../ctx'
 import { openRequest } from '../requests'
 import { completeDesign, spendOf } from '../spend'
 import { backToDesign } from './design'
+import { scoreMission } from '../scoring'
 
 function maybeOpenPoll(s: GameState): void {
   const m = missionOf(s)
@@ -116,6 +117,7 @@ export function launch(s: GameState, actorId: string): void {
   m.waitMonths = waitMonths
   m.waitCost = waitCost
   m.totalCost = report.cost + m.fees + waitCost
+  m.result = scoreMission(s)
   s.campaign.funds = Math.max(0, s.campaign.funds - m.totalCost)
   s.phase = 'launch'
   log(s, 'log.launched', { cost: m.totalCost, month: launchMonth }, 'planner')

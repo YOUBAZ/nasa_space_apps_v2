@@ -70,3 +70,23 @@ export function allReady(s0: GameState): GameState {
   for (const role of ['scientist', 'designer', 'radio'] as const) s = ok(s, { type: 'setReady', role, ready: true }, P[role])
   return s
 }
+
+const lastRequest = (s: GameState) => s.mission!.requests[s.mission!.requests.length - 1]
+
+/** From the design phase: build the design, pass integration and the poll, and launch. */
+export function launchFrom(s0: GameState, d: Design): GameState {
+  let s = allReady(applyDesign(s0, d))
+  s = ok(s, { type: 'submitPurchase' }, P.designer)
+  s = ok(s, { type: 'review', requestId: lastRequest(s).id, decision: 'approve' }, P.planner)
+  s = ok(s, { type: 'agreePairing', role: 'designer', agree: true }, P.designer)
+  s = ok(s, { type: 'agreePairing', role: 'radio', agree: true }, P.radio)
+  for (const role of ['planner', 'scientist', 'designer', 'radio'] as Role[]) s = ok(s, { type: 'vote', role, vote: 'go' }, P[role])
+  return ok(s, { type: 'launch' }, P.planner)
+}
+
+/** A team mission flown all the way to the debrief screen. */
+export function debriefOf(d: Design, objectiveId: ObjectiveId = 'wildfire', plan: PlanOpts = {}, difficulty: Difficulty = 'fan', seed = 7): GameState {
+  let s = launchFrom(designGame(difficulty, objectiveId, plan, seed), d)
+  while (s.phase !== 'debrief') s = ok(s, { type: 'advanceOps' }, P.radio)
+  return s
+}
