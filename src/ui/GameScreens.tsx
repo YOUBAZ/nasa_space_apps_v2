@@ -6,10 +6,9 @@ import { Button } from './components/Button'
 import { ChatDock } from './components/ChatDock'
 import { Campaign, CampaignOver } from './screens/Campaign'
 import { Debrief } from './screens/Debrief'
-import { Launch } from './screens/Launch'
+import { Flight } from './screens/Flight'
 import { Lobby } from './screens/Lobby'
 import { ErrorToast, MissionBoard } from './screens/MissionBoard'
-import { Operations } from './screens/Operations'
 
 interface Focus { focusRole?: Role; focusKey?: string }
 
@@ -24,8 +23,9 @@ function Screen({ onExit, focusRole, focusKey }: { onExit: () => void } & Focus)
   if (between && reviewing && canReview) return <Debrief onForward={() => setReviewing(false)} />
   switch (state.phase) {
     case 'lobby': return <Lobby onExit={onExit} />
-    case 'launch': return <Launch key={state.campaign.launches} />
-    case 'operations': return <Operations />
+    // launch and operations share one page, so the view and the radio transcript stay put
+    case 'launch':
+    case 'operations': return <Flight key={state.campaign.launches} />
     case 'debrief': return <Debrief />
     case 'campaign': return <Campaign onBack={back} />
     case 'campaign_over': return <CampaignOver onExit={onExit} onBack={back} />

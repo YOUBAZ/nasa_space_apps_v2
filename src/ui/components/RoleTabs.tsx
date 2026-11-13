@@ -10,7 +10,7 @@ export function RoleTabs({ active, onSelect }: { active: Role; onSelect(role: Ro
   const todo = duties(state)
   const m = state.mission
   return (
-    <div role="tablist" aria-label={t('board.roles')} className="grid grid-cols-2 content-start gap-2 lg:sticky lg:top-3 lg:grid-cols-1 lg:self-start" data-tut="roles">
+    <div role="tablist" aria-label={t('board.roles')} className="grid grid-cols-2 content-start gap-2 lg:grid-cols-1" data-tut="roles">
       {ROLES.map((role) => {
         const meta = ROLE_META[role]
         const selected = active === role

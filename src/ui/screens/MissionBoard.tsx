@@ -16,7 +16,7 @@ import { PlannerPanel } from '../panels/PlannerPanel'
 import { RadioPanel } from '../panels/RadioPanel'
 import { ScientistPanel } from '../panels/ScientistPanel'
 import { ROLE_META } from '../roles'
-import { Scene3D } from '../three/Scene3D'
+import { View3D } from '../components/View3D'
 import { GoPollCard, IntegrationCard } from './StageCards'
 import { withAutoSlots } from '../../engine/spend'
 
@@ -99,8 +99,14 @@ export function MissionBoard({ onExit, focusRole, focusKey }: { onExit(): void; 
         ))}
       </ol>
 
-      <div className="grid gap-3 lg:grid-cols-[230px_minmax(0,1fr)_310px]">
-        <RoleTabs active={active} onSelect={setActive} />
+      <div className="grid gap-3 lg:grid-cols-[250px_minmax(0,1fr)_360px]">
+        <div className="flex flex-col gap-3 lg:sticky lg:top-3 lg:max-h-[calc(100vh-1.5rem)] lg:self-start lg:overflow-y-auto">
+          <RoleTabs active={active} onSelect={setActive} />
+          <div className="panel flex flex-col gap-4 p-3">
+            <RequestInbox />
+            <ActivityLog />
+          </div>
+        </div>
 
         <main className="flex min-w-0 flex-col gap-3">
           {state.phase === 'integration' && <IntegrationCard />}
@@ -114,24 +120,20 @@ export function MissionBoard({ onExit, focusRole, focusKey }: { onExit(): void; 
           </section>
         </main>
 
-        <aside className="flex flex-col gap-3 lg:sticky lg:top-3 lg:max-h-[calc(100vh-1.5rem)] lg:self-start lg:overflow-y-auto">
+        {/* the 3D preview and gauges: always in view, never scrolling inside */}
+        <aside className="flex flex-col gap-3 lg:sticky lg:top-3 lg:self-start">
           {m && state.phase !== 'objective_proposal' && state.phase !== 'objective_review' && (
-            <div className="panel overflow-hidden" data-tut="spacecraft">
-              <div className="h-48 bg-black">
-                <Scene3D fallback={<p className="mono p-3 text-xs text-carbon-40">{t('board.preview')}</p>}>
-                  <Suspense fallback={null}><Spacecraft3D design={design} /></Suspense>
-                </Scene3D>
-              </div>
-              <div className="p-3"><Telemetry /></div>
+            <div className="panel flex flex-col gap-3 p-3" data-tut="spacecraft">
+              <View3D testId="spacecraft-view" resizable className="h-[min(42vh,24rem)] min-h-48"
+                fallback={<p className="mono p-3 text-xs text-carbon-40">{t('board.preview')}</p>}>
+                <Suspense fallback={null}><Spacecraft3D design={design} /></Suspense>
+              </View3D>
+              <Telemetry />
             </div>
           )}
           {solo && todo.planner === 'todo.launch' && (
             <Button variant="primary" size="lg" icon="rocket" onClick={() => act({ type: 'launch' }, 'planner')}>{t('board.launch')}</Button>
           )}
-          <div className="panel flex flex-col gap-4 p-3">
-            <RequestInbox />
-            <ActivityLog />
-          </div>
         </aside>
       </div>
     </div>

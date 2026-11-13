@@ -11,7 +11,7 @@ import { InfoTip } from '../handbook/Handbook'
 import { orbName, stnName } from '../names'
 import { orbitChips, stationChips } from '../stats'
 import { SlotPicker } from './DesignerPanel'
-import { Scene3D } from '../three/Scene3D'
+import { View3D } from '../components/View3D'
 
 const OrbitView3D = lazy(() => import('../three/OrbitView3D'))
 
@@ -63,18 +63,17 @@ export function RadioPanel() {
     <div className="flex flex-col gap-4">
       <section data-tut="orbits">
         <h3 className="label mb-1.5">{t('radio.orbit')}</h3>
-        <div className="grid gap-3 lg:grid-cols-[1fr_260px]">
+        <div className="grid gap-3 lg:grid-cols-[1fr_320px]">
           <div className="grid gap-2 sm:grid-cols-2">
             {orbitsFor(state.difficulty).map((id) => (
               <OptionCard key={id} name={orbName(id)} entryId={`orb.${id}`} chips={orbitChips(id)} color="#f6f6f6"
                 selected={d.orbit === id} disabled={!me} onPick={() => act({ type: 'setOrbit', orbit: id }, 'radio')} />
             ))}
           </div>
-          <div className="h-64 overflow-hidden rounded border border-carbon-70 bg-black lg:sticky lg:top-3 lg:self-start">
-            <Scene3D fallback={<p className="mono p-3 text-xs text-carbon-40">{d.orbit ? orbName(d.orbit) : t('radio.noOrbit')}</p>}>
-              <Suspense fallback={null}><OrbitView3D orbit={d.orbit} stations={picked} /></Suspense>
-            </Scene3D>
-          </div>
+          <View3D testId="orbit-view" resizable className="h-72 min-h-48 lg:sticky lg:top-3 lg:self-start"
+            fallback={<p className="mono p-3 text-xs text-carbon-40">{d.orbit ? orbName(d.orbit) : t('radio.noOrbit')}</p>}>
+            <Suspense fallback={null}><OrbitView3D orbit={d.orbit} stations={picked} design={d} /></Suspense>
+          </View3D>
         </div>
       </section>
 

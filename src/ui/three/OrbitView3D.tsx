@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import type { Group } from 'three'
 import { STATIONS } from '../../engine/catalog'
-import type { OrbitId, StationId } from '../../engine/types'
+import type { Design, OrbitId, StationId } from '../../engine/types'
 import { Planet, Stage, type Body } from './common'
 
 interface View { body: Body; radius: number; ring?: { r: number; tilt: number; stretch?: number; speed: number }; far?: boolean; surface?: boolean }
@@ -49,7 +49,7 @@ function Pin({ id, radius }: { id: StationId; radius: number }) {
 }
 
 /** The chosen destination: a low-poly world, the orbit ring, and the spacecraft flying along it. */
-export default function OrbitView3D({ orbit, stations }: { orbit?: OrbitId; stations: StationId[] }) {
+export default function OrbitView3D({ orbit, stations }: { orbit?: OrbitId; stations: StationId[]; design?: Partial<Design> }) {
   const v: View = orbit ? VIEW[orbit] : { body: 'earth', radius: 1 }
   const spinRef = useRef<Group>(null)
   return (
