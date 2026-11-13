@@ -38,7 +38,7 @@ It must be: **fun, simple, mildly challenging, interactive**. There is rarely on
 
 ## 2. Constraints
 
-- **48 hours** of build time → a single shared game engine, table-driven content, CSS/SVG animation (no 3D, no video assets).
+- **48 hours** of build time → a single shared game engine, table-driven content, no video or downloaded model assets. **3D (added by the team 2026-11-13):** simple low-poly 3D built from basic shapes in code (three.js via react-three-fiber) for the spacecraft, the rocket and launch, and the planet/orbit view. Menus and panels stay 2D.
 - Content numbers are **approximate public figures rounded and simplified for gameplay**; this must be stated in-game ("Simplified for play — see NASA sources").
 - All tunable numbers live in data files so balancing doesn't touch logic.
 
@@ -252,7 +252,7 @@ Science value = Σ relevance(instrument, objective) × orbit-fit multiplier × f
 - *(builder's calls)* Difficulty is chosen once per campaign. Mission type is a free pick each mission. "Fly again with fixes" pre-fills the last configuration but is a new mission: full price, counts as a launch. Local and solo campaigns autosave to the browser (localStorage) and survive a refresh; online campaigns live only while the host's tab is open. A simple campaign calendar (month counter) carries across missions for schedule and Mars windows.
 
 ## 9. Launch, operations, debrief
-- **Launch cinematic:** countdown, liftoff, staging, orbit insertion (CSS/SVG). Failure type picks the break point (e.g. over-mass → rocket can't reach orbit).
+- **Launch cinematic:** countdown, liftoff, staging, orbit insertion (3D scene: low-poly rocket, pad, Earth). Failure type picks the break point (e.g. over-mass → rocket can't reach orbit).
 - **Operations cinematic:** timeline with signal-quality meter and data counter; Radio Operator presses "Send commands" and "Downlink data" to advance (no failure possible here).
 - **Failure:** the **cartoon Elon Musk** Flight Director kicks the ground, screams, and throws his cap. There are 3 variants picked by the worst fault (explosion on the pad = over capacity; "we lost the signal" = comms; slow freeze = power or thermal). Each is about 4 seconds, can be skipped, and ends with a quip ("Okay, okay… rapid unscheduled disassembly.").
 - **Success:** the cartoon Elon Musk celebrates, with confetti and a mission patch stamped with the team name.
@@ -318,3 +318,9 @@ All per-option numbers, coverage tables, the relevance matrix, grants and formul
 - Final leaderboard: the campaign report ranks players by XP, with a shareable summary card.
 - Sound *(stretch)*: countdown beeps, launch rumble, radio static for the Radio Operator's debrief, a success fanfare, and a tantrum "argh". Royalty-free or generated, with a mute toggle.
 
+
+**3D scenes** (simple, low-poly, generated from shapes in code):
+- **Spacecraft builder:** a rotating 3D spacecraft that changes as the Designer picks parts (bus size, solar panels or RTG, dish size, engine, instruments as coloured blocks).
+- **Orbit view:** a 3D planet (Earth, Mars, Jupiter or the L2 point) with the chosen orbit ring, the spacecraft moving along it, and ground-station pins on Earth.
+- **Launch and operations:** a 3D rocket sized by the chosen vehicle lifts off, stages and reaches orbit, or fails at the break point.
+- Every 3D scene has a plain 2D fallback when WebGL isn't available (and in tests).

@@ -6,7 +6,7 @@
 
 **Architecture:** One pure-TypeScript engine (`src/engine`), with no UI, holds every rule: catalog, mission evaluation, the state machine for the role flow, scoring and the campaign. React screens render the engine state. Solo and pass-and-play run the engine in one browser. Online mode runs it in the host's browser and syncs actions and state over Supabase Realtime broadcast.
 
-**Tech Stack:** Vite 5 + React 18 + TypeScript 5 (strict), Tailwind CSS v4 (`@tailwindcss/vite`), Framer Motion 11, Vitest 2 + @testing-library/react, @supabase/supabase-js 2, fonts Inter / Public Sans / DM Mono (@fontsource), deployed on Vercel.
+**Tech Stack:** Vite 5 + React 18 + TypeScript 5 (strict), three.js + @react-three/fiber 8 + @react-three/drei 9 (low-poly 3D from primitives, lazy-loaded, 2D fallback), Tailwind CSS v4 (`@tailwindcss/vite`), Framer Motion 11, Vitest 2 + @testing-library/react, @supabase/supabase-js 2, fonts Inter / Public Sans / DM Mono (@fontsource), deployed on Vercel.
 
 **Spec:** [docs/superpowers/specs/2026-11-13-mission-control-design.md](../specs/2026-11-13-mission-control-design.md) + [balance appendix](../specs/2026-11-13-mission-control-balance.md) + oracle [balance_reference.py](../specs/balance_reference.py)
 
@@ -321,8 +321,8 @@ All screens read `GameState` through `useGame()` and dispatch `Action`s. Verific
 
 **Files:**
 - Create: `src/ui/panels/DesignerPanel.tsx`, `src/ui/panels/RadioPanel.tsx`, `src/ui/components/{SlotPicker,VehicleCard,OrbitCard,StationMap}.tsx`, `src/ui/screens/{Integration,GoPoll}.tsx`, `tests/ui/design.test.tsx`
-- Designer: a spacecraft diagram (SVG bus with slot hotspots), slot pickers (option cards with stats; disabled with "Request funds" when over the cap), vehicle cards with the capacity table, the instrument review box.
-- Radio: orbit cards (trait chips), band and antenna pickers, a flat world-map SVG with clickable station pins and a live coverage % readout, and cost.
+- Designer: a **3D spacecraft** (`src/ui/three/Spacecraft3D.tsx`, rebuilt from the chosen parts, auto-rotating, drag to orbit) with a 2D fallback, slot pickers (option cards with stats; disabled with "Request funds" when over the cap), vehicle cards with the capacity table, the instrument review box.
+- Radio: orbit cards (trait chips), a **3D orbit view** (`src/ui/three/OrbitView3D.tsx`: planet, orbit ring, moving spacecraft), band and antenna pickers, a flat world-map SVG with clickable station pins and a live coverage % readout, and cost.
 - Integration: the pairing lock (two toggles side by side) and a purchase-order summary.
 - GoPoll: four role consoles, Go/No-Go buttons, then a red hold-to-launch button (1.5 s).
 - [ ] **Step 1:** Test: choosing an over-cap slot shows "Request funds" and does not dispatch `setSlot`; un-agreeing returns to design; the hold-to-launch button only fires after 1.5 s (fake timers).
@@ -353,7 +353,7 @@ All screens read `GameState` through `useGame()` and dispatch `Action`s. Verific
 
 **Files:**
 - Create: `src/ui/screens/{Launch,Operations}.tsx`, `src/ui/cinematics/{Rocket,Starfield,Timeline,SignalMeter}.tsx`
-- Launch: a 10-second countdown in DM Mono, liftoff, staging, and an orbit-insertion arc. The break point comes from the worst fault: pad explosion for `over_capacity`/`vehicle_cannot_reach`, otherwise a nominal climb.
+- Launch: a **3D scene** (`src/ui/three/LaunchScene3D.tsx`: low-poly rocket sized by vehicle, pad, smoke particles, Earth curve) with a 10-second countdown in DM Mono, liftoff, staging, and orbit insertion. The break point comes from the worst fault: pad explosion for `over_capacity`/`vehicle_cannot_reach`, otherwise a nominal climb.
 - Operations: a timeline of beats (deploy, instruments on, first light, downlink). Radio presses "Send commands" and "Downlink data" to advance. The data counter tweens to `report.downlink`. Skippable.
 - [ ] **Step 1:** Using `run`, launch the over-capacity fixture and a success fixture; both reach the debrief. **Step 2:** Commit `feat(ui): launch and operations cinematics`.
 
