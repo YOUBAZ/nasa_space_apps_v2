@@ -78,7 +78,7 @@ function Stats({ state }: { state: GameState }) {
 }
 
 /** Between missions: money left, patches earned, gear unlocked, and what to fly next. */
-export function Campaign() {
+export function Campaign({ onBack }: { onBack?: () => void } = {}) {
   const { state, act, can } = useGame()
   const c = state.campaign
   const last = c.history[c.history.length - 1]
@@ -113,6 +113,7 @@ export function Campaign() {
       </div>
       <Leaderboard state={state} />
       <div className="flex flex-wrap items-center justify-end gap-3">
+        {onBack && <Button variant="ghost" icon="back" className="me-auto" onClick={onBack}>{t('camp.backToDebrief')}</Button>}
         {can('planner') ? (
           <>
             {last && last.outcome !== 'success' && (
@@ -130,7 +131,7 @@ export function Campaign() {
 }
 
 /** Final report when the money or the five launches run out. */
-export function CampaignOver({ onExit }: { onExit(): void }) {
+export function CampaignOver({ onExit, onBack }: { onExit(): void; onBack?: () => void }) {
   const { state } = useGame()
   const c = state.campaign
   const wins = c.history.filter((h) => h.outcome === 'success').length
@@ -167,8 +168,9 @@ export function CampaignOver({ onExit }: { onExit(): void }) {
         <PatchWall state={state} />
         <Leaderboard state={state} />
       </div>
-      <div className="flex justify-end">
-        <Button variant="primary" size="lg" icon="back" onClick={() => { clearSave(); onExit() }}>{t('over.menu')}</Button>
+      <div className="flex flex-wrap justify-end gap-3">
+        {onBack && <Button variant="ghost" icon="back" className="me-auto" onClick={onBack}>{t('camp.backToDebrief')}</Button>}
+        <Button variant="primary" size="lg" icon="check" onClick={() => { clearSave(); onExit() }}>{t('over.menu')}</Button>
       </div>
     </div>
   )

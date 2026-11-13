@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { t } from '../i18n/i18n'
 import { useGame } from '../net/useGame'
 import type { Role } from '../engine/types'
@@ -14,13 +15,20 @@ interface Focus { focusRole?: Role; focusKey?: string }
 
 function Screen({ onExit, focusRole, focusKey }: { onExit: () => void } & Focus) {
   const { state } = useGame()
+  // Looking back at the last debrief is a private view on this device; it changes nothing in the game.
+  const [reviewing, setReviewing] = useState(false)
+  const between = state.phase === 'campaign' || state.phase === 'campaign_over'
+  useEffect(() => { if (!between) setReviewing(false) }, [between])
+  const canReview = between && Boolean(state.mission?.result && state.mission.finalDesign)
+  const back = canReview ? () => setReviewing(true) : undefined
+  if (between && reviewing && canReview) return <Debrief onForward={() => setReviewing(false)} />
   switch (state.phase) {
     case 'lobby': return <Lobby onExit={onExit} />
     case 'launch': return <Launch key={state.campaign.launches} />
     case 'operations': return <Operations />
     case 'debrief': return <Debrief />
-    case 'campaign': return <Campaign />
-    case 'campaign_over': return <CampaignOver onExit={onExit} />
+    case 'campaign': return <Campaign onBack={back} />
+    case 'campaign_over': return <CampaignOver onExit={onExit} onBack={back} />
     default: return <MissionBoard onExit={onExit} focusRole={focusRole} focusKey={focusKey} />
   }
 }

@@ -103,4 +103,6 @@ export const endgame: Record<string, string> = {
   'over.objective': 'Objective',
   'over.result': 'Result',
   'over.menu': 'Back to the menu',
+  'camp.backToDebrief': 'Back to the debrief',
+  'debrief.forward': 'Forward to the campaign',
 }

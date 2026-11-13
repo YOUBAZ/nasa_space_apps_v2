@@ -28,10 +28,8 @@ describe('campaign flow', () => {
     let s = finish(debriefOf({ ...wildfire, vehicle: 'electron' }, 'wildfire', tight))
     expect(err(s, { type: 'nextMission', flyAgain: true }, P.designer)).toBe('not_your_role')
     s = ok(s, { type: 'nextMission', flyAgain: true }, P.planner)
-    expect(s.phase).toBe('planning')
+    expect(s.phase).toBe('design')
     expect(s.mission!.objectiveId).toBe('wildfire')
-    s = ok(s, { type: 'setPlan', ...tight, targetMonth: 40, scheduleMode: 'standard' }, P.planner)
-    s = ok(s, { type: 'confirmPlan' }, P.planner)
     // the old design is pre-filled, including the accepted instruments
     expect(s.mission!.design).toMatchObject({ structure: 'medium', vehicle: 'electron', orbit: 'sso', instruments: ['thermal_ir'] })
     expect(s.mission!.instrumentStatus).toBe('accepted')
@@ -51,6 +49,7 @@ describe('campaign flow', () => {
   })
   it('a pre-filled design is trimmed to fit a smaller budget', () => {
     let s = finish(debriefOf(wildfire, 'wildfire', tight))
+    s = { ...s, campaign: { ...s.campaign, funds: 200 } } // cannot afford the old $220M budget any more
     s = ok(s, { type: 'nextMission', flyAgain: true }, P.planner)
     s = ok(s, { type: 'setPlan', total: 150, designer: 100, radio: 3, targetMonth: 40, scheduleMode: 'standard' }, P.planner)
     s = ok(s, { type: 'confirmPlan' }, P.planner)
@@ -83,8 +82,6 @@ describe('campaign flow', () => {
   it('unlocked gear becomes selectable', () => {
     let s = finish(debriefOf(wildfire, 'wildfire', tight))
     s = ok(s, { type: 'nextMission', flyAgain: true }, P.planner)
-    s = ok(s, { type: 'setPlan', ...tight, targetMonth: 40, scheduleMode: 'standard' }, P.planner)
-    s = ok(s, { type: 'confirmPlan' }, P.planner)
     expect(ok(s, { type: 'setSlot', slot: 'antenna', option: 'hga' }, P.radio).mission!.design.antenna).toBe('hga')
   })
 })

@@ -58,6 +58,16 @@ export interface Budget {
   initialDesigner?: number
 }
 
+/** The budget and schedule of a mission, kept so "fly again" can restore them exactly. */
+export interface PlanMemory {
+  total: number
+  designer: number
+  radio: number
+  /** months between the mission starting and its target launch */
+  lead: number
+  scheduleMode: ScheduleMode
+}
+
 export interface Award {
   id: 'cost_efficiency' | 'scientific_value' | 'new_gear' | 'effective_decision'
   role?: Role
@@ -107,6 +117,8 @@ export interface Mission {
   votes: Partial<Record<Role, 'go' | 'nogo'>>
   /** "Fly again with fixes": the previous design, re-applied when the design phase opens */
   template?: Design
+  /** "Fly again" when the old budget is no longer affordable: the old numbers, for the Planner to adjust */
+  suggestedPlan?: PlanMemory
   // --- filled at launch
   report?: MissionReport
   finalDesign?: Design
@@ -138,6 +150,7 @@ export interface Campaign {
   teamName: string
   lastDesign?: Design
   lastObjective?: ObjectiveId
+  lastPlan?: PlanMemory
 }
 
 export interface ChatMsg {

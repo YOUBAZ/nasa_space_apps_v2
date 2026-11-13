@@ -57,13 +57,16 @@ function ScoreBar({ role, score, name }: { role: Role; score: number; name?: str
 }
 
 /** The Radio Operator's transmission: what happened, why, whose call it was, and how to fix it. */
-export function Debrief() {
+export function Debrief({ onForward }: { onForward?: () => void } = {}) {
   const { state, act, holder, can } = useGame()
   const m = state.mission!
   const r = m.result!
   const order = { critical: 0, major: 1, minor: 2 }
   const faults = [...r.faults].sort((a, b) => order[a.severity] - order[b.severity])
-  const badges = badgesFor(state.campaign.history, r, m.finalDesign!)
+  // When looking back from the campaign screen this mission is already in the history: leave it out,
+  // so the badges shown are the ones it earned at the time.
+  const earlier = onForward ? state.campaign.history.slice(0, -1) : state.campaign.history
+  const badges = badgesFor(earlier, r, m.finalDesign!)
   const net = r.grant - r.cost
   return (
     <div className="mx-auto flex max-w-5xl flex-col gap-4 px-3 py-4">
@@ -120,9 +123,11 @@ export function Debrief() {
       </div>
 
       <div className="flex justify-end">
-        {can('radio')
-          ? <Button variant="primary" size="lg" icon="arrow" onClick={() => act({ type: 'finishDebrief' }, 'radio')}>{t('debrief.close')}</Button>
-          : <p className="mono text-sm text-carbon-30">{t('debrief.waitRadio')}</p>}
+        {onForward
+          ? <Button variant="primary" size="lg" icon="arrow" onClick={onForward}>{t('debrief.forward')}</Button>
+          : can('radio')
+            ? <Button variant="primary" size="lg" icon="arrow" onClick={() => act({ type: 'finishDebrief' }, 'radio')}>{t('debrief.close')}</Button>
+            : <p className="mono text-sm text-carbon-30">{t('debrief.waitRadio')}</p>}
       </div>
     </div>
   )

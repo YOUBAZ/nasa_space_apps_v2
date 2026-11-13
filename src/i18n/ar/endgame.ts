@@ -98,4 +98,6 @@ export const endgame: Record<string, string> = {
   'over.objective': 'الهدف',
   'over.result': 'النتيجة',
   'over.menu': 'العودة إلى القائمة',
+  'camp.backToDebrief': 'العودة إلى التقرير',
+  'debrief.forward': 'التالي: الحملة',
 }

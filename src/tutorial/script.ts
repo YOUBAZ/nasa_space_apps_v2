@@ -157,11 +157,7 @@ export const TUTORIAL: TutorialStep[] = [
   },
   {
     id: 'again', coachKey: 'tut.again', pose: 'point', hintKey: 'tut.hint.again',
-    allow: (a) => a.type === 'nextMission' && a.flyAgain, done: (s) => s.phase === 'planning',
-  },
-  {
-    id: 'replan', coachKey: 'tut.replan', pose: 'point', tab: 'planner', spotlight: 'plan', hintKey: 'tut.hint.budget',
-    allow: planOk, done: (s) => s.phase === 'design',
+    allow: (a) => a.type === 'nextMission' && a.flyAgain, done: (s) => s.phase === 'design',
   },
   {
     id: 'fix', coachKey: 'tut.fix', pose: 'point', tab: 'designer', spotlight: 'vehicles', hintKey: 'tut.hint.fix',
