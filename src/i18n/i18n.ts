@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react'
-import en from './en.json'
-import ar from './ar.json'
+import { en } from './en'
+import { ar } from './ar'
 
 export type Lang = 'en' | 'ar'
 const tables: Record<Lang, Record<string, string>> = { en, ar }

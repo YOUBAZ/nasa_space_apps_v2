@@ -39,7 +39,7 @@ Update the status after each task: ⬜ not started · 🟨 in progress · ✅ do
 |---|---|---|---|---|
 | 0 | Project skeleton, HDS theme, tooling | 0.1 | ✅ | `npm test` and `npm run build` pass |
 | 1 | Catalog data matches oracle | 1.1 | ✅ | fixture test green |
-| 2 | Mission evaluation (faults, science, cost, time) | 2.1, 2.2 | ⬜ | oracle parity on all reference designs |
+| 2 | Mission evaluation (faults, science, cost, time) | 2.1, 2.2 | ✅ | oracle parity on all reference designs |
 | 3 | Game state machine (roles, approvals, appeals, design, integration, go poll) | 3.1–3.4 | ⬜ | full mission scripted in a test, solo and team |
 | 4 | Scoring, awards, campaign, gamification | 4.1, 4.2 | ⬜ | campaign test: fail → refly → success → unlock |
 | 5 | Local playable UI (solo + pass-and-play) | 5.1–5.5 | ⬜ | a complete Wildfire mission played in the browser |

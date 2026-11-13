@@ -53,3 +53,13 @@ export interface Fault {
 }
 
 export type ScheduleMode = 'rush' | 'standard' | 'careful'
+
+export const FAULT_CODES: FaultCode[] = [
+  'vehicle_cannot_reach', 'over_capacity', 'structure_overloaded', 'wrong_destination',
+  'power_deficit', 'thin_power_margin', 'battery_short', 'no_capture_propulsion',
+  'no_landing_kit', 'radiation_fried', 'telescope_blinded', 'tumbling',
+  'pointing_too_coarse', 'no_link', 'no_station_in_view', 'coverage_low',
+  'downlink_bottleneck', 'computer_overloaded', 'storage_overflow', 'thermal_failure',
+  'short_lifetime', 'wasted_stations', 'irrelevant_instruments',
+  'schedule_overrun', 'missed_mars_window', 'unused_allocation',
+]
