@@ -11,6 +11,7 @@ import {
   moveFunds, requestFunds, requestInstruments, resolveBackorder, reviewFunding, reviewInstruments,
   setOrbit, setReady, setSlot, setStations, setVehicle,
 } from './phases/design'
+import { advanceOps, agreePairing, launch, reviewPurchase, submitPurchase, vote } from './phases/integration'
 
 export interface CreateOpts {
   mode: Mode
@@ -136,6 +137,11 @@ function reduce(s: GameState, a: Action, actorId: string): void {
     case 'resolveBackorder': return resolveBackorder(s, a, actorId)
     case 'moveFunds': return moveFunds(s, a, actorId)
     case 'setReady': return setReady(s, a, actorId)
+    case 'agreePairing': return agreePairing(s, a, actorId)
+    case 'submitPurchase': return submitPurchase(s, actorId)
+    case 'vote': return vote(s, a, actorId)
+    case 'launch': return launch(s, actorId)
+    case 'advanceOps': return advanceOps(s, actorId)
     default: fail('unknown_action')
   }
 }
@@ -164,7 +170,10 @@ function review(s: GameState, a: Extract<Action, { type: 'review' }>, actorId: s
   } else if (r.kind === 'funding') {
     reviewFunding(s, r, approve)
     setStatus()
-  } else fail('unknown_action')
+  } else {
+    reviewPurchase(s, r, approve)
+    setStatus()
+  }
 
   function setStatus() {
     r.status = approve ? 'approved' : 'rejected'
