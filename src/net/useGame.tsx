@@ -18,6 +18,8 @@ export interface Game {
   can(role: Role): boolean
   holder(role: Role): string | undefined
   lastError: string | null
+  /** the host ended the room (online clients only) */
+  closed: boolean
   clearError(): void
 }
 
@@ -26,12 +28,14 @@ const Ctx = createContext<Game | null>(null)
 export function GameProvider({ transport, children }: { transport: Transport; children: ReactNode }) {
   const [state, setState] = useState<GameState | null>(transport.getState())
   const [lastError, setError] = useState<string | null>(null)
+  const [closed, setClosed] = useState(false)
 
   useEffect(() => {
     setState(transport.getState())
     return transport.subscribe((s, err) => {
       setState(s)
-      setError(err ?? null)
+      if (err === 'room_closed') setClosed(true)
+      else setError(err ?? null)
     })
   }, [transport])
 
@@ -60,9 +64,10 @@ export function GameProvider({ transport, children }: { transport: Transport; ch
       },
       holder(role) { return state.players.find((p) => p.roles.includes(role))?.name },
       lastError,
+      closed,
       clearError: () => setError(null),
     }
-  }, [state, transport, lastError, holderId])
+  }, [state, transport, lastError, closed, holderId])
 
   if (!game) return null
   return <Ctx.Provider value={game}>{children}</Ctx.Provider>

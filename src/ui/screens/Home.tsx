@@ -5,7 +5,7 @@ import { clearSave, createLocalTransport, loadSave } from '../../net/localTransp
 import type { Transport } from '../../net/transport'
 import { Button } from '../components/Button'
 import { Icon } from '../icons'
-import { onlineAvailable } from '../../net/online'
+import { hasServer, onlineAvailable } from '../../net/online'
 import { LangToggle } from '../components/LangToggle'
 
 const HeroScene = lazy(() => import('../three/HeroScene'))
@@ -146,6 +146,7 @@ export function Home({ onStart, onTutorial }: HomeProps) {
                     className="mono min-w-0 flex-1 rounded border border-carbon-60 bg-black/60 px-3 py-2 uppercase tracking-[0.3em] text-white outline-none focus:border-nasa-blue-tint" />
                   <Button disabled={busy || code.trim().length !== 6} onClick={() => startOnline('join')}>{t('home.join')}</Button>
                 </div>
+                {!hasServer() && <p className="mono text-xs text-intl-orange">{t('home.tabsOnly')}</p>}
                 {busy && <p className="mono text-sm text-carbon-30">{t('home.connecting')}</p>}
                 {error && <p className="text-sm text-nasa-red-tint" role="alert">{error}</p>}
               </div>

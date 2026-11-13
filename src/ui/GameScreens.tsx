@@ -1,4 +1,7 @@
+import { t } from '../i18n/i18n'
 import { useGame } from '../net/useGame'
+import { Button } from './components/Button'
+import { ChatDock } from './components/ChatDock'
 import { Campaign, CampaignOver } from './screens/Campaign'
 import { Debrief } from './screens/Debrief'
 import { Launch } from './screens/Launch'
@@ -6,8 +9,7 @@ import { Lobby } from './screens/Lobby'
 import { MissionBoard } from './screens/MissionBoard'
 import { Operations } from './screens/Operations'
 
-/** Picks the screen for the current phase of the game. */
-export function GameScreens({ onExit, boardExtra }: { onExit: () => void; boardExtra?: React.ReactNode }) {
+function Screen({ onExit }: { onExit: () => void }) {
   const { state } = useGame()
   switch (state.phase) {
     case 'lobby': return <Lobby onExit={onExit} />
@@ -16,6 +18,26 @@ export function GameScreens({ onExit, boardExtra }: { onExit: () => void; boardE
     case 'debrief': return <Debrief />
     case 'campaign': return <Campaign />
     case 'campaign_over': return <CampaignOver onExit={onExit} />
-    default: return <MissionBoard onExit={onExit} extra={boardExtra} />
+    default: return <MissionBoard onExit={onExit} />
   }
+}
+
+/** Picks the screen for the current phase of the game, plus the things that float over every screen. */
+export function GameScreens({ onExit, chat = false }: { onExit: () => void; chat?: boolean }) {
+  const { closed } = useGame()
+  return (
+    <>
+      <Screen onExit={onExit} />
+      <ChatDock always={chat} />
+      {closed && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4" role="alertdialog" aria-label={t('room.closed')}>
+          <div className="panel flex max-w-sm flex-col items-center gap-4 bg-carbon-90 p-6 text-center">
+            <h2 className="text-2xl font-black">{t('room.closed')}</h2>
+            <p className="text-carbon-20">{t('room.closedHint')}</p>
+            <Button variant="primary" icon="back" onClick={onExit}>{t('common.exit')}</Button>
+          </div>
+        </div>
+      )}
+    </>
+  )
 }

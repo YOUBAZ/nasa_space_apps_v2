@@ -45,7 +45,7 @@ export function ErrorToast() {
   )
 }
 
-export function MissionBoard({ onExit, extra }: { onExit(): void; extra?: React.ReactNode }) {
+export function MissionBoard({ onExit }: { onExit(): void }) {
   const { state, can, act } = useGame()
   const handbook = useHandbook()
   const todo = duties(state)
@@ -83,7 +83,6 @@ export function MissionBoard({ onExit, extra }: { onExit(): void; extra?: React.
             <p className="mono text-lg" dir="ltr">{state.campaign.launches + 1}/5</p>
           </div>
           <Button size="sm" variant="ghost" icon="book" onClick={() => handbook.open()}>{t('hb.title')}</Button>
-          {extra}
           <Button size="sm" variant="ghost" icon="back" onClick={onExit}>{t('common.exit')}</Button>
         </div>
       </header>

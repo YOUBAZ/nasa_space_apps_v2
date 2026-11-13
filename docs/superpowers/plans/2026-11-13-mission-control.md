@@ -44,7 +44,7 @@ Update the status after each task: ⬜ not started · 🟨 in progress · ✅ do
 | 4 | Scoring, awards, campaign, gamification | 4.1, 4.2 | ✅ | campaign test: fail → refly → success → unlock |
 | 5 | Local playable UI (solo + pass-and-play) | 5.1–5.5 | ✅ | a complete Wildfire mission played in the browser |
 | 6 | Launch / ops / debrief, Elon cartoon, campaign screen | 6.1–6.3 | ✅ | failure, partial and success scenes all reachable |
-| 7 | Online rooms + chat | 7.1, 7.2 | ⬜ | two browser windows complete a mission |
+| 7 | Online rooms + chat | 7.1, 7.2 | ✅ (Supabase path needs keys to verify) | two browser windows complete a mission |
 | 8 | Tutorial with Elon coach and scripted teammates | 8.1, 8.2 | ⬜ | tutorial completes: planted failure → fix → success |
 | 9 | Arabic + RTL | 9.1 | ⬜ | Arabic toggle, no missing keys, layout mirrors |
 | 10 | Sound, polish, deploy, final review | 10.1, 10.2 | ⬜ | Vercel URL plays end to end |

@@ -61,6 +61,17 @@ export const ui: Record<string, string> = {
   'lobby.offline': 'offline',
   'lobby.leave': 'Leave',
 
+  // chat and rooms
+  'chat.title': 'Team chat',
+  'chat.open': 'Open chat',
+  'chat.close': 'Close chat',
+  'chat.message': 'Message',
+  'chat.placeholder': 'Talk to your crew…',
+  'chat.send': 'Send',
+  'room.closed': 'The host ended the room',
+  'room.closedHint': 'Online games live in the host\'s browser. When the host leaves, the room closes.',
+  'home.tabsOnly': 'No game server is configured, so rooms only connect tabs of this same browser.',
+
   // generic
   'common.exit': 'Exit to menu',
   'common.close': 'Close',
