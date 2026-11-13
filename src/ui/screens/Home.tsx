@@ -7,6 +7,7 @@ import { Button } from '../components/Button'
 import { Icon } from '../icons'
 import { hasServer, onlineAvailable } from '../../net/online'
 import { LangToggle } from '../components/LangToggle'
+import { Scene3D } from '../three/Scene3D'
 
 const HeroScene = lazy(() => import('../three/HeroScene'))
 const DIFFS: Difficulty[] = ['fan', 'nerd', 'expert']
@@ -51,7 +52,7 @@ export function Home({ onStart, onTutorial }: HomeProps) {
   return (
     <div className="relative min-h-screen overflow-hidden">
       <div className="pointer-events-none absolute inset-0 opacity-80" aria-hidden="true">
-        <Suspense fallback={null}><HeroScene /></Suspense>
+        <Scene3D fallback={null}><Suspense fallback={null}><HeroScene /></Suspense></Scene3D>
       </div>
       <div className="relative mx-auto flex min-h-screen max-w-5xl flex-col gap-6 px-4 py-8">
         <header className="flex items-start justify-between gap-4">
@@ -120,10 +121,12 @@ export function Home({ onStart, onTutorial }: HomeProps) {
             {mode === 'local' && (
               <div className="flex flex-col gap-2">
                 <p className="label">{t('home.players')}</p>
-                <input value={myName} readOnly className="rounded border border-carbon-70 bg-black/40 px-3 py-2 text-carbon-30" />
+                <input value={name} maxLength={24} placeholder={t('home.player', { n: 1 })} aria-label={t('home.playerName', { n: 1 })}
+                  onChange={(e) => setName(e.target.value)}
+                  className="rounded border border-carbon-60 bg-black/60 px-3 py-2 text-white outline-none focus:border-nasa-blue-tint" />
                 {others.map((n, i) => (
                   <div key={i} className="flex gap-2">
-                    <input value={n} maxLength={24} placeholder={t('home.player', { n: i + 2 })}
+                    <input value={n} maxLength={24} placeholder={t('home.player', { n: i + 2 })} aria-label={t('home.playerName', { n: i + 2 })}
                       onChange={(e) => setOthers(others.map((x, j) => (j === i ? e.target.value : x)))}
                       className="min-w-0 flex-1 rounded border border-carbon-60 bg-black/60 px-3 py-2 text-white outline-none focus:border-nasa-blue-tint" />
                     {others.length > 1 && (

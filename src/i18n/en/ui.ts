@@ -41,6 +41,7 @@ export const ui: Record<string, string> = {
   'home.connecting': 'Connecting…',
   'home.joinFailed': 'Could not join that room. Check the code and try again.',
   'home.player': 'Player {n}',
+  'home.playerName': 'Player {n} name',
 
   // lobby
   'lobby.title': 'Crew assignment',

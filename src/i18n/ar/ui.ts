@@ -38,6 +38,7 @@ export const ui: Record<string, string> = {
   'home.connecting': 'جارٍ الاتصال…',
   'home.joinFailed': 'تعذّر الانضمام إلى الغرفة. تحقق من الرمز وحاول مجددًا.',
   'home.player': 'اللاعب {n}',
+  'home.playerName': 'اسم اللاعب {n}',
 
   'lobby.title': 'توزيع الطاقم',
   'lobby.sub': 'كل دور يحتاج لاعبًا. يمكن للاعب واحد أن يأخذ عدة أدوار.',
