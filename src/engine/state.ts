@@ -1,0 +1,208 @@
+import type {
+  Design, Difficulty, Fault, InstrumentId, ObjectiveId, OrbitId, Role, ScheduleMode, Slot,
+  StationId, VehicleId,
+} from './types'
+import type { MissionReport, Outcome } from './evaluate'
+
+export type Mode = 'solo' | 'local' | 'online'
+
+export type Phase =
+  | 'lobby' | 'objective_proposal' | 'objective_review' | 'planning' | 'design' | 'integration'
+  | 'go_poll' | 'launch' | 'operations' | 'debrief' | 'campaign' | 'campaign_over'
+
+export interface Player {
+  id: string
+  name: string
+  roles: Role[]
+  connected: boolean
+  xp: number
+  badges: string[]
+}
+
+export type RequestKind = 'objective' | 'funding' | 'purchase'
+export interface Request {
+  id: string
+  kind: RequestKind
+  from: Role
+  status: 'pending' | 'approved' | 'rejected' | 'closed'
+  /** appeals used so far (max 2) */
+  appeals: number
+  /** alternating thread: requester's pitch, planner's reason, appeal, … */
+  reasons: { by: Role; text: string }[]
+  objectiveId?: ObjectiveId
+  amount?: number
+  target?: 'designer' | 'radio'
+}
+export const MAX_APPEALS = 2
+
+export interface Backorder {
+  id: string
+  slot: Slot
+  option: string
+  status: 'open' | 'wait' | 'express' | 'substitute'
+}
+
+export type InstrumentStatus = 'none' | 'pending' | 'pushed_back' | 'final' | 'accepted'
+export type ReadyRole = 'scientist' | 'designer' | 'radio'
+
+export interface Budget {
+  total: number
+  designer: number
+  radio: number
+  reserve: number
+}
+
+export interface Award {
+  id: 'cost_efficiency' | 'scientific_value' | 'new_gear' | 'effective_decision'
+  role?: Role
+  unlock?: string
+}
+
+export interface MissionResult {
+  objectiveId: ObjectiveId
+  outcome: Outcome
+  roleScores: Record<Role, number>
+  teamPoints: 0 | 400 | 1000
+  awards: Award[]
+  grant: number
+  cost: number
+  science: number
+  faults: Fault[]
+  launchMonth: number
+}
+
+export interface Mission {
+  objectiveId?: ObjectiveId
+  pitch?: string
+  requests: Request[]
+  /** objectives turned down after both appeals */
+  rejectedObjectives: ObjectiveId[]
+  planSet: boolean
+  budget: Budget
+  targetMonth: number
+  scheduleMode: ScheduleMode
+  design: Partial<Design>
+  /** what the Scientist last asked for (design.instruments holds what the Designer accepted) */
+  instrumentRequest: InstrumentId[]
+  instrumentStatus: InstrumentStatus
+  pushbackReason?: string
+  /** the Scientist insisted after a push-back without making the payload lighter */
+  scientistOverrode: boolean
+  /** options the Planner told the team to replace */
+  banned: { slot: Slot; option: string }[]
+  backorders: Backorder[]
+  /** express fees and other extras paid out of the reserve */
+  fees: number
+  ready: Record<ReadyRole, boolean>
+  pairing: { designer: boolean; radio: boolean }
+  purchaseApproved: boolean
+  votes: Partial<Record<Role, 'go' | 'nogo'>>
+  // --- filled at launch
+  report?: MissionReport
+  finalDesign?: Design
+  readyMonth?: number
+  launchMonth?: number
+  waitMonths?: number
+  waitCost?: number
+  totalCost?: number
+  result?: MissionResult
+}
+
+export interface Patch {
+  shape: 'circle' | 'shield' | 'hexagon' | 'triangle'
+  colorA: string
+  colorB: string
+  icon: string
+  objectiveId: ObjectiveId
+  outcome: Outcome
+  teamName: string
+}
+
+export interface Campaign {
+  funds: number
+  launches: number
+  month: number
+  unlocked: string[]
+  history: MissionResult[]
+  patches: Patch[]
+  teamName: string
+  lastDesign?: Design
+  lastObjective?: ObjectiveId
+  /** set by nextMission{flyAgain}; the next mission's design starts from this */
+  prefill?: Design
+}
+
+export interface ChatMsg {
+  n: number
+  playerId: string
+  name: string
+  text: string
+}
+
+export interface LogEntry {
+  n: number
+  key: string
+  vars: Record<string, string | number>
+  role?: Role
+}
+
+export interface GameState {
+  mode: Mode
+  difficulty: Difficulty
+  seed: number
+  /** current state of the seeded random generator */
+  rng: number
+  hostId: string
+  phase: Phase
+  players: Player[]
+  campaign: Campaign
+  mission: Mission | null
+  chat: ChatMsg[]
+  log: LogEntry[]
+  nextId: number
+}
+
+export type Action =
+  | { type: 'join'; name: string }
+  | { type: 'claimRole'; role: Role }
+  | { type: 'releaseRole'; role: Role }
+  | { type: 'setConnected'; playerId: string; connected: boolean }
+  | { type: 'setTeamName'; name: string }
+  | { type: 'startCampaign' }
+  | { type: 'chat'; text: string }
+  | { type: 'proposeObjective'; objectiveId: ObjectiveId; pitch: string }
+  | { type: 'review'; requestId: string; decision: 'approve' | 'reject'; reason?: string }
+  | { type: 'appeal'; requestId: string; reason: string }
+  | { type: 'withdraw'; requestId: string }
+  | { type: 'setPlan'; total: number; designer: number; radio: number; targetMonth: number; scheduleMode: ScheduleMode }
+  | { type: 'confirmPlan' }
+  | { type: 'setSlot'; slot: Slot; option: string }
+  | { type: 'setVehicle'; vehicle: VehicleId }
+  | { type: 'setOrbit'; orbit: OrbitId }
+  | { type: 'setStations'; stations: StationId[] }
+  | { type: 'requestInstruments'; list: InstrumentId[] }
+  | { type: 'reviewInstruments'; decision: 'accept' | 'pushback'; reason?: string }
+  | { type: 'requestFunds'; from: 'designer' | 'radio'; target: 'designer' | 'radio'; amount: number; reason: string }
+  | { type: 'resolveBackorder'; id: string; choice: 'wait' | 'express' | 'substitute' }
+  | { type: 'moveFunds'; from: 'designer' | 'radio' | 'reserve'; to: 'designer' | 'radio' | 'reserve'; amount: number }
+  | { type: 'setReady'; role: ReadyRole; ready: boolean }
+  | { type: 'agreePairing'; role: 'designer' | 'radio'; agree: boolean }
+  | { type: 'submitPurchase' }
+  | { type: 'vote'; role: Role; vote: 'go' | 'nogo' }
+  | { type: 'launch' }
+  | { type: 'advanceOps' }
+  | { type: 'finishDebrief' }
+  | { type: 'nextMission'; flyAgain: boolean }
+
+export type ActionResult = { ok: true; state: GameState } | { ok: false; error: string }
+
+export class GameError extends Error {
+  code: string
+  constructor(code: string) {
+    super(code)
+    this.code = code
+  }
+}
+export const fail = (code: string): never => {
+  throw new GameError(code)
+}
