@@ -6,6 +6,8 @@
 @import "@fontsource/public-sans/600.css";
 @import "@fontsource/dm-mono/400.css";
 @import "@fontsource/dm-mono/500.css";
+@import "@fontsource/ibm-plex-sans-arabic/400.css";
+@import "@fontsource/ibm-plex-sans-arabic/700.css";
 
 /* NASA Horizon Design System tokens (HDS Core, CC0) */
 @theme {
@@ -30,7 +32,7 @@
   --color-spacesuit: #ffffff;
   --font-display: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-body: 'Public Sans', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: 'DM Mono', Consolas, Courier, monospace;
+  --font-mono: 'DM Mono', 'IBM Plex Sans Arabic', Consolas, Courier, monospace;
 }
 
 :root { color-scheme: dark; }
@@ -72,3 +74,10 @@ h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.01em; }
 }
 
 :focus-visible { outline: 2px solid var(--color-nasa-blue-tint); outline-offset: 2px; }
+
+/* Arabic: a typeface with Arabic glyphs, and no letter-spacing (it breaks the joined script). */
+html[lang='ar'] {
+  --font-display: 'IBM Plex Sans Arabic', 'Inter', Tahoma, sans-serif;
+  --font-body: 'IBM Plex Sans Arabic', 'Public Sans', Tahoma, sans-serif;
+}
+html[lang='ar'] * { letter-spacing: 0 !important; }

@@ -2,6 +2,7 @@ import { screen, fireEvent, within } from '@testing-library/react'
 import { mount } from './helpers'
 import { debriefOf, fixture, P, ok } from '../engine/helpers/play'
 import { failureGroup } from '../../src/ui/cinematics/OutcomeScene'
+import { setLang } from '../../src/i18n/i18n'
 
 const wildfire = fixture('fan/wildfire/viable0').design
 const tight = { total: 220, designer: 200, radio: 8, targetMonth: 18 }
@@ -31,6 +32,15 @@ describe('debrief screen', () => {
     mount(s, P.radio)
     expect(screen.queryByRole('button', { name: /new mission/i })).not.toBeInTheDocument()
     expect(screen.getByText(/waiting for the planner/i)).toBeInTheDocument()
+  })
+  it('names the orbit and rocket in the chosen language', () => {
+    setLang('ar')
+    try {
+      mount(debriefOf({ ...wildfire, vehicle: 'electron' }, 'wildfire', tight), P.radio)
+      const card = within(screen.getByTestId('fault-over_capacity'))
+      expect(card.getByText(/مدار متزامن مع الشمس/)).toBeInTheDocument()
+      expect(card.queryByText(/Sun-Synchronous/)).not.toBeInTheDocument()
+    } finally { setLang('en') }
   })
   it('picks the tantrum line from the worst fault', () => {
     expect(failureGroup([{ severity: 'critical', code: 'over_capacity', roles: ['designer'] }])).toBe('launch')

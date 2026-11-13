@@ -46,7 +46,7 @@ Update the status after each task: ⬜ not started · 🟨 in progress · ✅ do
 | 6 | Launch / ops / debrief, Elon cartoon, campaign screen | 6.1–6.3 | ✅ | failure, partial and success scenes all reachable |
 | 7 | Online rooms + chat | 7.1, 7.2 | ✅ (Supabase path needs keys to verify) | two browser windows complete a mission |
 | 8 | Tutorial with Elon coach and scripted teammates | 8.1, 8.2 | ✅ | tutorial completes: planted failure → fix → success |
-| 9 | Arabic + RTL | 9.1 | ⬜ | Arabic toggle, no missing keys, layout mirrors |
+| 9 | Arabic + RTL | 9.1 | ✅ (needs native-speaker review) | Arabic toggle, no missing keys, layout mirrors |
 | 10 | Sound, polish, deploy, final review | 10.1, 10.2 | ⬜ | Vercel URL plays end to end |
 
 **48-hour cut line:** Phases 0–5 and 7 are must-have. 6 and 8 are should-have (at minimum a static debrief and a text-only tutorial). 9 and 10 shrink first.

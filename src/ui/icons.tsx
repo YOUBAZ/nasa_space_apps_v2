@@ -44,10 +44,14 @@ const P: Record<string, string> = {
 
 export type IconName = keyof typeof P
 
-export function Icon({ name, size = 18, ...rest }: { name: IconName; size?: number } & SVGProps<SVGSVGElement>) {
+const DIRECTIONAL = ['arrow', 'back', 'send']
+
+export function Icon({ name, size = 18, className = '', ...rest }: { name: IconName; size?: number } & SVGProps<SVGSVGElement>) {
+  // arrows point the way the text reads
+  const flip = DIRECTIONAL.includes(name as string) ? 'rtl:-scale-x-100' : ''
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8}
-      strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...rest}>
+      strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={`${flip} ${className}`.trim() || undefined} {...rest}>
       <path d={P[name] ?? P.info} />
     </svg>
   )

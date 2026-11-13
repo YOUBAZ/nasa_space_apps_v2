@@ -4,6 +4,10 @@ import { ar } from './ar'
 
 export type Lang = 'en' | 'ar'
 const tables: Record<Lang, Record<string, string>> = { en, ar }
+const STORE = 'mc.lang'
+function initial(): Lang {
+  try { return localStorage.getItem(STORE) === 'ar' ? 'ar' : 'en' } catch { return 'en' }
+}
 let current: Lang = 'en'
 const listeners = new Set<() => void>()
 
@@ -20,6 +24,7 @@ export function hasKey(key: string): boolean {
 
 export function setLang(lang: Lang): void {
   current = lang
+  try { localStorage.setItem(STORE, lang) } catch { /* storage unavailable */ }
   if (typeof document !== 'undefined') {
     document.documentElement.lang = lang
     document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
@@ -36,4 +41,10 @@ export function useLang(): Lang {
     (cb) => { listeners.add(cb); return () => listeners.delete(cb) },
     () => current,
   )
+}
+
+/** Restore the language chosen last time (called once at startup). */
+export function restoreLang(): void {
+  const lang = initial()
+  if (lang !== current) setLang(lang)
 }

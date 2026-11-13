@@ -8,7 +8,7 @@ import { OutcomeScene } from '../cinematics/OutcomeScene'
 import { Button } from '../components/Button'
 import { RoleBadge } from '../components/RoleBadge'
 import { Icon } from '../icons'
-import { money } from '../names'
+import { money, objName, orbName, vehName } from '../names'
 import { ROLE_META } from '../roles'
 
 const SEV: Record<Fault['severity'], string> = { critical: 'border-nasa-red', major: 'border-intl-orange', minor: 'border-carbon-60' }
@@ -19,6 +19,8 @@ function FaultCard({ fault }: { fault: Fault }) {
   const m = state.mission!
   const e = explainFault(fault, m.report!, m.finalDesign!, m.objectiveId!, {
     readyMonth: m.readyMonth ?? 0, targetMonth: m.targetMonth, waitMonths: m.waitMonths ?? 0, waitCost: m.waitCost ?? 0,
+    // names in the player's language (the engine only knows the English catalog names)
+    orbit: orbName(m.finalDesign!.orbit), vehicle: vehName(m.finalDesign!.vehicle), objective: objName(m.objectiveId!),
   })
   return (
     <li className={`rounded border-s-4 bg-black/40 p-3 ${SEV[fault.severity]}`} data-testid={`fault-${fault.code}`}>
