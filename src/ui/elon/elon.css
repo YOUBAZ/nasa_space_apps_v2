@@ -1,0 +1,52 @@
+.elon g { transform-box: fill-box; }
+.elon-arm-l, .elon-arm-r { transform-origin: 50% 8%; }
+.elon-leg-l, .elon-leg-r { transform-origin: 50% 4%; }
+.elon-head { transform-origin: 50% 95%; }
+.elon-body { transform-origin: 50% 100%; }
+
+/* idle: breathe */
+.elon-idle .elon-body { animation: elon-bob 2.8s ease-in-out infinite; }
+.elon-idle .elon-arm-l { transform: rotate(6deg); }
+.elon-idle .elon-arm-r { transform: rotate(-6deg); }
+
+/* point: right arm up, tapping the air */
+.elon-point .elon-body { animation: elon-bob 2.8s ease-in-out infinite; }
+.elon-point .elon-arm-l { transform: rotate(8deg); }
+.elon-point .elon-arm-r { animation: elon-point 1.2s ease-in-out infinite; }
+
+/* celebrate: both arms up, jumping */
+.elon-celebrate .elon-body { animation: elon-jump 0.55s ease-in-out infinite alternate; }
+.elon-celebrate .elon-arm-l { animation: elon-cheer-l 0.4s ease-in-out infinite alternate; }
+.elon-celebrate .elon-arm-r { animation: elon-cheer-r 0.4s ease-in-out infinite alternate; }
+
+/* tantrum: kick the ground, shake, scream */
+.elon-tantrum .elon-body { animation: elon-shake 0.12s linear infinite; }
+.elon-tantrum .elon-leg-r { animation: elon-kick 0.42s ease-in infinite; }
+.elon-tantrum .elon-arm-l { animation: elon-fist-l 0.3s ease-in-out infinite alternate; }
+.elon-tantrum .elon-arm-r { animation: elon-fist-r 0.3s ease-in-out infinite alternate; }
+.elon-tantrum .elon-head { animation: elon-head-shake 0.18s linear infinite; }
+.elon-tantrum .elon-steam { animation: elon-steam 0.5s ease-out infinite; }
+
+/* shrug: palms out, head tilt */
+.elon-shrug .elon-arm-l { animation: elon-shrug-l 1.6s ease-in-out infinite; }
+.elon-shrug .elon-arm-r { animation: elon-shrug-r 1.6s ease-in-out infinite; }
+.elon-shrug .elon-head { animation: elon-tilt 1.6s ease-in-out infinite; }
+
+@keyframes elon-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+@keyframes elon-point { 0%, 100% { transform: rotate(-150deg); } 50% { transform: rotate(-135deg); } }
+@keyframes elon-jump { from { transform: translateY(0); } to { transform: translateY(-22px); } }
+@keyframes elon-cheer-l { from { transform: rotate(150deg); } to { transform: rotate(172deg); } }
+@keyframes elon-cheer-r { from { transform: rotate(-150deg); } to { transform: rotate(-172deg); } }
+@keyframes elon-shake { 0% { transform: translateX(-2px); } 50% { transform: translateX(2px); } 100% { transform: translateX(-2px); } }
+@keyframes elon-kick { 0% { transform: rotate(0); } 45% { transform: rotate(-58deg); } 70% { transform: rotate(12deg); } 100% { transform: rotate(0); } }
+@keyframes elon-fist-l { from { transform: rotate(120deg); } to { transform: rotate(150deg); } }
+@keyframes elon-fist-r { from { transform: rotate(-120deg); } to { transform: rotate(-150deg); } }
+@keyframes elon-head-shake { 0% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } 100% { transform: rotate(-6deg); } }
+@keyframes elon-steam { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(1.25); } }
+@keyframes elon-shrug-l { 0%, 100% { transform: rotate(40deg); } 50% { transform: rotate(72deg); } }
+@keyframes elon-shrug-r { 0%, 100% { transform: rotate(-40deg); } 50% { transform: rotate(-72deg); } }
+@keyframes elon-tilt { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(9deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .elon * { animation-duration: 0.01s !important; animation-iteration-count: 1 !important; }
+}

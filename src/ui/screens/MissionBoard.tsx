@@ -111,7 +111,7 @@ export function MissionBoard({ onExit, extra }: { onExit(): void; extra?: React.
           </section>
         </main>
 
-        <aside className="flex flex-col gap-3">
+        <aside className="flex flex-col gap-3 lg:sticky lg:top-3 lg:max-h-[calc(100vh-1.5rem)] lg:self-start lg:overflow-y-auto">
           {m && state.phase !== 'objective_proposal' && state.phase !== 'objective_review' && (
             <div className="panel overflow-hidden" data-tut="spacecraft">
               <div className="h-48 bg-black">

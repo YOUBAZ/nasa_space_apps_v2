@@ -70,7 +70,7 @@ export function RadioPanel() {
                 selected={d.orbit === id} disabled={!me} onPick={() => act({ type: 'setOrbit', orbit: id }, 'radio')} />
             ))}
           </div>
-          <div className="h-56 overflow-hidden rounded border border-carbon-70 bg-black lg:h-auto lg:min-h-56">
+          <div className="h-64 overflow-hidden rounded border border-carbon-70 bg-black lg:sticky lg:top-3 lg:self-start">
             <Scene3D fallback={<p className="mono p-3 text-xs text-carbon-40">{d.orbit ? orbName(d.orbit) : t('radio.noOrbit')}</p>}>
               <Suspense fallback={null}><OrbitView3D orbit={d.orbit} stations={picked} /></Suspense>
             </Scene3D>

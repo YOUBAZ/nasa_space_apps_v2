@@ -42,8 +42,8 @@ Update the status after each task: ⬜ not started · 🟨 in progress · ✅ do
 | 2 | Mission evaluation (faults, science, cost, time) | 2.1, 2.2 | ✅ | oracle parity on all reference designs |
 | 3 | Game state machine (roles, approvals, appeals, design, integration, go poll) | 3.1–3.4 | ✅ | full mission scripted in a test, solo and team |
 | 4 | Scoring, awards, campaign, gamification | 4.1, 4.2 | ✅ | campaign test: fail → refly → success → unlock |
-| 5 | Local playable UI (solo + pass-and-play) | 5.1–5.5 | ⬜ | a complete Wildfire mission played in the browser |
-| 6 | Launch / ops / debrief, Elon cartoon, campaign screen | 6.1–6.3 | ⬜ | failure, partial and success scenes all reachable |
+| 5 | Local playable UI (solo + pass-and-play) | 5.1–5.5 | ✅ | a complete Wildfire mission played in the browser |
+| 6 | Launch / ops / debrief, Elon cartoon, campaign screen | 6.1–6.3 | ✅ | failure, partial and success scenes all reachable |
 | 7 | Online rooms + chat | 7.1, 7.2 | ⬜ | two browser windows complete a mission |
 | 8 | Tutorial with Elon coach and scripted teammates | 8.1, 8.2 | ⬜ | tutorial completes: planted failure → fix → success |
 | 9 | Arabic + RTL | 9.1 | ⬜ | Arabic toggle, no missing keys, layout mirrors |

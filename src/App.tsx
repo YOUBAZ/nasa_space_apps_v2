@@ -4,6 +4,7 @@ import { GameProvider } from './net/useGame'
 import type { Transport } from './net/transport'
 import { GameScreens } from './ui/GameScreens'
 import { Home } from './ui/screens/Home'
+import { HandbookProvider } from './ui/handbook/Handbook'
 
 export default function App() {
   useLang()
@@ -16,7 +17,7 @@ export default function App() {
     <div className="flex min-h-screen flex-col">
       <div className="flex-1">
         {transport
-          ? <GameProvider transport={transport}><GameScreens onExit={exit} /></GameProvider>
+          ? <GameProvider transport={transport}><HandbookProvider><GameScreens onExit={exit} /></HandbookProvider></GameProvider>
           : <Home onStart={setTransport} onTutorial={() => {}} />}
       </div>
       <footer className="px-4 py-3 text-center text-xs text-carbon-40">{t('app.footer')}</footer>

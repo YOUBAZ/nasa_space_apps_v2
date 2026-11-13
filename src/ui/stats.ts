@@ -69,11 +69,13 @@ export function orbitChips(id: OrbitId): Chip[] {
     { text: t('stat.shadow', { n: o.shadow }) },
     { icon: 'radio', text: t('stat.distance', { where: t(`tier.${o.tier}`) }) },
     { icon: 'clock', text: t('stat.life', { n: o.life }) },
-    { text: t(o.dsn ? 'stat.netDsn' : 'stat.netNear'), tone: 'accent' },
-    { text: t(`stat.capture.${o.capture}`), tone: 'accent' },
-    { text: t('stat.radiation', { level: t(`level.${o.rad}`) }), tone: 'accent' },
-    { text: t('stat.thermal', { level: t(`thermal.${o.thermal}`) }), tone: 'accent' },
   ]
+  // Only the traits that differ from an ordinary Earth orbit, to keep the card short.
+  const a = (text: string) => chips.push({ text, tone: 'accent' })
+  if (o.dsn) a(t('stat.netDsn'))
+  if (o.capture > 0) a(t(`stat.capture.${o.capture}`))
+  if (o.rad !== 'low') a(t('stat.radiation', { level: t(`level.${o.rad}`) }))
+  if (o.thermal !== 'mild') a(t('stat.thermal', { level: t(`thermal.${o.thermal}`) }))
   if (!o.earth) chips.push({ text: t('stat.noMagField'), tone: 'accent' })
   if (o.marsWindow) chips.push({ text: t('stat.marsWindow'), tone: 'accent' })
   return chips
