@@ -20,7 +20,11 @@ export const supabaseBus: BusFactory = async (code, playerId) => {
   })
   channel.on('presence', { event: 'leave' }, ({ key }) => {
     if (!key || leaving.has(key)) return
-    leaving.set(key, setTimeout(() => { leaving.delete(key); onLeave?.(key) }, 5000))
+    leaving.set(key, setTimeout(() => {
+      leaving.delete(key)
+      // The same player may be connected twice for a moment (a second tab trying the seat): only gone when none remain.
+      if (!channel.presenceState()[key]?.length) onLeave?.(key)
+    }, 5000))
   })
   await new Promise<void>((resolve, reject) => {
     channel.subscribe((status) => {

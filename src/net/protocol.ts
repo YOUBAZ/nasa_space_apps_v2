@@ -3,7 +3,7 @@ import type { Action, GameState } from '../engine/state'
 
 /** Everything that travels over a room's channel. The host's browser is the single source of truth. */
 export type Msg =
-  | { t: 'hello'; playerId: string; name: string }
+  | { t: 'hello'; playerId: string; name: string; tab?: string }
   | { t: 'action'; from: string; action: Action; seq: number }
   | { t: 'snapshot_req'; playerId: string }
   | { t: 'bye'; playerId: string }
@@ -33,7 +33,7 @@ export function hostReduce(state: GameState, rev: number, msg: Msg): HostStep {
 
   switch (msg.t) {
     case 'hello': {
-      const r = applyAction(state, { type: 'join', name: msg.name }, msg.playerId)
+      const r = applyAction(state, { type: 'join', name: msg.name, ...(msg.tab ? { tab: msg.tab } : {}) }, msg.playerId)
       return r.ok ? accept(r.state) : reject(msg.playerId, r.error)
     }
     case 'action': {

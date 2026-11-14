@@ -19,6 +19,8 @@ export interface Player {
   badges: string[]
   /** roles this player held when they dropped; handed back on return if still free */
   lostRoles?: Role[]
+  /** which browser tab holds this seat (online play), so a second tab cannot take over a live seat */
+  tab?: string
 }
 
 export type RequestKind = 'objective' | 'funding' | 'purchase'
@@ -203,7 +205,7 @@ export interface GameState {
 }
 
 export type Action =
-  | { type: 'join'; name: string }
+  | { type: 'join'; name: string; tab?: string }
   | { type: 'claimRole'; role: Role }
   | { type: 'releaseRole'; role: Role }
   | { type: 'setConnected'; playerId: string; connected: boolean }

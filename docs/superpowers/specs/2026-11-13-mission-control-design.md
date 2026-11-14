@@ -2,6 +2,8 @@
 
 *Working title. Date: 2026-11-13. Built for a NASA Space Apps hackathon (~48 hours).*
 
+**The game is now called Xploration** (team decision, 2026-11-14). "Mission Control" below is the old working title; file names, the git branch and the hosting address keep it.
+
 ## 1. Intent
 
 A gamified simulator where **non-technical people who love space** learn how real missions are planned by *making the trade-offs themselves*. Up to four players split the jobs of a real mission team, negotiate over money, mass, power, data and time, then launch. The game never blocks a bad design: the mission flies anyway, and the debrief explains **what broke, why, and whose decision caused it**. Learning comes from consequences, not from being told "wrong".
@@ -431,3 +433,13 @@ Rules:
 - **Accountability:** mass, structure and power faults are blamed on the Designer alone, even when the Scientist insisted and even after a Planner ruling. The Scientist still answers for instruments that do not suit the objective, because that is a science choice, not a question of what the craft can carry.
 
 Engine: `requestInstruments` (optional `note`), `reviewInstruments` (`accept | pushback | escalate`), `capInstruments` (Planner). State: `instrumentStatus` (`none, pending, pushed_back, escalated, capped, final, accepted`), `instrumentPushbacks`, `instrumentCap`, `instrumentThread`.
+
+## 21. Name, and joining a room (requested 2026-11-14)
+
+- **Name.** The game is called **Xploration**, in English and in Arabic (the name is not translated). It shows on the Home page, in the browser tab and in the tutorial's welcome.
+- **Joining online, the name a player types.** Two faults were fixed:
+  - Two tabs of one browser were treated as the same player, so the second person got the first person's name and seat. Each tab now has its own token (kept across a refresh). If the remembered seat is being played in another tab, the newcomer joins as a new player.
+  - A player who left and came back kept the old name whatever they typed. A typed name now replaces it; a blank keeps it. The mission log records the change.
+- A joiner who types no name is called "Player N" by seat number (before, every such joiner was "Player 1").
+- Unchanged: a refresh in the same tab, or coming back after leaving, returns the player to their own seat and hands back the roles that are still free.
+- Engine names: `join` takes an optional `tab`; error `seat_in_use`; log `log.player.renamed`.

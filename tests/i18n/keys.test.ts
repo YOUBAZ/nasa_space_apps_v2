@@ -21,7 +21,7 @@ describe('Arabic translation', () => {
     expect(Object.entries(ar).filter(([, v]) => /[٠-٩]/.test(v)).map(([k]) => k)).toEqual([])
   })
   it('is actually Arabic (no untranslated English sentences)', () => {
-    const latinOnly = Object.entries(ar).filter(([k, v]) => !/[؀-ۿ]/.test(v) && /[A-Za-z]{4,}/.test(v) && !k.startsWith('veh.') && !k.startsWith('cap.'))
+    const latinOnly = Object.entries(ar).filter(([k, v]) => !/[؀-ۿ]/.test(v) && /[A-Za-z]{4,}/.test(v) && !k.startsWith('veh.') && !k.startsWith('cap.') && k !== 'app.title') // the game's name stays as written
     expect(latinOnly.map(([k]) => k)).toEqual([])
   })
   it('switching language flips the page direction', () => {

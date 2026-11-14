@@ -126,3 +126,13 @@ Ruling: old saves are upgraded on load (new fields filled; an old "final" list b
 Verified in browser: the whole nine-step negotiation between two tabs; tutorial end to end; two-tab online mission; Arabic solo. 427 tests pass.
 Not verified: the Arabic wording of the new text (needs a native speaker); the Requests box with a long conversation on a phone.
 
+## Renamed to Xploration; joiners' names (2026-11-14)
+Ruling: the name "Xploration" is used as written in Arabic too (a name, not a phrase) — cost if wrong: one string in `src/i18n/ar/core.ts`. The i18n test exempts `app.title`.
+Ruling: only what players see was renamed (title, tab, tutorial welcome, README, package name). The branch, doc file names, storage keys and the Vercel address keep "mission-control" — renaming those risks the live link and saved games.
+Root cause of "joiners cannot change their name" (reproduced in a browser on the old code): with a server the player id is remembered per browser, so a second tab said hello with the first tab's id and the host treated it as the same player coming back, ignoring the typed name. A real returning player's new name was ignored the same way.
+Ruling: a per-tab token (sessionStorage) goes with the hello; the host refuses a live seat held by another tab (`seat_in_use`) and the client then joins as a new player — keeps "a returning player gets their seat back" for refreshes and re-joins.
+Ruling: a typed name on return renames the player; a blank keeps the old name. Joiners now send what they typed, and a blank is numbered by seat ("Player 2"…), in English only — cost if wrong: Arabic players who type nothing see an English default.
+Ruling: the host ignores a presence "leave" while another connection under the same player key remains — otherwise the refused second tab would mark the first tab's player offline five seconds later.
+Verified in browser against the real server: host plus three joining tabs of one browser (typed, typed, blank), nobody marked offline after 8 s, leave and rejoin with a new name; the two-player online mission end to end. 433 tests pass.
+Not verified: two real devices (each device is its own browser, so this path was already working); the Arabic text of the new log line.
+

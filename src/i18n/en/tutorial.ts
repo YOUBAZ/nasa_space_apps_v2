@@ -1,6 +1,6 @@
 // Coach Elon (parody) talks the player through one failed flight and one fixed flight.
 export const tutorial: Record<string, string> = {
-  'tut.welcome': "Welcome to Mission Control! I'm Elon, your Flight Director. We are going to fly a real mission together. It will go wrong once. That is how you learn rockets.",
+  'tut.welcome': "Welcome to Xploration! I'm Elon, your Flight Director. We are going to fly a real mission together. It will go wrong once. That is how you learn rockets.",
   'tut.roles': 'Four jobs fly a mission: the Planner holds the money, the Scientist picks the science, the Designer builds the spacecraft, the Radio Operator picks the orbit and talks to it. Today you try all four. Teammates will chip in.',
   'tut.pick': 'You are the Scientist. Pick "Wildfire & disaster watch", write a one-line pitch, and send it to the Planner.',
   'tut.rejected': 'Rejected! The Planner controls the budget and can say no. Do not panic: you get two appeals.',

@@ -310,6 +310,7 @@ export const board: Record<string, string> = {
   // activity log
   'log.title': 'Activity',
   'log.player.joined': '{name} joined',
+  'log.player.renamed': '{from} is now called {name}',
   'log.player.left': '{name} disconnected; their roles are free to claim',
   'log.campaign.started': 'Campaign started with ${funds}M',
   'log.objective.proposed': 'proposed "{objective}"',

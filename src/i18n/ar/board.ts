@@ -294,6 +294,7 @@ export const board: Record<string, string> = {
 
   'log.title': 'النشاط',
   'log.player.joined': 'انضم {name}',
+  'log.player.renamed': 'أصبح اسم {from} الآن {name}',
   'log.player.left': 'انقطع اتصال {name}؛ أدواره متاحة لمن يأخذها',
   'log.campaign.started': 'بدأت الحملة بمبلغ ${funds} مليون',
   'log.objective.proposed': 'اقترح "{objective}"',

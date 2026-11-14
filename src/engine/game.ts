@@ -59,7 +59,7 @@ export function newMission(): Mission {
 export const rolesOf = (s: GameState, playerId: string): Role[] =>
   s.players.find((p) => p.id === playerId)?.roles ?? []
 
-const cleanName = (name: string) => (name ?? '').trim().slice(0, 24) || 'Player'
+const cleanName = (name: string, fallback = 'Player') => (name ?? '').trim().slice(0, 24) || fallback
 
 /** The single entry point for every rule in the game. Never mutates `state`. */
 export function applyAction(state: GameState, action: Action, actorId: string): ActionResult {
@@ -74,7 +74,7 @@ export function applyAction(state: GameState, action: Action, actorId: string): 
 }
 
 function reduce(s: GameState, a: Action, actorId: string): void {
-  if (a.type === 'join') return join(s, a.name, actorId)
+  if (a.type === 'join') return join(s, a.name, actorId, a.tab)
   playerOf(s, actorId)
   switch (a.type) {
     case 'claimRole': {
@@ -152,10 +152,19 @@ function reduce(s: GameState, a: Action, actorId: string): void {
   }
 }
 
-function join(s: GameState, name: string, actorId: string): void {
+function join(s: GameState, name: string, actorId: string, tab?: string): void {
   const existing = s.players.find((p) => p.id === actorId)
   if (existing) {
+    // Two tabs of one browser remember the same seat. While the first is still playing, the second is a new player.
+    if (existing.connected && existing.tab && tab && existing.tab !== tab) fail('seat_in_use')
     existing.connected = true
+    if (tab) existing.tab = tab
+    // A name typed on the way back in replaces the old one; a blank keeps it.
+    const typed = (name ?? '').trim()
+    if (typed && cleanName(typed) !== existing.name) {
+      log(s, 'log.player.renamed', { from: existing.name, name: cleanName(typed) })
+      existing.name = cleanName(typed)
+    }
     // Welcome back: hand over the roles they dropped, unless someone has taken them since.
     for (const role of existing.lostRoles ?? []) if (!holderOf(s, role)) existing.roles.push(role)
     existing.lostRoles = undefined
@@ -165,12 +174,14 @@ function join(s: GameState, name: string, actorId: string): void {
   if (s.players.length >= 4) {
     // A full room still has space if somebody has dropped out: the newcomer takes that seat.
     const empty = s.players.find((p) => !p.connected && p.id !== s.hostId) ?? fail('room_full')
-    Object.assign(empty, { id: actorId, name: cleanName(name), connected: true, roles: [], lostRoles: undefined })
-    log(s, 'log.player.joined', { name: cleanName(name) })
+    const taken = cleanName(name, `Player ${s.players.indexOf(empty) + 1}`)
+    Object.assign(empty, { id: actorId, name: taken, connected: true, roles: [], lostRoles: undefined, tab })
+    log(s, 'log.player.joined', { name: taken })
     return
   }
-  s.players.push({ id: actorId, name: cleanName(name), roles: [], connected: true, xp: 0, badges: [] })
-  log(s, 'log.player.joined', { name: cleanName(name) })
+  const shown = cleanName(name, `Player ${s.players.length + 1}`)
+  s.players.push({ id: actorId, name: shown, roles: [], connected: true, xp: 0, badges: [], ...(tab ? { tab } : {}) })
+  log(s, 'log.player.joined', { name: shown })
 }
 
 function review(s: GameState, a: Extract<Action, { type: 'review' }>, actorId: string): void {

@@ -1,4 +1,4 @@
-# Mission Control
+# Xploration
 
 Team space-mission simulator for NASA Space Apps (fan-made, not affiliated with NASA).
 

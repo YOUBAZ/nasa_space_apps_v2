@@ -81,6 +81,8 @@ export async function createHostTransport(opts: HostOpts, busFactory: BusFactory
 
 export interface ClientOpts {
   code: string; name: string; playerId?: string; timeoutMs?: number
+  /** identifies this browser tab, so the host can tell a returning tab from a second one */
+  tab?: string
   /** how often to ask the host for the current state, in case a broadcast was lost (0 = never) */
   resyncMs?: number
 }
@@ -124,7 +126,7 @@ export async function createClientTransport(opts: ClientOpts, busFactory: BusFac
       onFirst = null
       if (error) { bus.close(); reject(new Error(error)) } else resolve()
     }
-    bus.send({ t: 'hello', playerId: me, name: opts.name })
+    bus.send({ t: 'hello', playerId: me, name: opts.name, ...(opts.tab ? { tab: opts.tab } : {}) })
   })
 
   // Broadcasts are not guaranteed: ask for the state now and then, and whenever the tab wakes up.

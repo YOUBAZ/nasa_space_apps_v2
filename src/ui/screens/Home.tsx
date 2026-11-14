@@ -40,7 +40,7 @@ export function Home({ onStart, onTutorial }: HomeProps) {
       const net = await import('../../net/supabaseTransport')
       const transport = kind === 'host'
         ? await net.createHostTransport({ difficulty, name: myName })
-        : await net.createClientTransport({ code: code.trim().toUpperCase(), name: myName })
+        : await net.createClientTransport({ code: code.trim().toUpperCase(), name: name.trim() })
       onStart(transport)
     } catch {
       setError(t('home.joinFailed'))
