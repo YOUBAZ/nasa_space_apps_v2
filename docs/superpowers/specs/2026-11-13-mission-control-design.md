@@ -384,10 +384,20 @@ The flight is one continuous time-lapse on one page, with the Radio Operator's c
 
 ## 19. The Flight Director's look (requested 2026-11-14, replaces the cartoon in §15)
 
-The Flight Director and tutorial coach is now a real photo of Elon Musk's face on an animated 3D body, the way photo-head satire puppets are made. The body does the five poses (idle, point, celebrate, tantrum with the ground kick, shrug); the face turns red in the tantrum.
+The Flight Director and tutorial coach is shown as whole, real photographs of Elon Musk: head and body. The team first asked for a real face on the animated body, then (same day) for the whole body to be real, so the 3D puppet body was removed.
 
-- The photo is a NASA image (NASA/Kim Shiflett, Falcon Heavy post-launch news conference, 6 February 2018, image KSC-20180206-PH_KLS03_0080), cropped and cut out. It is free of copyright. Credit is in `public/textures/CREDITS.md`.
-- The face itself is never altered or animated: no synthetic expressions, no voice.
-- Where a device cannot draw 3D, the flat figure is shown with the same photo head.
+| Pose | Photo | What it shows | Motion in the game |
+|---|---|---|---|
+| idle | NHQ202005300110, NASA/Joel Kowsky | standing, suit, Demo-2 launch 2020 | slow breathing |
+| point (coach explaining) | KSC-2014-2727, NASA/Dimitri Gerondidakis | presenting Dragon V2, both hands open, 2014 | gentle lean |
+| celebrate | NHQ201910100009, NASA/Aubrey Gemignani | laughing, holding a mug, 2019 | hop |
+| shrug (partial success) | KSC-2014-2736, NASA/Dimitri Gerondidakis | standing, fingers together, 2014 | sway |
+| tantrum (failure) | KSC-20180206-PH_KLS03_0099, NASA/Kim Shiflett | answering a question at a news conference, both hands raised, 2018 | stamp and shake, red glow, "ARGH!" |
+
+- All five are NASA images, free of copyright. Credits are in `public/textures/CREDITS.md`. The table of photos is `src/ui/elon/photos.ts`.
+- Only the background is removed. Nothing inside a photo is redrawn, recoloured, reshaped or animated: no generated limbs, expressions or voice. The game moves each photo as one piece and draws effects (glow, steam marks, "ARGH!") beside it.
+- **There is no kick.** No real photo of a tantrum exists, and making a realistic picture of a real person kicking and screaming would be fabricated footage. The failure moment is carried by the stamping motion, the glow, the scream text and the sound.
+- The photos come from different days, so his clothes change between poses. Most show him from about the knees or waist up, because NASA has no clear head-to-toe photo.
+- If the photos cannot load, the drawn cartoon from §15 is shown.
 - The character stays labelled as parody (footer and the character's accessible name).
-- **Risk the team accepted:** a real person's photo carries likeness-rights risk, and NASA's media guidelines say images of identifiable people must not be used to suggest endorsement. The team should check the Space Apps rules before submitting.
+- **Risk the team accepted:** a real person's photos carry likeness-rights risk, and NASA's media guidelines say images of identifiable people must not be used to suggest endorsement. More photos make this risk bigger, not smaller. The team should check the Space Apps rules before submitting.

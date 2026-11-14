@@ -1,10 +1,8 @@
-import { lazy, Suspense } from 'react'
-import { Scene3D } from '../three/Scene3D'
+import { useEffect, useState } from 'react'
 import type { ElonPose } from './poses'
 import { ELON_HEAD_URL } from './head'
+import { elonFit, elonPhotoUrl } from './photos'
 import './elon.css'
-
-const Elon3D = lazy(() => import('./Elon3D'))
 
 const SKIN = '#f1c9a5'
 const SKIN_ANGRY = '#f08a6e'
@@ -13,22 +11,32 @@ const HAIR = '#3b2a20'
 
 /**
  * The Flight Director and tutorial coach, a parody of Elon Musk.
- * Drawn as a 3D figure where the device can show 3D, and as the flat cartoon below everywhere else.
+ * Each pose is a whole, real NASA photograph of him with the background cut away. The game only moves
+ * the photograph as one piece (bob, bounce, shake) and draws its effects beside it; it never redraws,
+ * recolours or bends him. If the photo cannot load, the drawn cartoon below stands in.
  */
 export function Elon({ pose = 'idle', size = 180 }: { pose?: ElonPose; size?: number }) {
-  const flat = <ElonFlat pose={pose} size={size} />
+  const [broken, setBroken] = useState(false)
+  useEffect(() => { setBroken(false) }, [pose])
+  if (broken) return <ElonFlat pose={pose} size={size} />
+  const fit = elonFit(pose, size)
   return (
-    <Scene3D fallback={flat}>
-      <Suspense fallback={flat}>
-        <div role="img" aria-label="Elon Musk (parody)" className={`elon elon-${pose}`} style={{ width: size, height: size * 1.3 }}>
-          <Elon3D pose={pose} size={size} />
-        </div>
-      </Suspense>
-    </Scene3D>
+    <div role="img" aria-label="Elon Musk (parody)" className={`elon elon-photo elon-${pose}`} style={{ width: size, height: size * 1.3 }}>
+      <span className="elon-shadow" aria-hidden="true" />
+      <div className="elon-figure" style={{ width: fit.width, height: fit.height, left: (size - fit.width) / 2 }}>
+        <img key={pose} src={elonPhotoUrl(pose)} alt="" draggable={false} onError={() => setBroken(true)} />
+        {pose === 'tantrum' && (
+          <svg className="elon-steam" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" fill="none" stroke="#f64137" strokeWidth="2.6" strokeLinecap="round">
+            <path d="M20 9 l-8 -8 M14 22 l-11 -3 M56 5 l7 -9 M63 17 l11 -5" />
+            <path d="M2 99 q-7 -3 -5 -10 M99 99 q7 -3 5 -10" />
+          </svg>
+        )}
+      </div>
+    </div>
   )
 }
 
-/** The flat-vector cartoon: poses are CSS animations on the limbs, so it needs no 3D and no assets. */
+/** The drawn stand-in, used only when the photographs cannot load. */
 export function ElonFlat({ pose = 'idle', size = 180 }: { pose?: ElonPose; size?: number }) {
   const angry = pose === 'tantrum'
   const happy = pose === 'celebrate'

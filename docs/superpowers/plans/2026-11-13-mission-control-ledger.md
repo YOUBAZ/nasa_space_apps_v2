@@ -104,3 +104,12 @@ Ruling: "real Elon Musk, whichever of 2D or 3D is more realistic" → a real NAS
 Ruling: the face is not altered or animated (no generated expressions) — I will not fabricate realistic imagery of a real person doing things he did not do — cost if wrong: the mouth does not move when he "screams".
 Ruling: used a public-domain NASA photo found via images.nasa.gov rather than a press photo — no copyright issue; likeness-rights and NASA "no implied endorsement" risks remain and are the team's call (flagged to the user).
 Verified in browser: all five poses show the photo head; tutorial end to end. 394 tests pass.
+
+## Full-body real photos (2026-11-14)
+Ruling: "make the full body realistic" → the 3D puppet body is removed; each of the five poses is a whole real NASA photo with the background cut away (table in spec §19) — cost if wrong: user wanted one consistent outfit or a head-to-toe figure; NASA has no such set.
+Ruling: no generated or edited body, and no kick — a realistic picture of a real person kicking and screaming would be fabricated footage; the tantrum is a real news-conference photo that the game stamps and shakes as a whole, with glow, steam marks, "ARGH!" and sound — cost if wrong: the failure scene is less slapstick than the brief's "kicks the ground".
+Ruling: dropped the Demo-2 T-shirt photo because the shirt carries a NASA mission emblem (the project never shows NASA insignia).
+Ruling: `Elon3D.tsx`, `rig.ts` and the rig test were deleted; the drawn cartoon stays only as the fallback when photos fail to load.
+Verified in browser: five poses in `#gallery`; tutorial end to end (coach and failure debrief). 403 tests pass; build succeeds.
+Not verified: how the cut-out edges look on a high-density phone screen.
+
