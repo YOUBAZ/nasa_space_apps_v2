@@ -11,7 +11,7 @@ describe('debrief screen', () => {
   it('a failure shows the tantrum, the cause, whose call it was, and a NASA link', () => {
     mount(debriefOf({ ...wildfire, vehicle: 'electron' }, 'wildfire', tight), P.radio)
     expect(screen.getByTestId('outcome')).toHaveAttribute('data-outcome', 'failure')
-    expect(screen.getByRole('img', { name: /cartoon elon musk/i })).toHaveClass('elon-tantrum')
+    expect(screen.getByRole('img', { name: /elon musk/i })).toHaveClass('elon-tantrum')
     const card = within(screen.getByTestId('fault-over_capacity'))
     expect(card.getByText(/weighed 682 kg, but Electron can only carry 200 kg/)).toBeInTheDocument()
     expect(card.getByText('Designer')).toBeInTheDocument()
@@ -20,7 +20,7 @@ describe('debrief screen', () => {
   })
   it('a success celebrates and closing it opens the campaign screen', () => {
     const { transport } = mount(debriefOf(wildfire, 'wildfire', tight), P.radio)
-    expect(screen.getByRole('img', { name: /cartoon elon musk/i })).toHaveClass('elon-celebrate')
+    expect(screen.getByRole('img', { name: /elon musk/i })).toHaveClass('elon-celebrate')
     expect(screen.getByText(/textbook mission/i)).toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: /close the debrief/i }))
     expect(transport.getState()!.phase).toBe('campaign')

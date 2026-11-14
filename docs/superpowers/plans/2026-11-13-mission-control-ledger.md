@@ -98,3 +98,9 @@ Ruling: with several mission-ending faults the animation shows the earliest in f
 Ruling: a #gallery review page was added (not linked from the menu) so all 14 animations can be checked quickly.
 Verified in browser (software rendering): all 14 stories in the gallery with a frame each; tutorial end to end; two-tab online mission; Arabic solo; phone-width audit. 387 tests pass.
 Not verified: frame rate on real hardware; the fly-past, fireball and scan-cone moments were seen only as single frames.
+
+## Real-photo Flight Director (2026-11-14)
+Ruling: "real Elon Musk, whichever of 2D or 3D is more realistic" → a real NASA photo of his face (2D, the most realistic option) on the animated 3D body — keeps the kick-and-scream animation the brief asked for and stays obviously a parody collage — cost if wrong: user wanted a full-body photo or a fully modelled 3D head.
+Ruling: the face is not altered or animated (no generated expressions) — I will not fabricate realistic imagery of a real person doing things he did not do — cost if wrong: the mouth does not move when he "screams".
+Ruling: used a public-domain NASA photo found via images.nasa.gov rather than a press photo — no copyright issue; likeness-rights and NASA "no implied endorsement" risks remain and are the team's call (flagged to the user).
+Verified in browser: all five poses show the photo head; tutorial end to end. 394 tests pass.

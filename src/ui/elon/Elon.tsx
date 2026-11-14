@@ -1,5 +1,10 @@
+import { lazy, Suspense } from 'react'
+import { Scene3D } from '../three/Scene3D'
 import type { ElonPose } from './poses'
+import { ELON_HEAD_URL } from './head'
 import './elon.css'
+
+const Elon3D = lazy(() => import('./Elon3D'))
 
 const SKIN = '#f1c9a5'
 const SKIN_ANGRY = '#f08a6e'
@@ -7,15 +12,29 @@ const SHIRT = '#17171b'
 const HAIR = '#3b2a20'
 
 /**
- * A flat-vector cartoon of Elon Musk (parody): the Flight Director and tutorial coach.
- * Poses are CSS animations on the limbs, so it stays crisp at any size and needs no assets.
+ * The Flight Director and tutorial coach, a parody of Elon Musk.
+ * Drawn as a 3D figure where the device can show 3D, and as the flat cartoon below everywhere else.
  */
 export function Elon({ pose = 'idle', size = 180 }: { pose?: ElonPose; size?: number }) {
+  const flat = <ElonFlat pose={pose} size={size} />
+  return (
+    <Scene3D fallback={flat}>
+      <Suspense fallback={flat}>
+        <div role="img" aria-label="Elon Musk (parody)" className={`elon elon-${pose}`} style={{ width: size, height: size * 1.3 }}>
+          <Elon3D pose={pose} size={size} />
+        </div>
+      </Suspense>
+    </Scene3D>
+  )
+}
+
+/** The flat-vector cartoon: poses are CSS animations on the limbs, so it needs no 3D and no assets. */
+export function ElonFlat({ pose = 'idle', size = 180 }: { pose?: ElonPose; size?: number }) {
   const angry = pose === 'tantrum'
   const happy = pose === 'celebrate'
   const skin = angry ? SKIN_ANGRY : SKIN
   return (
-    <svg viewBox="0 0 200 260" width={size} height={(size * 260) / 200} className={`elon elon-${pose}`} role="img" aria-label="Cartoon Elon Musk">
+    <svg viewBox="0 0 200 260" width={size} height={(size * 260) / 200} className={`elon elon-${pose}`} role="img" aria-label="Elon Musk (parody)">
       <ellipse cx="100" cy="250" rx="52" ry="7" fill="#000" opacity="0.35" />
       <g className="elon-body">
         {/* legs */}
@@ -47,6 +66,8 @@ export function Elon({ pose = 'idle', size = 180 }: { pose?: ElonPose; size?: nu
               : pose === 'shrug'
                 ? <path d="M88 82 q12 -5 24 0" stroke="#17171b" strokeWidth="2.5" fill="none" strokeLinecap="round" />
                 : <path d="M86 78 q10 8 26 1" stroke="#17171b" strokeWidth="2.5" fill="none" strokeLinecap="round" />}
+          {/* the real face sits over the drawn one; if the photo cannot load, the drawing shows */}
+          <image href={ELON_HEAD_URL} x="52" y="-6" width="98" height="116" preserveAspectRatio="xMidYMid meet" />
         </g>
       </g>
       {angry && (

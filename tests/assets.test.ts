@@ -26,6 +26,16 @@ describe('planet imagery', () => {
       expect(BODIES[ORBIT_VIEW[id as keyof typeof ORBIT_VIEW].body]).toBeDefined()
     }
   })
+  it('the Flight Director uses a credited NASA photo', () => {
+    const p = join(dir, 'elon-head.png')
+    expect(existsSync(p)).toBe(true)
+    expect(readFileSync(p).subarray(1, 4).toString()).toBe('PNG') // needs transparency around the head
+    expect(statSync(p).size).toBeLessThan(500_000)
+    const credits = readFileSync(join(dir, 'CREDITS.md'), 'utf8')
+    expect(credits).toContain('elon-head.png')
+    expect(credits).toMatch(/NASA\/Kim Shiflett/)
+    expect(credits).toMatch(/parody/i)
+  })
   it('Earth, Mars, Jupiter and the Moon use real imagery', () => {
     for (const b of ['earth', 'mars', 'jupiter', 'moon'] as const) expect(BODIES[b].texture).toMatch(/\.jpg$/)
   })

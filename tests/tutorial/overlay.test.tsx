@@ -6,7 +6,7 @@ describe('tutorial overlay', () => {
     render(<TutorialGame onExit={() => {}} />)
     const coach = within(screen.getByTestId('coach'))
     expect(coach.getByText(/I'm Elon, your Flight Director/)).toBeInTheDocument()
-    expect(coach.getByRole('img', { name: /cartoon elon musk/i })).toBeInTheDocument()
+    expect(coach.getByRole('img', { name: /elon musk/i })).toBeInTheDocument()
     fireEvent.click(coach.getByRole('button', { name: /next/i }))
     expect(coach.getByText(/Four jobs fly a mission/)).toBeInTheDocument()
     fireEvent.click(coach.getByRole('button', { name: /next/i }))

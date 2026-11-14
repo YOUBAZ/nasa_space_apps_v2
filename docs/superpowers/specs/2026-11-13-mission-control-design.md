@@ -381,3 +381,13 @@ The flight is one continuous time-lapse on one page, with the Radio Operator's c
 | 12 | Nobody listening | cruise | calls home right after reaching space; a red marker shows no station hears it |
 
 **Review page.** Opening the game with `#gallery` at the end of the address shows every animation without playing a mission.
+
+## 19. The Flight Director's look (requested 2026-11-14, replaces the cartoon in §15)
+
+The Flight Director and tutorial coach is now a real photo of Elon Musk's face on an animated 3D body, the way photo-head satire puppets are made. The body does the five poses (idle, point, celebrate, tantrum with the ground kick, shrug); the face turns red in the tantrum.
+
+- The photo is a NASA image (NASA/Kim Shiflett, Falcon Heavy post-launch news conference, 6 February 2018, image KSC-20180206-PH_KLS03_0080), cropped and cut out. It is free of copyright. Credit is in `public/textures/CREDITS.md`.
+- The face itself is never altered or animated: no synthetic expressions, no voice.
+- Where a device cannot draw 3D, the flat figure is shown with the same photo head.
+- The character stays labelled as parody (footer and the character's accessible name).
+- **Risk the team accepted:** a real person's photo carries likeness-rights risk, and NASA's media guidelines say images of identifiable people must not be used to suggest endorsement. The team should check the Space Apps rules before submitting.

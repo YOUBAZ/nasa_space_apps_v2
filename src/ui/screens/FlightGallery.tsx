@@ -8,6 +8,8 @@ import { formatMissionTime } from '../flight/format'
 import { useFlightTimeline } from '../flight/useFlightTimeline'
 import { orbName } from '../names'
 import { FlightView, telemetry } from './Flight'
+import { Elon } from '../elon/Elon'
+import { ELON_POSES } from '../elon/poses'
 
 const BASE: Design = {
   structure: 'medium', power: 'deploy_solar', battery: 'medium', computer: 'radhard', attitude: 'wheels_star', thermal: 'heaters',
@@ -106,6 +108,17 @@ export function FlightGallery({ onExit }: { onExit(): void }) {
         </div>
       )}
       <Player key={`${story}-${orbit}-${run}`} story={story} orbit={orbit} />
+      <section className="panel p-4" data-testid="gallery-elon">
+        <h2 className="label mb-2">{t('gallery.director')}</h2>
+        <div className="flex flex-wrap items-end justify-around gap-4">
+          {ELON_POSES.map((pose) => (
+            <figure key={pose} className="flex flex-col items-center">
+              <Elon pose={pose} size={170} />
+              <figcaption className="mono text-xs text-carbon-30">{pose}</figcaption>
+            </figure>
+          ))}
+        </div>
+      </section>
     </div>
   )
 }

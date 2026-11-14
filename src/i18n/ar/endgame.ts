@@ -143,4 +143,5 @@ export const endgame: Record<string, string> = {
   'gallery.replay': 'إعادة',
   'gallery.ends': 'تنتهي أثناء',
   'gallery.length': 'مدة الرسوم',
+  'gallery.director': "وضعيات مدير الرحلة",
 }

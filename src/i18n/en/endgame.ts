@@ -148,4 +148,5 @@ export const endgame: Record<string, string> = {
   'gallery.replay': 'Replay',
   'gallery.ends': 'Ends during',
   'gallery.length': 'Animation length',
+  'gallery.director': "The Flight Director's poses",
 }
