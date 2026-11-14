@@ -45,20 +45,12 @@ export function cheapestStationCost(orbit: OrbitId, need: number, band: string):
   return best
 }
 
-/** Final blame: the spec's sharing rules applied on top of the evaluator's default roles. */
+/**
+ * Final blame. The Designer approves everything that goes on the craft, the instruments included,
+ * so mass and power faults are the Designer's alone: the Scientist no longer shares them.
+ */
 function assignBlame(s: GameState): Fault[] {
-  const m = missionOf(s)
-  const report = m.report!
-  const design = m.finalDesign!
-  const instrumentPower = design.instruments.reduce((sum, i) => sum + INSTRUMENTS[i].power, 0)
-  const hungryPayload = report.powerDraw > 0 && instrumentPower / report.powerDraw > 0.5
-  return report.faults.map((f) => {
-    const roles = [...f.roles]
-    const share = (role: Role) => { if (!roles.includes(role)) roles.push(role) }
-    if ((f.code === 'over_capacity' || f.code === 'structure_overloaded') && m.scientistOverrode) share('scientist')
-    if ((f.code === 'power_deficit' || f.code === 'thin_power_margin' || f.code === 'battery_short') && hungryPayload) share('scientist')
-    return { ...f, roles }
-  })
+  return missionOf(s).report!.faults.map((f) => ({ ...f, roles: [...f.roles] }))
 }
 
 /** Turns a launched mission into scores, awards and money (spec §10). */

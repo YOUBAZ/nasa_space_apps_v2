@@ -8,7 +8,7 @@ import { holderOf, log, missionOf, newId, playerOf, requirePhase, requireRole } 
 import { proposeObjective, reviewObjective } from './phases/objective'
 import { confirmPlan, setPlan } from './phases/planning'
 import {
-  moveFunds, topUp, requestFunds, requestInstruments, resolveBackorder, reviewFunding, reviewInstruments,
+  capInstruments, moveFunds, topUp, requestFunds, requestInstruments, resolveBackorder, reviewFunding, reviewInstruments,
   setOrbit, setReady, setSlot, setStations, setVehicle,
 } from './phases/design'
 import { finishDebrief, nextMission } from './campaign'
@@ -50,7 +50,7 @@ export function newMission(): Mission {
     budget: { total: 0, designer: 0, radio: 0, reserve: 0 }, targetMonth: 0, scheduleMode: 'standard',
     design: {},
     instrumentRequest: [],
-    instrumentStatus: 'none', scientistOverrode: false, banned: [], backorders: [], fees: 0,
+    instrumentStatus: 'none', instrumentPushbacks: 0, instrumentThread: [], banned: [], backorders: [], fees: 0,
     ready: { scientist: false, designer: false, radio: false },
     pairing: { designer: false, radio: false }, purchaseApproved: false, votes: {},
   }
@@ -135,6 +135,7 @@ function reduce(s: GameState, a: Action, actorId: string): void {
     case 'setStations': return setStations(s, a, actorId)
     case 'requestInstruments': return requestInstruments(s, a, actorId)
     case 'reviewInstruments': return reviewInstruments(s, a, actorId)
+    case 'capInstruments': return capInstruments(s, a, actorId)
     case 'requestFunds': return requestFunds(s, a, actorId)
     case 'resolveBackorder': return resolveBackorder(s, a, actorId)
     case 'moveFunds': return moveFunds(s, a, actorId)

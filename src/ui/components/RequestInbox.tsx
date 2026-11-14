@@ -4,6 +4,7 @@ import { MAX_APPEALS } from '../../engine/state'
 import { t } from '../../i18n/i18n'
 import { useGame } from '../../net/useGame'
 import { Button } from './Button'
+import { InstrumentRuling } from './InstrumentTalk'
 import { RoleBadge } from './RoleBadge'
 import { money, objName } from '../names'
 
@@ -96,12 +97,19 @@ export function RequestInbox() {
   const open = m.requests.filter((r) => r.status === 'pending' || r.status === 'rejected')
   const lastDone = [...m.requests].reverse().find((r) => r.status === 'approved')
   const list = lastDone && !open.includes(lastDone) ? [...open, lastDone] : open
+  // An instrument dispute the Designer took to the Planner sits at the top until the Scientist's final list is in.
+  const dispute = m.instrumentStatus === 'escalated' || m.instrumentStatus === 'capped'
   return (
     <section data-testid="inbox" data-tut="inbox">
       <h3 className="label mb-2">{t('req.title')}</h3>
-      {list.length === 0
+      {list.length === 0 && !dispute
         ? <p className="mono text-xs text-carbon-40">{t('req.empty')}</p>
-        : <ul className="flex flex-col gap-2">{list.map((r) => <RequestCard key={r.id} r={r} />)}</ul>}
+        : (
+          <ul className="flex flex-col gap-2">
+            {dispute && <InstrumentRuling key={`ruling-${m.instrumentCap ?? 'open'}`} />}
+            {list.map((r) => <RequestCard key={r.id} r={r} />)}
+          </ul>
+        )}
     </section>
   )
 }

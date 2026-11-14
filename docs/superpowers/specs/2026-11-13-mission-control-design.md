@@ -59,7 +59,7 @@ Picked by the team: **A**.
 - Failure character: **a cartoon Elon Musk** (the "Flight Director") who kicks the ground and screams. *(Team changed this from the original character on 2026-11-13.)*
 - Coach character: **the same cartoon Elon Musk** leads the tutorial instead of CAPCOM.
 - Visual theme: **NASA's Horizon Design System look** (colours, fonts, mission-control feel), made as game-like as possible.
-- Instruments: **Scientist requests, Designer can push back**; Scientist decides on resend.
+- Instruments: **Scientist requests, Designer approves.** The Designer decides what goes on the craft; see §20 for the negotiation. *(Changed 2026-11-14: the Scientist no longer has the last word.)*
 - Appeals: **2 appeals** per rejected request, then the requester must choose another option.
 - Solo mode: **approvals skipped entirely**; one player makes every choice.
 - Languages: **English + Arabic (RTL)**.
@@ -95,7 +95,7 @@ LOBBY
                             Spacecraft (Designer: components + instruments + vehicle) / Ground & Comms (Radio) / Reserve;
                             set target launch month; choose schedule mode (Rush / Standard / Careful)
  → DESIGN (parallel)
-     Scientist  → instrument request → Designer: Accept | Push back (reason) → Scientist: resend (final)
+     Scientist  → instrument list → Designer: Approve | Push back (reason, twice at most) | at the 3rd look: escalate → Planner sets a limit → final list (§20)
      Designer   → 10 bus slots + launch vehicle
      Radio      → orbit, band, antenna, ground stations
      Any of Designer/Radio → Funding request → Planner: Approve | Reject → Appeal (≤2) | choose cheaper option
@@ -114,7 +114,7 @@ Rules:
 - Appeals are counted per request; after 2 rejections of appeals, the Appeal button disappears.
 - **Hard caps:** each role's running cost is shown against its allocation; picks that would exceed it are disabled with "Request funds". Allocations always sum to ≤ mission budget ≤ campaign funds, so the campaign balance never goes negative.
 - **Leaving DESIGN** *(builder's call)*: each of Scientist, Designer and Radio presses "Ready". Ready is disabled while that role has an open request or pending review. Changing anything clears that role's Ready. When all three are Ready → INTEGRATION.
-- **Instruments after acceptance** *(builder's call)*: the Scientist may edit during DESIGN, but any edit re-opens Designer review (push-back allowed again, Scientist's resend is final again).
+- **Instruments after acceptance** *(builder's call)*: the Scientist may send a different list during DESIGN; it re-opens the Designer's review, but push-backs already used stay used, and a Planner limit stays in force (§20).
 - **Going back** *(builder's call)*: a No-Go, or either side pressing "Un-agree" on the pairing, returns to DESIGN and clears the pairing lock, purchase-order approval and all Ready flags. Accepted instrument lists, approved funding and spent appeal counters on closed requests are kept; new requests get fresh appeal counters.
 - If the Reserve is empty, a funding request can only be rejected, or the Planner can move money between allocations.
 - Solo: OBJECTIVE_REVIEW, push-back, funding requests, purchase approval, pairing lock and Go/No-Go are skipped; the player edits one total budget.
@@ -243,7 +243,7 @@ Science value = Σ relevance(instrument, objective) × orbit-fit multiplier × f
 - **Major** (partial success, reduced science): downlink < 50% of data; coverage below objective need; storage/computer bottleneck; battery short for shadow; lifetime < required; pointing too coarse for instrument/antenna.
 - **Minor** (score penalty only): thin margins (< 10%), schedule overrun vs target, missed Mars window, wasteful extra stations, irrelevant instruments, large unused allocation (> 30% left unspent).
 - **Outcome:** any critical → **Failure**; else any major → **Partial success**; else **Full success**. Deterministic.
-- **Blame** (each fault names 1–2 roles): mass/structure → Designer (shared with Scientist if Scientist overrode a push-back); power → Designer (+Scientist if instruments > 50% of draw); vehicle–orbit mismatch → Designer + Radio (they locked the pairing together); comms/coverage → Radio; wrong instrument or orbit for objective → Scientist (+Radio for orbit); budget/schedule → Planner; approved request that led to a fault → Planner shares.
+- **Blame** (each fault names 1–2 roles): mass/structure → Designer; power → Designer; vehicle–orbit mismatch → Designer + Radio (they locked the pairing together); comms/coverage → Radio; wrong instrument or orbit for objective → Scientist (+Radio for orbit); budget/schedule → Planner. *(Changed 2026-11-14: the Scientist no longer shares mass or power faults, because the Designer approves every instrument; see §20.)*
 
 ### Money in the campaign
 - On launch the full mission cost is deducted.
@@ -401,3 +401,33 @@ The Flight Director and tutorial coach is shown as whole, real photographs of El
 - If the photos cannot load, the drawn cartoon from §15 is shown.
 - The character stays labelled as parody (footer and the character's accessible name).
 - **Risk the team accepted:** a real person's photos carry likeness-rights risk, and NASA's media guidelines say images of identifiable people must not be used to suggest endorsement. More photos make this risk bigger, not smaller. The team should check the Space Apps rules before submitting.
+
+## 20. Instrument negotiation: the Designer approves what flies (requested 2026-11-14)
+
+The Designer is always the one who approves what goes on the spacecraft. The Scientist asks; the Designer decides; the Planner steps in only when the two cannot agree. Solo play is unchanged (instruments go straight on).
+
+| Step | Who | What they can do |
+|---|---|---|
+| 1 | Scientist | Sends a list. |
+| 2 | Designer (decision 1 of 3) | **Approve**, or **push back** with a reason. |
+| 3 | Scientist | **Insist** on the same list, or **change** it; may add a message. |
+| 4 | Designer (decision 2 of 3) | Approve, or **push back for the last time** with a reason. |
+| 5 | Scientist | Insist or change, for the last time. |
+| 6 | Designer (decision 3 of 3) | Approve, or **take it to the Planner** with a reason. No third push-back. |
+| 7 | Planner | Sets the **Scientist's instrument budget** ($X million). |
+| 8 | Scientist | Sends a final list that costs no more than $X. |
+| 9 | Designer | **Must accept** the final list: Approve is the only button. |
+
+Rules:
+
+- An approval at any step ends the negotiation and puts the list on the craft.
+- Nothing goes on the craft until the Designer approves. While a new list is being discussed, the previously approved one stays on.
+- **The Planner's limit** must be no more than the Designer's allocation and no less than the cheapest available instrument. The Planner may correct it until the Scientist has sent the final list. It stays in force for the rest of the mission, and the Planner cannot move money out of the Designer's allocation below it.
+- Instrument cost is counted the way the Designer pays for it (the rush or careful price change included).
+- While the Planner is deciding, the Scientist cannot send a list.
+- Approving still has to fit the Designer's allocation. After a ruling the Designer may have to swap other parts or ask for funds to make room.
+- If the Scientist changes an approved list later, the review re-opens, but used push-backs are not handed back. Under a Planner limit a new list goes straight to "must accept".
+- Everyone sees the whole conversation (each list, each reason, the ruling). The Planner reads it in the Requests box before ruling.
+- **Accountability:** mass, structure and power faults are blamed on the Designer alone, even when the Scientist insisted and even after a Planner ruling. The Scientist still answers for instruments that do not suit the objective, because that is a science choice, not a question of what the craft can carry.
+
+Engine: `requestInstruments` (optional `note`), `reviewInstruments` (`accept | pushback | escalate`), `capInstruments` (Planner). State: `instrumentStatus` (`none, pending, pushed_back, escalated, capped, final, accepted`), `instrumentPushbacks`, `instrumentCap`, `instrumentThread`.

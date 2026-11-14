@@ -19,12 +19,24 @@ export interface LocalOpts {
   me?: string
 }
 
+/** Fills in what a game saved by an earlier build does not have yet. */
+function upgradeSave(s: GameState): GameState {
+  const m = s.mission as (GameState['mission'] & { scientistOverrode?: boolean }) | null
+  if (!m) return s
+  m.instrumentThread ??= []
+  m.instrumentPushbacks ??= 0
+  // "final" once meant the Scientist's last word. Now only a list sent after the Planner's ruling is final.
+  if (m.instrumentStatus === 'final' && m.instrumentCap === undefined) m.instrumentStatus = 'pending'
+  delete m.scientistOverrode
+  return s
+}
+
 export function loadSave(): GameState | null {
   try {
     const raw = localStorage.getItem(SAVE_KEY)
     if (!raw) return null
     const s = JSON.parse(raw) as GameState
-    return s && typeof s === 'object' && 'phase' in s && s.mode !== 'online' ? s : null
+    return s && typeof s === 'object' && 'phase' in s && s.mode !== 'online' ? upgradeSave(s) : null
   } catch {
     return null
   }

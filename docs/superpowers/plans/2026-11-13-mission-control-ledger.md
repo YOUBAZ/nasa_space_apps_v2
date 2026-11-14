@@ -113,3 +113,16 @@ Ruling: `Elon3D.tsx`, `rig.ts` and the rig test were deleted; the drawn cartoon 
 Verified in browser: five poses in `#gallery`; tutorial end to end (coach and failure debrief). 403 tests pass; build succeeds.
 Not verified: how the cut-out edges look on a high-density phone screen.
 
+## Instrument negotiation, Designer approves (2026-11-14)
+Ruling: built exactly the user's scenario (table in spec §20): up to two push-backs, escalation only at the Designer's third decision, Planner sets the Scientist's instrument budget, final list must be accepted.
+Ruling: "Designer always responsible, not the Scientist" → removed both Scientist blame shares (mass after insisting; power when instruments draw over half) — cost if wrong: user meant only mass.
+Ruling: the Scientist still answers for `irrelevant_instruments` — it is a science choice, not a craft-compatibility one — cost if wrong: user wants that on the Designer too (one line in `evaluate.ts`).
+Ruling: after a Planner ruling the Designer alone is still blamed for mass/power — the user said "always"; the Designer still controls the bus, power and rocket — cost if wrong: the Planner should share after imposing a list.
+Ruling: the limit must be ≥ the cheapest instrument, so the Scientist can always send something — cost if wrong: none seen.
+Ruling: the limit persists for the mission and the Planner cannot drain the Designer's allocation below it — follows "he must commit to it" and "does not exceed the Designer's allocation".
+Ruling: push-backs do not reset when an approved list is changed later — otherwise the negotiation could loop for ever — cost if wrong: a late change gives the Designer fewer chances to object.
+Ruling: "must accept" is still an explicit Approve click (the only button), and it still checks the allocation — keeps the Designer as the approver; the Designer may need to free money first.
+Ruling: old saves are upgraded on load (new fields filled; an old "final" list becomes "pending").
+Verified in browser: the whole nine-step negotiation between two tabs; tutorial end to end; two-tab online mission; Arabic solo. 427 tests pass.
+Not verified: the Arabic wording of the new text (needs a native speaker); the Requests box with a long conversation on a phone.
+

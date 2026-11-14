@@ -5,8 +5,8 @@ export const ui: Record<string, string> = {
   'role.designer': 'Designer',
   'role.radio': 'Radio Operator',
   'role.planner.job': 'Runs the budget and schedule, approves requests, manages the team.',
-  'role.scientist.job': 'Picks the mission objective and the science instruments.',
-  'role.designer.job': 'Builds the spacecraft and picks the rocket.',
+  'role.scientist.job': 'Picks the mission objective and asks for the science instruments.',
+  'role.designer.job': 'Builds the spacecraft, picks the rocket, and approves every instrument that goes on board.',
   'role.radio.job': 'Chooses the orbit, antenna and ground stations, and talks to the spacecraft.',
 
   // difficulty

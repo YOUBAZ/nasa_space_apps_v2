@@ -31,7 +31,9 @@ export function duties(s: GameState): Partial<Record<Role, string>> {
         if (ready) out.planner = 'todo.launch'
         break
       }
-      if (m.instrumentStatus === 'none' || m.instrumentStatus === 'pushed_back') out.scientist = 'todo.requestInstruments'
+      if (m.instrumentStatus === 'none') out.scientist = 'todo.requestInstruments'
+      else if (m.instrumentStatus === 'pushed_back') out.scientist = 'todo.answerPushback'
+      else if (m.instrumentStatus === 'capped') out.scientist = 'todo.finalInstruments'
       else if (m.instrumentStatus === 'accepted' && !m.ready.scientist) out.scientist = 'todo.markReady'
       for (const role of ['designer', 'radio'] as const) {
         if (role === 'designer' && (m.instrumentStatus === 'pending' || m.instrumentStatus === 'final')) out.designer = 'todo.reviewInstruments'
@@ -39,7 +41,8 @@ export function duties(s: GameState): Partial<Record<Role, string>> {
         else if (readyBlocker(s, role) === 'incomplete_design') out[role] = 'todo.finishDesign'
         else if (!m.ready[role] && !readyBlocker(s, role)) out[role] = 'todo.markReady'
       }
-      if (pending('funding')) out.planner = 'todo.reviewFunding'
+      if (m.instrumentStatus === 'escalated') out.planner = 'todo.ruleInstruments'
+      else if (pending('funding')) out.planner = 'todo.reviewFunding'
       else if (m.backorders.some((b) => b.status === 'open' && m.design[b.slot] === b.option)) out.planner = 'todo.backorder'
       break
     }

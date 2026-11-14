@@ -52,24 +52,16 @@ describe('instrument request and push-back', () => {
     expect(s.mission!.instrumentStatus).toBe('pending')
     expect(s.mission!.design.instruments ?? []).toEqual([])
   })
-  it('push-back needs a reason, then the resend is final', () => {
+  it('push-back needs a reason; the Scientist may insist, and the Designer decides again', () => {
     let s = requested()
     expect(err(s, { type: 'reviewInstruments', decision: 'pushback' }, P.designer)).toBe('reason_required')
     s = ok(s, { type: 'reviewInstruments', decision: 'pushback', reason: 'Too heavy' }, P.designer)
     expect(s.mission!.instrumentStatus).toBe('pushed_back')
     s = ok(s, { type: 'requestInstruments', list: ['thermal_ir', 'hires_cam'] }, P.scientist)
-    expect(s.mission!.instrumentStatus).toBe('final')
-    expect(s.mission!.scientistOverrode).toBe(true)
-    expect(err(s, { type: 'reviewInstruments', decision: 'pushback', reason: 'Still heavy' }, P.designer)).toBe('already_final')
+    expect(s.mission!.instrumentStatus).toBe('pending') // insisting no longer forces the Designer's hand
     s = ok(s, { type: 'reviewInstruments', decision: 'accept' }, P.designer)
     expect(s.mission!.instrumentStatus).toBe('accepted')
     expect(s.mission!.design.instruments).toEqual(['thermal_ir', 'hires_cam'])
-  })
-  it('a lighter resend is a compromise, not an override', () => {
-    let s = requested()
-    s = ok(s, { type: 'reviewInstruments', decision: 'pushback', reason: 'Too heavy' }, P.designer)
-    s = ok(s, { type: 'requestInstruments', list: ['thermal_ir'] }, P.scientist)
-    expect(s.mission!.scientistOverrode).toBe(false)
   })
   it('accepting checks the Designer cap', () => {
     let s = designGame('fan', 'wildfire', { designer: 60 })

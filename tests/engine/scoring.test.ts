@@ -62,7 +62,7 @@ describe('scoreMission', () => {
     expect(r.teamPoints).toBe(400)
     expect(r.grant).toBe(Math.round(360 * r.science / 2))
   })
-  it('a Scientist who overrode a push-back shares the blame for excess mass', () => {
+  it('the Designer alone answers for excess mass, even when the Scientist insisted', () => {
     let s = designGame('fan', 'wildfire', { total: 600, designer: 580, radio: 8 })
     s = ok(s, { type: 'requestInstruments', list: ['thermal_ir', 'ir_telescope'] }, P.scientist)
     s = ok(s, { type: 'reviewInstruments', decision: 'pushback', reason: 'Far too heavy' }, P.designer)
@@ -84,7 +84,10 @@ describe('scoreMission', () => {
     for (const role of ['planner', 'scientist', 'designer', 'radio'] as const) s = ok(s, { type: 'vote', role, vote: 'go' }, P[role])
     s = ok(s, { type: 'launch' }, P.planner)
     const blamed = s.mission!.result!.faults.find((f) => f.code === 'over_capacity' || f.code === 'structure_overloaded')!
-    expect(blamed.roles).toEqual(expect.arrayContaining(['designer', 'scientist']))
+    expect(blamed.roles).toEqual(['designer'])
+    // the same goes for power: a hungry payload is on the craft because the Designer approved it
+    const craft = ['over_capacity', 'structure_overloaded', 'power_deficit', 'thin_power_margin', 'battery_short']
+    for (const f of s.mission!.result!.faults.filter((x) => craft.includes(x.code))) expect(f.roles).not.toContain('scientist')
   })
   it('keeps every role score between 0 and 100', () => {
     const r = debriefOf({ ...wildfire, vehicle: 'electron', stations: [], battery: 'medium' }, 'wildfire', tight).mission!.result!

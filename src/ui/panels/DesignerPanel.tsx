@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { COMPONENTS, INSTRUMENTS, optionsFor, vehiclesFor } from '../../engine/catalog'
 import type { GameState } from '../../engine/state'
+import { MAX_PUSHBACKS } from '../../engine/state'
 import { RADIO_SLOTS, SLOTS, type Slot } from '../../engine/types'
 import { spendOf, withAutoSlots } from '../../engine/spend'
 import { t } from '../../i18n/i18n'
 import { useGame } from '../../net/useGame'
 import { Button } from '../components/Button'
 import { FundsDialog } from '../components/FundsDialog'
+import { InstrumentTalk } from '../components/InstrumentTalk'
 import { OptionCard } from '../components/OptionCard'
 import { ReadyBar } from '../components/ReadyBar'
 import { InfoTip } from '../handbook/Handbook'
@@ -59,37 +61,70 @@ export function SlotPicker({ slot, role }: { slot: Slot; role: 'designer' | 'rad
   )
 }
 
+/**
+ * The Designer decides what goes on the craft. Two push-backs at most; at the third decision the choice is
+ * approve or take it to the Planner; a list sent after the Planner's ruling can only be approved.
+ */
 function InstrumentReview() {
   const { state, act, can } = useGame()
   const m = state.mission!
-  const [reason, setReason] = useState<string | null>(null)
-  if (m.instrumentStatus !== 'pending' && m.instrumentStatus !== 'final') return null
+  const [form, setForm] = useState<{ kind: 'pushback' | 'escalate'; text: string } | null>(null)
+  const status = m.instrumentStatus
+  if (status === 'none' || status === 'accepted') return null
+  if (status !== 'pending' && status !== 'final') {
+    const waiting = status === 'pushed_back' ? t('design.wait.pushed_back')
+      : status === 'escalated' ? t('design.wait.escalated') : t('design.wait.capped', { amount: money(m.instrumentCap ?? 0) })
+    return (
+      <section className="rounded border border-carbon-60 bg-black/40 p-3" data-tut="instrument-review">
+        <p className="text-sm text-carbon-20">{waiting}</p>
+        <div className="mt-2"><InstrumentTalk /></div>
+      </section>
+    )
+  }
   const list = m.instrumentRequest
   const sum = (key: 'mass' | 'power' | 'cost') => list.reduce((n, i) => n + INSTRUMENTS[i][key], 0)
-  const final = m.instrumentStatus === 'final'
+  const final = status === 'final'
+  const lastLook = m.instrumentPushbacks >= MAX_PUSHBACKS
   const overCap = can('designer') && state.phase === 'design'
     && spendOf({ ...state, mission: { ...m, design: { ...m.design, instruments: list } } }, 'designer') > m.budget.designer + 1e-9
+  const send = () => {
+    if (!form) return
+    act({ type: 'reviewInstruments', decision: form.kind, reason: form.text.trim() }, 'designer')
+    setForm(null)
+  }
   return (
     <section className="rounded border border-active-green/60 bg-black/40 p-3" data-tut="instrument-review">
-      <h3 className="label mb-1">{t(final ? 'design.reviewFinal' : 'design.review')}</h3>
+      <div className="flex items-baseline justify-between gap-2">
+        <h3 className="label mb-1">{t(final ? 'design.reviewFinal' : 'design.review')}</h3>
+        {!final && <span className="mono text-xs text-carbon-30">{t('design.look', { n: m.instrumentPushbacks + 1 })}</span>}
+      </div>
       <p className="text-sm">{list.map(instName).join(' · ')}</p>
       <p className="mono mt-1 text-xs text-carbon-30" dir="ltr">+{num(sum('mass'))} kg · +{num(sum('power'))} W · +{money(sum('cost'))}</p>
+      <p className="mt-1 text-sm text-carbon-20">{t(final ? 'design.mustAccept' : lastLook ? 'design.escalateHint' : 'design.yourCall')}</p>
       {overCap && <p className="mt-1 text-sm text-intl-orange">{t('design.reviewOver')}</p>}
-      {reason === null ? (
-        <div className="mt-2 flex gap-2">
+      {m.instrumentThread.length > 1 && <div className="mt-2"><InstrumentTalk /></div>}
+      {form === null ? (
+        <div className="mt-2 flex flex-wrap gap-2">
           <Button size="sm" variant="go" icon="check" disabled={!can('designer')} onClick={() => act({ type: 'reviewInstruments', decision: 'accept' }, 'designer')}>{t('design.accept')}</Button>
-          {!final && <Button size="sm" variant="danger" disabled={!can('designer')} onClick={() => setReason('')}>{t('design.pushback')}</Button>}
+          {!final && !lastLook && (
+            <Button size="sm" variant="danger" disabled={!can('designer')} onClick={() => setForm({ kind: 'pushback', text: '' })}>
+              {t(m.instrumentPushbacks === MAX_PUSHBACKS - 1 ? 'design.pushbackLast' : 'design.pushback')}
+            </Button>
+          )}
+          {!final && lastLook && (
+            <Button size="sm" variant="danger" disabled={!can('designer')} onClick={() => setForm({ kind: 'escalate', text: '' })}>{t('design.escalate')}</Button>
+          )}
         </div>
       ) : (
         <div className="mt-2 flex flex-col gap-2">
           <label className="flex flex-col gap-1">
             <span className="label">{t('req.reason')}</span>
-            <textarea value={reason} onChange={(e) => setReason(e.target.value)} rows={2} maxLength={300}
+            <textarea value={form.text} onChange={(e) => setForm({ ...form, text: e.target.value })} rows={2} maxLength={300}
               className="rounded border border-carbon-60 bg-black/60 px-2 py-1 text-sm text-white outline-none focus:border-nasa-blue-tint" />
           </label>
           <div className="flex gap-2">
-            <Button size="sm" disabled={!reason.trim()} onClick={() => { act({ type: 'reviewInstruments', decision: 'pushback', reason: reason.trim() }, 'designer'); setReason(null) }}>{t('design.sendPushback')}</Button>
-            <Button size="sm" variant="ghost" onClick={() => setReason(null)}>{t('common.cancel')}</Button>
+            <Button size="sm" disabled={!form.text.trim()} onClick={send}>{t(form.kind === 'escalate' ? 'design.sendEscalate' : 'design.sendPushback')}</Button>
+            <Button size="sm" variant="ghost" onClick={() => setForm(null)}>{t('common.cancel')}</Button>
           </div>
         </div>
       )}

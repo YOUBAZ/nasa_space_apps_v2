@@ -46,7 +46,21 @@ export interface Backorder {
   status: 'open' | 'wait' | 'express' | 'substitute'
 }
 
-export type InstrumentStatus = 'none' | 'pending' | 'pushed_back' | 'final' | 'accepted'
+/**
+ * Where the instrument list stands between the Scientist and the Designer:
+ * none → pending (Designer to decide) ⇄ pushed_back (Scientist to insist or change), at most two push-backs;
+ * at the third look the Designer approves or escalates → escalated (Planner sets a limit) → capped
+ * (Scientist picks a final list inside the limit) → final (Designer must accept) → accepted.
+ */
+export type InstrumentStatus = 'none' | 'pending' | 'pushed_back' | 'escalated' | 'capped' | 'final' | 'accepted'
+export const MAX_PUSHBACKS = 2
+export interface InstrumentStep {
+  by: Role
+  kind: 'list' | 'insist' | 'change' | 'pushback' | 'escalate' | 'cap' | 'accept'
+  text?: string
+  list?: InstrumentId[]
+  amount?: number
+}
 export type ReadyRole = 'scientist' | 'designer' | 'radio'
 
 export interface Budget {
@@ -103,9 +117,14 @@ export interface Mission {
   /** what the Scientist last asked for (design.instruments holds what the Designer accepted) */
   instrumentRequest: InstrumentId[]
   instrumentStatus: InstrumentStatus
+  /** the Designer's latest reason for not approving */
   pushbackReason?: string
-  /** the Scientist insisted after a push-back without making the payload lighter */
-  scientistOverrode: boolean
+  /** push-backs the Designer has used this mission (at most MAX_PUSHBACKS) */
+  instrumentPushbacks: number
+  /** the Planner's ruling after an escalation: the most the Scientist's instruments may cost */
+  instrumentCap?: number
+  /** the whole conversation, oldest first */
+  instrumentThread: InstrumentStep[]
   /** options the Planner told the team to replace */
   banned: { slot: Slot; option: string }[]
   backorders: Backorder[]
@@ -201,8 +220,9 @@ export type Action =
   | { type: 'setVehicle'; vehicle: VehicleId }
   | { type: 'setOrbit'; orbit: OrbitId }
   | { type: 'setStations'; stations: StationId[] }
-  | { type: 'requestInstruments'; list: InstrumentId[] }
-  | { type: 'reviewInstruments'; decision: 'accept' | 'pushback'; reason?: string }
+  | { type: 'requestInstruments'; list: InstrumentId[]; note?: string }
+  | { type: 'reviewInstruments'; decision: 'accept' | 'pushback' | 'escalate'; reason?: string }
+  | { type: 'capInstruments'; amount: number; reason?: string }
   | { type: 'requestFunds'; from: 'designer' | 'radio'; target: 'designer' | 'radio'; amount: number; reason: string }
   | { type: 'resolveBackorder'; id: string; choice: 'wait' | 'express' | 'substitute' }
   | { type: 'topUp'; amount: number }

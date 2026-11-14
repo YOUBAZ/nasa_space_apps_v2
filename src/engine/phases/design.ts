@@ -1,5 +1,5 @@
-import type { Action, GameState, Mission, ReadyRole, Request } from '../state'
-import { fail } from '../state'
+import type { Action, GameState, InstrumentStep, Mission, ReadyRole, Request } from '../state'
+import { fail, MAX_PUSHBACKS } from '../state'
 import type { InstrumentId, Slot } from '../types'
 import { RADIO_SLOTS } from '../types'
 import {
@@ -8,6 +8,7 @@ import {
 } from '../catalog'
 import { isSolo, log, missionOf, newId, random, requirePhase, requireRole, validAmount } from '../ctx'
 import { hasOpenRequest, openRequest, requireReason } from '../requests'
+import { SCHEDULE } from '../evaluate'
 import { activeSlots, checkCaps, spendOf } from '../spend'
 
 export { BACKORDER_DELAY_MONTHS }
@@ -46,6 +47,7 @@ function applyTemplate(s: GameState): void {
   if (list.length > 0 && tryPiece(s, () => { d.instruments = list }, () => { delete d.instruments })) {
     m.instrumentRequest = [...list]
     m.instrumentStatus = 'accepted'
+    m.instrumentThread.push({ by: 'designer', kind: 'accept', list: [...list] })
   }
   m.template = undefined
 }
@@ -135,15 +137,42 @@ export function setStations(s: GameState, a: Extract<Action, { type: 'setStation
   checkCaps(s)
 }
 
-const massOf = (list: InstrumentId[]) => list.reduce((sum, i) => sum + INSTRUMENTS[i].mass, 0)
+/** What a list of instruments takes out of the Designer's allocation (schedule price change included). */
+export function instrumentCost(s: GameState, list: InstrumentId[]): number {
+  const mult = SCHEDULE[missionOf(s).scheduleMode].cost
+  return list.reduce((sum, i) => sum + INSTRUMENTS[i].cost, 0) * mult
+}
+/** The cheapest single instrument the Scientist could still pick: no limit may be set below this. */
+export const cheapestInstrument = (s: GameState): number =>
+  Math.min(...instrumentsFor(s.difficulty, s.campaign.unlocked).map((i) => instrumentCost(s, [i])))
 
+const sameSet = (a: InstrumentId[], b: InstrumentId[]) => a.length === b.length && a.every((x) => b.includes(x))
+const note = (text: string | undefined): string | undefined => (text ?? '').trim().slice(0, 300) || undefined
+const step = (m: Mission, x: InstrumentStep) => { m.instrumentThread.push(x) }
+
+/**
+ * The Scientist sends a list. It never goes on the craft by itself: the Designer approves what flies.
+ * After a push-back the same list means "I insist"; a different one is a change.
+ * Once the Planner has ruled, every list must fit the Planner's limit, and the Designer must accept it.
+ */
 export function requestInstruments(s: GameState, a: Extract<Action, { type: 'requestInstruments' }>, actorId: string): void {
-  const m = beginEdit(s, actorId, 'scientist')!
+  requirePhase(s, 'design', 'integration', 'go_poll')
+  requireRole(s, actorId, 'scientist')
   const list = a.list ?? []
   const allowed = instrumentsFor(s.difficulty, s.campaign.unlocked)
   if (list.length === 0 || new Set(list).size !== list.length || list.some((i) => !allowed.includes(i))) {
     fail('invalid_instruments')
   }
+  const before = missionOf(s)
+  if (!isSolo(s)) {
+    if (before.instrumentStatus === 'escalated') fail('awaiting_planner')
+    if (before.instrumentCap !== undefined && instrumentCost(s, list) > before.instrumentCap + 1e-9) fail('over_instrument_cap')
+    // Sending the list that is already agreed (or already waiting) changes nothing.
+    const settled = before.instrumentStatus === 'accepted' || before.instrumentStatus === 'pending' || before.instrumentStatus === 'final'
+    if (settled && sameSet(list, before.instrumentRequest)) return
+  }
+  backToDesign(s)
+  const m = missionOf(s)
   m.ready.scientist = false
   if (isSolo(s)) {
     m.instrumentRequest = [...list]
@@ -152,37 +181,71 @@ export function requestInstruments(s: GameState, a: Extract<Action, { type: 'req
     checkCaps(s)
     return
   }
-  if (m.instrumentStatus === 'pushed_back' || m.instrumentStatus === 'final') {
-    // The Scientist has the last word after a push-back.
-    if (m.instrumentStatus === 'pushed_back') m.scientistOverrode = massOf(list) >= massOf(m.instrumentRequest)
-    m.instrumentStatus = 'final'
-  } else {
-    m.instrumentStatus = 'pending'
-    m.scientistOverrode = false
-  }
+  const kind = m.instrumentStatus === 'none' ? 'list' : m.instrumentStatus === 'pushed_back' && sameSet(list, m.instrumentRequest) ? 'insist' : 'change'
   m.instrumentRequest = [...list]
-  log(s, 'log.instruments.requested', { n: list.length }, 'scientist')
+  m.instrumentStatus = m.instrumentCap !== undefined ? 'final' : 'pending'
+  m.ready.designer = false
+  step(m, { by: 'scientist', kind, list: [...list], text: note(a.note) })
+  if (kind === 'insist') log(s, 'log.instruments.insisted', { n: list.length }, 'scientist')
+  else log(s, 'log.instruments.requested', { n: list.length }, 'scientist')
 }
 
+/**
+ * The Designer decides what goes on the craft: approve, push back (twice at most, with a reason),
+ * or, at the third look, take the disagreement to the Planner. A list sent after the Planner's ruling must be accepted.
+ */
 export function reviewInstruments(s: GameState, a: Extract<Action, { type: 'reviewInstruments' }>, actorId: string): void {
   requirePhase(s, 'design', 'integration', 'go_poll')
   requireRole(s, actorId, 'designer')
   const m = missionOf(s)
   if (m.instrumentStatus !== 'pending' && m.instrumentStatus !== 'final') fail('nothing_to_review')
-  if (a.decision === 'pushback') {
+  if (a.decision === 'pushback' || a.decision === 'escalate') {
     if (m.instrumentStatus === 'final') fail('already_final')
+    const last = m.instrumentPushbacks >= MAX_PUSHBACKS
+    if (a.decision === 'pushback' && last) fail('no_pushbacks_left')
+    if (a.decision === 'escalate' && !last) fail('cannot_escalate_yet')
     m.pushbackReason = requireReason(a.reason)
-    m.instrumentStatus = 'pushed_back'
-    log(s, 'log.instruments.pushed_back', {}, 'designer')
+    if (a.decision === 'pushback') {
+      m.instrumentPushbacks += 1
+      m.instrumentStatus = 'pushed_back'
+      step(m, { by: 'designer', kind: 'pushback', text: m.pushbackReason })
+      log(s, 'log.instruments.pushed_back', { n: m.instrumentPushbacks, max: MAX_PUSHBACKS }, 'designer')
+    } else {
+      m.instrumentStatus = 'escalated'
+      step(m, { by: 'designer', kind: 'escalate', text: m.pushbackReason })
+      log(s, 'log.instruments.escalated', {}, 'designer')
+    }
     return
   }
+  if (a.decision !== 'accept') fail('invalid_choice')
   backToDesign(s)
   m.design.instruments = [...m.instrumentRequest]
   m.instrumentStatus = 'accepted'
   m.pushbackReason = undefined
   m.ready.designer = false
   checkCaps(s)
+  step(m, { by: 'designer', kind: 'accept', list: [...m.instrumentRequest] })
   log(s, 'log.instruments.accepted', { n: m.instrumentRequest.length }, 'designer')
+}
+
+/**
+ * The Planner settles an escalated disagreement with money: the most the Scientist's instruments may cost.
+ * It can never be more than the Designer has been given, and never less than the cheapest instrument.
+ */
+export function capInstruments(s: GameState, a: Extract<Action, { type: 'capInstruments' }>, actorId: string): void {
+  if (isSolo(s)) fail('solo_game')
+  requirePhase(s, 'design', 'integration', 'go_poll')
+  requireRole(s, actorId, 'planner')
+  const m = missionOf(s)
+  if (m.instrumentStatus !== 'escalated' && m.instrumentStatus !== 'capped') fail('nothing_escalated')
+  const amount = validAmount(a.amount)
+  if (amount <= 0) fail('invalid_amount')
+  if (amount > m.budget.designer + 1e-9) fail('cap_exceeds_allocation')
+  if (amount + 1e-9 < cheapestInstrument(s)) fail('cap_too_small')
+  m.instrumentCap = amount
+  m.instrumentStatus = 'capped'
+  step(m, { by: 'planner', kind: 'cap', amount, text: note(a.reason) })
+  log(s, 'log.instruments.capped', { amount }, 'planner')
 }
 
 export function requestFunds(s: GameState, a: Extract<Action, { type: 'requestFunds' }>, actorId: string): void {
@@ -230,6 +293,8 @@ export function moveFunds(s: GameState, a: Extract<Action, { type: 'moveFunds' }
   if (a.from === 'reserve') {
     if (amount > m.budget.reserve) fail('insufficient_reserve')
   } else if (m.budget[a.from] - amount < spendOf(s, a.from) - 1e-9) fail('below_spend')
+  // The Scientist's limit was promised out of the Designer's money.
+  if (a.from === 'designer' && m.instrumentCap !== undefined && m.budget.designer - amount < m.instrumentCap - 1e-9) fail('below_instrument_cap')
   m.budget[a.from] -= amount
   m.budget[a.to] += amount
 }

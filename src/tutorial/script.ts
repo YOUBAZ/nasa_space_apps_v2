@@ -102,7 +102,7 @@ export const TUTORIAL: TutorialStep[] = [
   {
     id: 'resend', coachKey: 'tut.resend', pose: 'point', tab: 'scientist', spotlight: 'instruments', hintKey: 'tut.hint.instruments',
     allow: instrumentsOk,
-    react: (s) => (m(s).instrumentStatus === 'final'
+    react: (s) => (m(s).instrumentStatus === 'pending' && m(s).instrumentPushbacks > 0
       ? { role: 'designer', sayKey: 'tut.say.accept', action: () => ({ type: 'reviewInstruments', decision: 'accept' }) } : null),
     done: (s) => m(s).instrumentStatus === 'accepted',
   },
